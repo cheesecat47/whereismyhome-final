@@ -29,17 +29,17 @@ public class SwaggerConfiguration {
 
 	private String version = "V1";
 	private String title = "WhereIsMyHome API " + version;
-	
-	@Bean
-	public Docket api() {
-		return new Docket(DocumentationType.SWAGGER_2).consumes(getConsumeContentTypes()).produces(getProduceContentTypes())
-					.apiInfo(apiInfo()).groupName(version).select()
-					.apis(RequestHandlerSelectors.basePackage("com.ssafy.whereismyhome"))
-					.paths(regex("/.*")).build()
-					.useDefaultResponseMessages(false);
-	}
-	
-	private Set<String> getConsumeContentTypes() {
+
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2).consumes(getConsumeContentTypes()).produces(getProduceContentTypes())
+                .apiInfo(apiInfo()).groupName(version).select()
+                .apis(RequestHandlerSelectors.basePackage("com.ssafy.whereismyhome"))
+                .paths(regex("/.*")).build()
+                .useDefaultResponseMessages(false);
+    }
+
+    private Set<String> getConsumeContentTypes() {
         Set<String> consumes = new HashSet<>();
         consumes.add("application/json;charset=UTF-8");
 //      consumes.add("application/xml;charset=UTF-8");
@@ -53,13 +53,12 @@ public class SwaggerConfiguration {
         return produces;
     }
 
-	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title(title)
-				.description("<h3>WhereIsMyHome API Reference for Developers<br>") 
-				.contact(new Contact("SSAFY", "https://edu.ssafy.com", "ssafy@ssafy.com"))
-				.license("SSAFY License")
-				.licenseUrl("https://www.ssafy.com/ksp/jsp/swp/etc/swpPrivacy.jsp")
-				.version("1.0").build();
-	}
-	
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder().title(title)
+                .description("<h3>WhereIsMyHome API Reference for Developers<br>")
+                .contact(new Contact("SSAFY", "https://edu.ssafy.com", "ssafy@ssafy.com"))
+                .license("SSAFY License")
+                .licenseUrl("https://www.ssafy.com/ksp/jsp/swp/etc/swpPrivacy.jsp")
+                .version("1.0").build();
+    }
 }
