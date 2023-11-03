@@ -69,4 +69,20 @@
                             where rn = 1) as C
                            on A.aptCode = C.aptCode;
     </select>
+
+    <select id="getHouseDealsByAptCodeYearMonth" parameterType="String" resultType="HouseDealDto">
+        select no,
+               dealAmount,
+               dealYear,
+               dealMonth,
+               dealDay,
+               area,
+               floor,
+               cancelDealType,
+               aptCode
+        from housedeal
+        where aptCode = #{aptCode}
+          and dealYear = #{year}
+          and dealMonth = #{month};
+    </select>
 </mapper>

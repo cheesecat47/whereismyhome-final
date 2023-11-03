@@ -1,5 +1,6 @@
 package com.ssafy.whereismyhome.house.controller;
 
+import com.ssafy.whereismyhome.house.model.HouseDealDto;
 import com.ssafy.whereismyhome.house.model.HouseInfoDealDto;
 import com.ssafy.whereismyhome.house.model.HouseInfoDto;
 import com.ssafy.whereismyhome.house.service.HouseService;
@@ -10,7 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -55,6 +59,17 @@ public class HouseController {
     public ResponseEntity<List<HouseInfoDealDto>> getHouseInfoDealsByDongCode(String dongCode) {
         List<HouseInfoDealDto> list = service.getHouseInfoDealsByDongCode(dongCode);
         logger.debug("houseInfoDealList: {}", list);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(list);
+    }
+
+    @GetMapping("/housedeal")
+    @ApiOperation(value = "아파트 번호로 거래 목록 조회")
+    public ResponseEntity<List<HouseDealDto>> getHouseDealsByAptCodeYearMonth(String aptCode, String year, String month) {
+        List<HouseDealDto> list = service.getHouseDealsByAptCodeYearMonth(aptCode, year, month);
+        logger.debug("houseDealList: {}", list);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

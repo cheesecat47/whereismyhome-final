@@ -1,5 +1,6 @@
 package com.ssafy.whereismyhome.house.model.mapper;
 
+import com.ssafy.whereismyhome.house.model.HouseDealDto;
 import com.ssafy.whereismyhome.house.model.HouseInfoDealDto;
 import com.ssafy.whereismyhome.house.model.HouseInfoDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -13,4 +14,6 @@ public interface HouseMapper {
     List<HouseInfoDto> getHouseInfosByDongCode(String dongCode);
 
     List<HouseInfoDealDto> getHouseInfoDealsByDongCode(String dongCode);
+
+    List<HouseDealDto> getHouseDealsByAptCodeYearMonth(String aptCode, String year, String month);
 }
