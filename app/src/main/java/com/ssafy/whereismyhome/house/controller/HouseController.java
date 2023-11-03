@@ -39,9 +39,9 @@ public class HouseController {
                 .body(dongCode);
     }
 
-    @GetMapping("/houseinfo/{dongCode}")
+    @GetMapping("/houseinfo")
     @ApiOperation(value = "동 코드로 아파트 목록 조회")
-    public ResponseEntity<List<HouseInfoDto>> getHouseInfosByDongCode(@PathVariable("dongCode") String dongCode) {
+    public ResponseEntity<List<HouseInfoDto>> getHouseInfosByDongCode(String dongCode) {
         List<HouseInfoDto> list = service.getHouseInfosByDongCode(dongCode);
         logger.debug("houseInfoList: {}", list);
 
@@ -50,9 +50,9 @@ public class HouseController {
                 .body(list);
     }
 
-    @GetMapping("/houseinfodeal/{dongCode}")
+    @GetMapping("/houseinfodeal")
     @ApiOperation(value = "동 코드로 아파트 최근 거래 목록 조회")
-    public ResponseEntity<List<HouseInfoDealDto>> getHouseInfoDealsByDongCode(@PathVariable("dongCode") String dongCode) {
+    public ResponseEntity<List<HouseInfoDealDto>> getHouseInfoDealsByDongCode(String dongCode) {
         List<HouseInfoDealDto> list = service.getHouseInfoDealsByDongCode(dongCode);
         logger.debug("houseInfoDealList: {}", list);
 
