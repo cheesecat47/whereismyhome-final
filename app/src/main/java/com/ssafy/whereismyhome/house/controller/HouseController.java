@@ -1,5 +1,6 @@
 package com.ssafy.whereismyhome.house.controller;
 
+import com.ssafy.whereismyhome.house.model.HouseInfoDealDto;
 import com.ssafy.whereismyhome.house.model.HouseInfoDto;
 import com.ssafy.whereismyhome.house.service.HouseService;
 import io.swagger.annotations.Api;
@@ -38,7 +39,7 @@ public class HouseController {
                 .body(dongCode);
     }
 
-    @GetMapping("/house-info/{dongCode}")
+    @GetMapping("/houseinfo/{dongCode}")
     @ApiOperation(value = "동 코드로 아파트 목록 조회")
     public ResponseEntity<List<HouseInfoDto>> getHouseInfosByDongCode(@PathVariable("dongCode") String dongCode) {
         List<HouseInfoDto> list = service.getHouseInfosByDongCode(dongCode);
@@ -49,4 +50,14 @@ public class HouseController {
                 .body(list);
     }
 
+    @GetMapping("/houseinfodeal/{dongCode}")
+    @ApiOperation(value = "동 코드로 아파트 최근 거래 목록 조회")
+    public ResponseEntity<List<HouseInfoDealDto>> getHouseInfoDealsByDongCode(@PathVariable("dongCode") String dongCode) {
+        List<HouseInfoDealDto> list = service.getHouseInfoDealsByDongCode(dongCode);
+        logger.debug("houseInfoDealList: {}", list);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(list);
+    }
 }

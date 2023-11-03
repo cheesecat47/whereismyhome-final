@@ -38,4 +38,35 @@
         order by aptCode;
     </select>
 
+    <select id="getHouseInfoDealsByDongCode" parameterType="String" resultType="houseInfoDealDto">
+        select A.dong,
+               A.dongCode,
+               A.jibun,
+               A.apartmentName,
+               A.aptCode,
+               A.lng,
+               A.lat,
+               C.dealYear,
+               C.dealMonth,
+               C.dealDay,
+               C.dealAmount,
+               C.area
+        from (select distinct aptCode, dong, dongCode, apartmentName, jibun, lng, lat
+              from houseinfo
+              where dongCode = #{dongCode}) as A
+                 left join (SELECT aptCode, dealYear, dealMonth, dealDay, dealAmount, area
+                            from (SELECT distinct aptCode,
+                                                  dealYear,
+                                                  dealMonth,
+                                                  dealDay,
+                                                  dealAmount,
+                                                  area,
+                                                  ROW_NUMBER() OVER (PARTITION BY aptCode ORDER BY dealYear DESC, dealMonth DESC, dealDay DESC) AS rn
+                                  FROM housedeal
+                                  where aptCode in (select distinct aptCode
+                                                    from houseinfo
+                                                    where dongCode = #{dongCode})) as B
+                            where rn = 1) as C
+                           on A.aptCode = C.aptCode;
+    </select>
 </mapper>
