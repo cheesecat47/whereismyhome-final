@@ -9,7 +9,33 @@
         from `dongcode`
         where sidoName = #{sidoName}
           and gugunName like #{gugunName}
-          and dongName = #{dongName};
+          and dongName = #{dongName}
+        order by dongCode;
+    </select>
+
+    <select id="getHouseInfosByDongCode" parameterType="String" resultType="houseInfoDto">
+        select aptCode,
+               buildYear,
+               roadName,
+               roadNameBonbun,
+               roadNameBubun,
+               roadNameSeq,
+               roadNameBasementCode,
+               roadNameCode,
+               dong,
+               bonbun,
+               bubun,
+               sigunguCode,
+               eubmyundongCode,
+               dongCode,
+               landCode,
+               apartmentName,
+               jibun,
+               lng,
+               lat
+        from `houseinfo`
+        where dongCode = #{dongCode}
+        order by aptCode;
     </select>
 
 </mapper>

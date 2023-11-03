@@ -1,7 +1,10 @@
 package com.ssafy.whereismyhome.house.service;
 
+import com.ssafy.whereismyhome.house.model.HouseInfoDto;
 import com.ssafy.whereismyhome.house.model.mapper.HouseMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class HouseServiceImpl implements HouseService {
@@ -15,5 +18,10 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public String getDongCodeByDongName(String sidoName, String gugunName, String dongName) {
         return mapper.getDongCodeByDongName(sidoName, gugunName, dongName);
+    }
+
+    @Override
+    public List<HouseInfoDto> getHouseInfosByDongCode(String dongCode) {
+        return mapper.getHouseInfosByDongCode(dongCode);
     }
 }
