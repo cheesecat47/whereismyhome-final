@@ -2,7 +2,10 @@ package com.ssafy.whereismyhome.house.controller;
 
 import com.ssafy.whereismyhome.house.service.HouseService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,8 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/house")
-@Api(value = "House")
+@Api(value = "House", tags = {"아파트 정보 API V1"})
 @CrossOrigin("*")
+@Slf4j
 public class HouseController {
 
     private static final Logger logger = LoggerFactory.getLogger(HouseController.class);
@@ -35,4 +39,6 @@ public class HouseController {
                 .status(HttpStatus.OK)
                 .body(dongCode);
     }
+
+
 }
