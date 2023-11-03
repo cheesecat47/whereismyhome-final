@@ -11,10 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -70,6 +67,39 @@ public class HouseController {
     public ResponseEntity<List<HouseDealDto>> getHouseDealsByAptCodeYearMonth(String aptCode, String year, String month) {
         List<HouseDealDto> list = service.getHouseDealsByAptCodeYearMonth(aptCode, year, month);
         logger.debug("houseDealList: {}", list);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(list);
+    }
+
+    @GetMapping("/location-name")
+    @ApiOperation(value = "시도 이름 목록 조회")
+    public ResponseEntity<List<String>> getSidoNames() {
+        List<String> list = service.getSidoNames();
+        logger.debug("sidoNames: {}", list);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(list);
+    }
+
+    @GetMapping("/location-name/{sidoName}")
+    @ApiOperation(value = "시도에 해당하는 시군구 이름 목록 조회")
+    public ResponseEntity<List<String>> getGugunNames(@PathVariable("sidoName") String sidoName) {
+        List<String> list = service.getGugunNames(sidoName);
+        logger.debug("gugunNames: {}", list);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(list);
+    }
+
+    @GetMapping("/location-name/{sidoName}/{gugunName}")
+    @ApiOperation(value = "시도, 시군구에 해당하는 동 이름 목록 조회")
+    public ResponseEntity<List<String>> getDongNames(@PathVariable("sidoName") String sidoName, @PathVariable("gugunName") String gugunName) {
+        List<String> list = service.getDongNames(sidoName, gugunName);
+        logger.debug("dongNameList: {}", list);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
