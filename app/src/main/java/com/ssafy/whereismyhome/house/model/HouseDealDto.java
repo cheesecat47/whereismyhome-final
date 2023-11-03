@@ -1,14 +1,14 @@
 package com.ssafy.whereismyhome.house.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import io.swagger.annotations.ApiModel;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@ApiModel(value = "HouseDealDto", description = "거래 정보를 관리할 Dto")
 public class HouseDealDto {
     private long no;
     private String dealAmount;

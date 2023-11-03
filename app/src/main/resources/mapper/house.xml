@@ -9,7 +9,80 @@
         from `dongcode`
         where sidoName = #{sidoName}
           and gugunName like #{gugunName}
-          and dongName = #{dongName};
+          and dongName = #{dongName}
+        order by dongCode;
     </select>
 
+    <select id="getHouseInfosByDongCode" parameterType="String" resultType="houseInfoDto">
+        select aptCode,
+               buildYear,
+               roadName,
+               roadNameBonbun,
+               roadNameBubun,
+               roadNameSeq,
+               roadNameBasementCode,
+               roadNameCode,
+               dong,
+               bonbun,
+               bubun,
+               sigunguCode,
+               eubmyundongCode,
+               dongCode,
+               landCode,
+               apartmentName,
+               jibun,
+               lng,
+               lat
+        from `houseinfo`
+        where dongCode = #{dongCode}
+        order by aptCode;
+    </select>
+
+    <select id="getHouseInfoDealsByDongCode" parameterType="String" resultType="houseInfoDealDto">
+        select A.dong,
+               A.dongCode,
+               A.jibun,
+               A.apartmentName,
+               A.aptCode,
+               A.lng,
+               A.lat,
+               C.dealYear,
+               C.dealMonth,
+               C.dealDay,
+               C.dealAmount,
+               C.area
+        from (select distinct aptCode, dong, dongCode, apartmentName, jibun, lng, lat
+              from houseinfo
+              where dongCode = #{dongCode}) as A
+                 left join (SELECT aptCode, dealYear, dealMonth, dealDay, dealAmount, area
+                            from (SELECT distinct aptCode,
+                                                  dealYear,
+                                                  dealMonth,
+                                                  dealDay,
+                                                  dealAmount,
+                                                  area,
+                                                  ROW_NUMBER() OVER (PARTITION BY aptCode ORDER BY dealYear DESC, dealMonth DESC, dealDay DESC) AS rn
+                                  FROM housedeal
+                                  where aptCode in (select distinct aptCode
+                                                    from houseinfo
+                                                    where dongCode = #{dongCode})) as B
+                            where rn = 1) as C
+                           on A.aptCode = C.aptCode;
+    </select>
+
+    <select id="getHouseDealsByAptCodeYearMonth" parameterType="String" resultType="HouseDealDto">
+        select no,
+               dealAmount,
+               dealYear,
+               dealMonth,
+               dealDay,
+               area,
+               floor,
+               cancelDealType,
+               aptCode
+        from housedeal
+        where aptCode = #{aptCode}
+          and dealYear = #{year}
+          and dealMonth = #{month};
+    </select>
 </mapper>
