@@ -2,6 +2,7 @@ package com.ssafy.whereismyhome.member.service;
 
 import com.ssafy.whereismyhome.member.mapper.MemberMapper;
 import com.ssafy.whereismyhome.member.model.MemberDto;
+import com.ssafy.whereismyhome.member.model.SignUpRequestDto;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -21,8 +22,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void signUpMember(MemberDto memberDto) throws SQLException {
-        memberMapper.signUpMember(memberDto);
+    public int signUpMember(SignUpRequestDto memberDto) throws SQLException {
+        return memberMapper.signUpMember(memberDto);
     }
 
     @Override

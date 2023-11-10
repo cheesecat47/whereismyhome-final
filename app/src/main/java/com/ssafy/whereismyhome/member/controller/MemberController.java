@@ -2,6 +2,8 @@ package com.ssafy.whereismyhome.member.controller;
 
 import com.ssafy.whereismyhome.member.model.LoginResponseDto;
 import com.ssafy.whereismyhome.member.model.MemberDto;
+import com.ssafy.whereismyhome.member.model.SignUpRequestDto;
+import com.ssafy.whereismyhome.member.model.SignUpResponseDto;
 import com.ssafy.whereismyhome.member.service.MemberService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -37,38 +39,52 @@ public class MemberController {
             @ApiResponse(code = 400, message = "실패", response = LoginResponseDto.class)
     })
     public ResponseEntity<LoginResponseDto> loginMember(String user_id, String password) {
-        LoginResponseDto dto = new LoginResponseDto();
+        LoginResponseDto res = new LoginResponseDto();
 
         try {
             if (user_id.equals("") || password.equals("")) {
                 throw new Exception("아이디, 비밀번호는 필수입니다.");
             }
 
-            logger.debug("로그인 완료: {}", dto);
-            dto.setStatus(HttpStatus.OK);
-            dto.setMessage("로그인 성공");
-            dto.setData(memberService.loginMember(user_id, password));
+            MemberDto member = memberService.loginMember(user_id, password);
+            logger.debug("로그인 완료: {}", member);
+
+            res.setStatus(HttpStatus.OK);
+            res.setMessage("로그인 성공");
+            res.setData(member);
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
-            dto.setStatus(HttpStatus.BAD_REQUEST);
-            dto.setMessage(e.getMessage());
-            dto.setData(null);
+            res.setStatus(HttpStatus.BAD_REQUEST);
+            res.setMessage("로그인 실패");
+            res.setData(null);
         }
 
         return ResponseEntity
-                .status(dto.getStatus())
-                .body(dto);
+                .status(res.getStatus())
+                .body(res);
     }
 
     @ApiOperation(value = "회원등록", notes = "회원 정보를 입력 받아 회원 가입 처리")
     @PostMapping("/user")
-    public void signUpMember(MemberDto dto) {
+    public ResponseEntity<SignUpResponseDto> signUpMember(SignUpRequestDto dto) {
+        SignUpResponseDto res = new SignUpResponseDto();
+
         try {
-            memberService.signUpMember(dto);
-            logger.debug("회원 등록 완료");
-        } catch (SQLException e) {
+            int cnt = memberService.signUpMember(dto);
+            assert cnt == 1;
+            logger.debug("회원 등록 완료: {}", cnt);
+
+            res.setStatus(HttpStatus.CREATED);
+            res.setMessage("회원 등록 성공");
+        } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
+            res.setStatus(HttpStatus.BAD_REQUEST);
+            res.setMessage("회원 등록 실패");
         }
+
+        return ResponseEntity
+                .status(res.getStatus())
+                .body(res);
     }
 
     @ApiOperation(value = "회원수정", notes = "회원 아이디를 입력 받아 회원 수정 처리")

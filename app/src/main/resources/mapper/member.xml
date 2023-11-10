@@ -23,11 +23,10 @@
 		user_id = #{user_id} and password = #{password}
 	</select>
 
-	<insert id="signUpMember" parameterType="memberDto">
-		insert into user
-		(user_id, name, password, age, sex, email_account, email_domain, authorization)
-		values (#{user_id}, #{name}, #{password}, #{age}, #{sex}, #{email_account}, #{email_domain}, #{authorization})
-	</insert>
+    <insert id="signUpMember" parameterType="signUpRequestDto">
+        insert into user (user_id, name, password, age, sex, email_account, email_domain, authorization)
+        values (#{user_id}, #{name}, #{password}, #{age}, #{sex}, #{email_account}, #{email_domain}, 0)
+    </insert>
 
 	<update id="updateMember" parameterType="memberDto">
 		update user
