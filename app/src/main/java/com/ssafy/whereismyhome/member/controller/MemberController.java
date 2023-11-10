@@ -139,15 +139,32 @@ public class MemberController {
                 .body(res);
     }
 
-    @ApiOperation(value = "회원 정보 검색", notes = "회원 아이디를 받아 정보 검색 처리")
+    @ApiOperation(value = "회원 정보 검색", notes = "회원 아이디를 받아 회원 정보 검색")
     @GetMapping("/user/{userid}")
-    public void getMember(@PathVariable("userid") String user_id) {
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "회원 정보 검색 성공", response = GetMemberByUserIdResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 정보 검색 실패", response = GetMemberByUserIdResponseDto.class)
+    })
+    public ResponseEntity<GetMemberByUserIdResponseDto> getMemberByUserId(@PathVariable("userid") String user_id) {
+        GetMemberByUserIdResponseDto res = new GetMemberByUserIdResponseDto();
+
         try {
-            MemberDto dto = memberService.getMember(user_id);
-            logger.debug("회원 정보 검색: {}", dto);
-        } catch (SQLException e) {
+            MemberDto member = memberService.getMemberByUserId(user_id);
+            logger.debug("회원 정보 검색: {}", member);
+
+            res.setStatus(HttpStatus.OK);
+            res.setMessage("회원 정보 검색 성공");
+            res.setData(member);
+        } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
+            res.setStatus(HttpStatus.BAD_REQUEST);
+            res.setMessage("회원 정보 검색 실패");
+            res.setData(null);
         }
+
+        return ResponseEntity
+                .status(res.getStatus())
+                .body(res);
     }
 
 }

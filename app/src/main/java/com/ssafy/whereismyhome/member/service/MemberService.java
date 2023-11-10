@@ -19,5 +19,5 @@ public interface MemberService {
 
     List<MemberDto> getMembers() throws SQLException;
 
-    MemberDto getMember(String user_id) throws SQLException;
+    MemberDto getMemberByUserId(String user_id) throws SQLException;
 }

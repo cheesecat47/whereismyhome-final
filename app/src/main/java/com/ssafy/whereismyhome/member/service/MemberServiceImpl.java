@@ -43,8 +43,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDto getMember(String user_id) throws SQLException {
-        return memberMapper.getMember(user_id);
+    public MemberDto getMemberByUserId(String user_id) throws SQLException {
+        return memberMapper.getMemberByUserId(user_id);
     }
 
 }
