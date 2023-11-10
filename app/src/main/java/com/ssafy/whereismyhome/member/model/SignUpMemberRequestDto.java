@@ -10,8 +10,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@ApiModel(value = "SignUpRequestDto", description = "회원 가입 파라미터로 받을 Dto")
-public class SignUpRequestDto {
+@ApiModel(value = "SignUpMemberRequestDto", description = "회원 등록 파라미터로 받을 Dto")
+public class SignUpMemberRequestDto {
 
     @ApiModelProperty(value = "회원 아이디") // 상세 설명
     @ApiParam(required = true)

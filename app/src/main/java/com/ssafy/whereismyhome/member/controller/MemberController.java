@@ -65,11 +65,11 @@ public class MemberController {
     @ApiOperation(value = "회원등록", notes = "회원 정보를 입력 받아 회원 가입 처리")
     @PostMapping("/user")
     @ApiResponses({
-            @ApiResponse(code = 201, message = "회원 등록 성공", response = SignUpResponseDto.class),
-            @ApiResponse(code = 400, message = "회원 등록 실패", response = SignUpResponseDto.class)
+            @ApiResponse(code = 201, message = "회원 등록 성공", response = SignUpMemberResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 등록 실패", response = SignUpMemberResponseDto.class)
     })
-    public ResponseEntity<SignUpResponseDto> signUpMember(SignUpRequestDto dto) {
-        SignUpResponseDto res = new SignUpResponseDto();
+    public ResponseEntity<SignUpMemberResponseDto> signUpMember(SignUpMemberRequestDto dto) {
+        SignUpMemberResponseDto res = new SignUpMemberResponseDto();
 
         try {
             int cnt = memberService.signUpMember(dto);
