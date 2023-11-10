@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@ApiModel(value = "SignUpResponseDto", description = "회원가입 결과를 반환할 Dto")
-public class SignUpResponseDto {
+@ApiModel(value = "DeleteMemberByUserIdResponseDto", description = "회원 삭제 결과를 반환할 Dto")
+public class DeleteMemberByUserIdResponseDto {
     private HttpStatus status;
     private String message;
 }

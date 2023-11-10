@@ -62,7 +62,7 @@ public class MemberController {
                 .body(res);
     }
 
-    @ApiOperation(value = "회원등록", notes = "회원 정보를 입력 받아 회원 가입 처리")
+    @ApiOperation(value = "회원 등록", notes = "회원 정보를 입력 받아 회원 가입 처리")
     @PostMapping("/user")
     @ApiResponses({
             @ApiResponse(code = 201, message = "회원 등록 성공", response = SignUpMemberResponseDto.class),
@@ -89,7 +89,7 @@ public class MemberController {
                 .body(res);
     }
 
-    @ApiOperation(value = "회원수정", notes = "회원 아이디를 입력 받아 회원 수정 처리")
+    @ApiOperation(value = "회원 수정", notes = "회원 아이디를 입력 받아 회원 수정 처리")
     @PostMapping("/user/{userid}")
     public void updateMember(MemberDto dto) {
         try {
@@ -100,15 +100,31 @@ public class MemberController {
         }
     }
 
-    @ApiOperation(value = "회원삭제", notes = "회원 아이디를 받아 회원 삭제 처리")
+    @ApiOperation(value = "회원 삭제", notes = "회원 아이디를 받아 회원 삭제 처리")
     @DeleteMapping("/user/{userid}")
-    public void deleteMember(@PathVariable("userid") String user_id) {
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "회원 삭제 성공", response = DeleteMemberByUserIdResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 삭제 실패", response = DeleteMemberByUserIdResponseDto.class)
+    })
+    public ResponseEntity<DeleteMemberByUserIdResponseDto> deleteMemberByUserId(@PathVariable("userid") String user_id) {
+        DeleteMemberByUserIdResponseDto res = new DeleteMemberByUserIdResponseDto();
+
         try {
-            memberService.deleteMember(user_id);
-            logger.debug("회원 삭제 완료");
-        } catch (SQLException e) {
+            int cnt = memberService.deleteMemberByUserId(user_id);
+            assert cnt == 1;
+            logger.debug("회원 삭제 완료: {}", cnt);
+
+            res.setStatus(HttpStatus.OK);
+            res.setMessage("회원 삭제 성공");
+        } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
+            res.setStatus(HttpStatus.BAD_REQUEST);
+            res.setMessage("회원 삭제 실패");
         }
+
+        return ResponseEntity
+                .status(res.getStatus())
+                .body(res);
     }
 
     @ApiOperation(value = "전체 회원 정보 조회", notes = "전체 회원 정보를 조회")

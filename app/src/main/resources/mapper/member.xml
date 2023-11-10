@@ -17,7 +17,7 @@
           and password = #{password}
     </select>
 
-    <insert id="signUpMember" parameterType="signUpRequestDto">
+    <insert id="signUpMember" parameterType="signUpMemberRequestDto">
         insert into user (user_id, name, password, age, sex, email_account, email_domain, authorization)
         values (#{user_id}, #{name}, #{password}, #{age}, #{sex}, #{email_account}, #{email_domain}, 0)
     </insert>
@@ -32,7 +32,7 @@
         where user_id = #{user_id}
     </update>
 
-    <delete id="deleteMember" parameterType="String">
+    <delete id="deleteMemberByUserId" parameterType="String">
         delete
         from user
         where user_id = #{user_id}
