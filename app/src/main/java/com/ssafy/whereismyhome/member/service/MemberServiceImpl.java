@@ -28,8 +28,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void updateMember(MemberDto memberDto) throws SQLException {
-        memberMapper.updateMember(memberDto);
+    public int updateMember(MemberDto memberDto) throws SQLException {
+        return memberMapper.updateMember(memberDto);
     }
 
     @Override

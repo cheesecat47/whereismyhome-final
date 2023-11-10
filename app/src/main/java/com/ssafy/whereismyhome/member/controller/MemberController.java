@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -91,13 +90,42 @@ public class MemberController {
 
     @ApiOperation(value = "회원 수정", notes = "회원 아이디를 입력 받아 회원 수정 처리")
     @PostMapping("/user/{userid}")
-    public void updateMember(MemberDto dto) {
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "회원 수정 성공", response = UpdateMemberResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 수정 실패", response = UpdateMemberResponseDto.class)
+    })
+    public ResponseEntity<UpdateMemberResponseDto> updateMember(@PathVariable("userid") String user_id, UpdateMemberRequestDto dto) {
+        UpdateMemberResponseDto res = new UpdateMemberResponseDto();
+
         try {
-            memberService.updateMember(dto);
-            logger.debug("회원 수정 완료");
-        } catch (SQLException e) {
+            MemberDto member = memberService.getMemberByUserId(user_id);
+            assert member != null : "해당 회원 정보가 존재하지 않습니다.";
+            logger.debug("회원 수정: 기존 정보 {}", member);
+            logger.debug("회원 수정: 파라미터 {}", dto);
+
+            member.setAge(dto.getAge() > 0 ? dto.getAge() : member.getAge());
+            member.setEmail_account(dto.getEmail_account() != null ? dto.getEmail_account() : member.getEmail_account());
+            member.setEmail_domain(dto.getEmail_domain() != null ? dto.getEmail_domain() : member.getEmail_domain());
+            member.setPassword(dto.getPassword() != null ? dto.getPassword() : member.getPassword());
+            member.setSex(dto.getSex() != null ? dto.getSex() : member.getSex());
+
+            logger.debug("회원 수정: 수정될 정보 {}", member);
+
+            int cnt = memberService.updateMember(member);
+            assert cnt == 1;
+            logger.debug("회원 수정 완료: {}", cnt);
+
+            res.setStatus(HttpStatus.OK);
+            res.setMessage("회원 수정 성공");
+        } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
+            res.setStatus(HttpStatus.BAD_REQUEST);
+            res.setMessage("회원 수정 실패");
         }
+
+        return ResponseEntity
+                .status(res.getStatus())
+                .body(res);
     }
 
     @ApiOperation(value = "회원 삭제", notes = "회원 아이디를 받아 회원 삭제 처리")

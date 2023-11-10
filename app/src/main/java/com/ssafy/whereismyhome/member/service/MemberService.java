@@ -13,7 +13,7 @@ public interface MemberService {
 
     int signUpMember(SignUpMemberRequestDto memberDto) throws SQLException;
 
-    void updateMember(MemberDto memberDto) throws SQLException;
+    int updateMember(MemberDto memberDto) throws SQLException;
 
     int deleteMemberByUserId(String user_id) throws SQLException;
 

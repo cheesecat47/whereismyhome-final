@@ -22,9 +22,11 @@
         values (#{user_id}, #{name}, #{password}, #{age}, #{sex}, #{email_account}, #{email_domain}, 0)
     </insert>
 
-    <update id="updateMember" parameterType="memberDto">
+    <update id="updateMember" parameterType="MemberDto">
         update user
         <trim prefix="set" suffixOverrides=",">
+            <if test="age > 0">age = #{age},</if>
+            <if test="sex != null">sex = #{sex},</if>
             <if test="password != null">password = #{password},</if>
             <if test="email_account != null">email_account = #{email_account},</if>
             <if test="email_domain != null">email_domain = #{email_domain},</if>
