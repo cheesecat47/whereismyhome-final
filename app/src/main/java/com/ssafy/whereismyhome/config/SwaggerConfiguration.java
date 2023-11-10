@@ -5,6 +5,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,15 +19,16 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig {
+@MapperScan(basePackages = { "com.ssafy.whereismyhome.*.mapper" })
+public class SwaggerConfiguration {
 
 //	Swagger-UI 2.x 확인
 //	http://localhost:8080/{your-app-root}/swagger-ui.html
 //	Swagger-UI 3.x 확인
 //	http://localhost:8080/{your-app-root}/swagger-ui/index.html
 
-    private String version = "V1";
-    private String title = "WhereIsMyHome API " + version;
+	private String version = "V1";
+	private String title = "WhereIsMyHome API " + version;
 
     @Bean
     public Docket api() {
@@ -59,5 +61,4 @@ public class SwaggerConfig {
                 .licenseUrl("https://www.ssafy.com/ksp/jsp/swp/etc/swpPrivacy.jsp")
                 .version("1.0").build();
     }
-
 }
