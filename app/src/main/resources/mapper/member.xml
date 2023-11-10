@@ -16,12 +16,17 @@
 	</resultMap>
 
 	<select id="loginMember" parameterType="String" resultMap="member">
-		select
-		user_id, name, age, sex, email_account, email_domain, authorization
-		from user
-		where
-		user_id = #{user_id} and password = #{password}
-	</select>
+        select user_id,
+               name,
+               age,
+               sex,
+               email_account,
+               email_domain,
+               authorization
+        from user
+        where user_id = #{user_id}
+          and password = #{password}
+    </select>
 
     <insert id="signUpMember" parameterType="signUpRequestDto">
         insert into user (user_id, name, password, age, sex, email_account, email_domain, authorization)
