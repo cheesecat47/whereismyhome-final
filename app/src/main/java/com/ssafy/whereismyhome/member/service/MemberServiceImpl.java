@@ -6,6 +6,7 @@ import com.ssafy.whereismyhome.member.model.SignUpRequestDto;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -34,6 +35,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void deleteMember(String user_id) throws SQLException {
         memberMapper.deleteMember(user_id);
+    }
+
+    @Override
+    public List<MemberDto> getMembers() throws SQLException {
+        return memberMapper.getMembers();
     }
 
     @Override

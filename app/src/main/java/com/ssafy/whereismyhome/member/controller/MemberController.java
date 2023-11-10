@@ -1,9 +1,6 @@
 package com.ssafy.whereismyhome.member.controller;
 
-import com.ssafy.whereismyhome.member.model.LoginResponseDto;
-import com.ssafy.whereismyhome.member.model.MemberDto;
-import com.ssafy.whereismyhome.member.model.SignUpRequestDto;
-import com.ssafy.whereismyhome.member.model.SignUpResponseDto;
+import com.ssafy.whereismyhome.member.model.*;
 import com.ssafy.whereismyhome.member.service.MemberService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @RestController
 @Api(tags = {"유저 컨트롤러  API V1"})
@@ -35,8 +33,8 @@ public class MemberController {
             @ApiImplicitParam(name = "password", required = true, defaultValue = "")
     })
     @ApiResponses({
-            @ApiResponse(code = 200, message = "성공", response = LoginResponseDto.class),
-            @ApiResponse(code = 400, message = "실패", response = LoginResponseDto.class)
+            @ApiResponse(code = 200, message = "로그인 성공", response = LoginResponseDto.class),
+            @ApiResponse(code = 400, message = "로그인 실패", response = LoginResponseDto.class)
     })
     public ResponseEntity<LoginResponseDto> loginMember(String user_id, String password) {
         LoginResponseDto res = new LoginResponseDto();
@@ -66,6 +64,10 @@ public class MemberController {
 
     @ApiOperation(value = "회원등록", notes = "회원 정보를 입력 받아 회원 가입 처리")
     @PostMapping("/user")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "회원 등록 성공", response = SignUpResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 등록 실패", response = SignUpResponseDto.class)
+    })
     public ResponseEntity<SignUpResponseDto> signUpMember(SignUpRequestDto dto) {
         SignUpResponseDto res = new SignUpResponseDto();
 
@@ -107,6 +109,34 @@ public class MemberController {
         } catch (SQLException e) {
             logger.error("Error: {}", e.getMessage());
         }
+    }
+
+    @ApiOperation(value = "전체 회원 정보 조회", notes = "전체 회원 정보를 조회")
+    @GetMapping("/user")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "회원 목록 조회 성공", response = GetMembersResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 목록 조회 실패", response = GetMembersResponseDto.class)
+    })
+    public ResponseEntity<GetMembersResponseDto> getMembers() {
+        GetMembersResponseDto res = new GetMembersResponseDto();
+
+        try {
+            List<MemberDto> list = memberService.getMembers();
+            logger.debug("회원 목록 조회: {}", list.size());
+
+            res.setStatus(HttpStatus.OK);
+            res.setMessage("회원 목록 조회 성공");
+            res.setData(list);
+        } catch (Exception e) {
+            logger.error("Error: {}", e.getMessage());
+            res.setStatus(HttpStatus.BAD_REQUEST);
+            res.setMessage("회원 목록 조회 실패");
+            res.setData(null);
+        }
+
+        return ResponseEntity
+                .status(res.getStatus())
+                .body(res);
     }
 
     @ApiOperation(value = "회원 정보 검색", notes = "회원 아이디를 받아 정보 검색 처리")

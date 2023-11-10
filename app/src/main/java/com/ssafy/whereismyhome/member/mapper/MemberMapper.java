@@ -5,6 +5,7 @@ import com.ssafy.whereismyhome.member.model.SignUpRequestDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Mapper
 public interface MemberMapper {
@@ -16,6 +17,8 @@ public interface MemberMapper {
     void updateMember(MemberDto memberDto) throws SQLException;
 
     void deleteMember(String user_id) throws SQLException;
+
+    List<MemberDto> getMembers() throws SQLException;
 
     MemberDto getMember(String user_id) throws SQLException;
 

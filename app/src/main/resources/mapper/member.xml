@@ -49,6 +49,21 @@
 		user_id = #{user_id}
 	</delete>
 
+	<select id="getMembers" resultType="memberDto">
+        select user_id,
+               name,
+               age,
+               sex,
+               email_account,
+               email_domain,
+               authorization,
+               created_time,
+               updated_time,
+               deleted_time
+        from user
+        order by user_id
+    </select>
+
 	<select id="getMember" parameterType="string" resultMap="member">
 		select user_id, name, age, sex, email_account, email_domain, authorization
 		from user

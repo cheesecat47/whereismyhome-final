@@ -4,6 +4,7 @@ import com.ssafy.whereismyhome.member.model.MemberDto;
 import com.ssafy.whereismyhome.member.model.SignUpRequestDto;
 
 import java.sql.SQLException;
+import java.util.List;
 
 
 public interface MemberService {
@@ -15,6 +16,8 @@ public interface MemberService {
     void updateMember(MemberDto memberDto) throws SQLException;
 
     void deleteMember(String user_id) throws SQLException;
+
+    List<MemberDto> getMembers() throws SQLException;
 
     MemberDto getMember(String user_id) throws SQLException;
 }
