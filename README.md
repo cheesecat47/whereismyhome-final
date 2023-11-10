@@ -20,29 +20,13 @@
 
 ### 로그인 / 로그아웃 페이지
 
-## Directory structure
+## 실행 방법
 
-```shell
-.
-└── app
-    └── src
-        ├── main
-        │   ├── java
-        │   │   └── com
-        │   │       └── ssafy
-        │   │           └── whereismyhome
-        │   │               ├── house
-        │   │               │   └── controller
-        │   │               └── member
-        │   │                   └── comtroller
-        │   └── resources
-        └── test
-            └── java
-                └── com
-                    └── ssafy
-                        └── whereismyhome
+### Database 준비
 
-```
+1. `resources/sql` 디렉토리로 이동
+2. 압축 해제 
+3. SQL 실행
 
 ## Authors
 
