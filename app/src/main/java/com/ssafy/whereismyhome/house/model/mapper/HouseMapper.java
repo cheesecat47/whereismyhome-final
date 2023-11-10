@@ -16,4 +16,10 @@ public interface HouseMapper {
     List<HouseInfoDealDto> getHouseInfoDealsByDongCode(String dongCode);
 
     List<HouseDealDto> getHouseDealsByAptCodeYearMonth(String aptCode, String year, String month);
+
+    List<String> getSidoNames();
+
+    List<String> getGugunNames(String sidoName);
+
+    List<String> getDongNames(String sidoName, String gugunName);
 }

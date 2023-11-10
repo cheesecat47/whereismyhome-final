@@ -85,4 +85,29 @@
           and dealYear = #{year}
           and dealMonth = #{month};
     </select>
+
+    <select id="getSidoNames" resultType="String">
+        select distinct sidoName
+        from dongcode
+        order by sidoName;
+    </select>
+
+    <select id="getGugunNames" parameterType="String" resultType="String">
+        select distinct substring_index(gugunName, ' ', 1) as gugunName
+        from (select distinct sidoName, gugunName
+              from dongcode
+              where sidoName = #{sidoName}
+                and gugunName is not null
+              order by gugunName) as t;
+    </select>
+
+    <select id="getDongNames" parameterType="String" resultType="String">
+        select distinct substring_index(t.dongName, ' ', 1) as dongName
+        from (select distinct sidoName, gugunName, dongName
+              from dongcode
+              where sidoName = #{sidoName}
+                and gugunName like #{gugunName}
+                and dongName is not null
+              order by dongName) t;
+    </select>
 </mapper>

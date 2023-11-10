@@ -36,4 +36,19 @@ public class HouseServiceImpl implements HouseService {
     public List<HouseDealDto> getHouseDealsByAptCodeYearMonth(String aptCode, String year, String month) {
         return mapper.getHouseDealsByAptCodeYearMonth(aptCode, year, month);
     }
+
+    @Override
+    public List<String> getSidoNames() {
+        return mapper.getSidoNames();
+    }
+
+    @Override
+    public List<String> getGugunNames(String sidoName) {
+        return mapper.getGugunNames(sidoName);
+    }
+
+    @Override
+    public List<String> getDongNames(String sidoName, String gugunName) {
+        return mapper.getDongNames(sidoName, gugunName);
+    }
 }
