@@ -6,7 +6,6 @@ import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,12 +45,12 @@ public class MemberController {
             MemberDto member = memberService.loginMember(user_id, password);
             logger.debug("로그인 완료: {}", member);
 
-            res.setStatus(HttpStatus.OK);
+            res.setStatus(200);
             res.setMessage("로그인 성공");
             res.setData(member);
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
-            res.setStatus(HttpStatus.BAD_REQUEST);
+            res.setStatus(400);
             res.setMessage("로그인 실패");
             res.setData(null);
         }
@@ -75,11 +74,11 @@ public class MemberController {
             assert cnt == 1;
             logger.debug("회원 등록 완료: {}", cnt);
 
-            res.setStatus(HttpStatus.CREATED);
+            res.setStatus(201);
             res.setMessage("회원 등록 성공");
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
-            res.setStatus(HttpStatus.BAD_REQUEST);
+            res.setStatus(400);
             res.setMessage("회원 등록 실패");
         }
 
@@ -115,11 +114,11 @@ public class MemberController {
             assert cnt == 1;
             logger.debug("회원 수정 완료: {}", cnt);
 
-            res.setStatus(HttpStatus.OK);
+            res.setStatus(200);
             res.setMessage("회원 수정 성공");
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
-            res.setStatus(HttpStatus.BAD_REQUEST);
+            res.setStatus(400);
             res.setMessage("회원 수정 실패");
         }
 
@@ -142,11 +141,11 @@ public class MemberController {
             assert cnt == 1;
             logger.debug("회원 삭제 완료: {}", cnt);
 
-            res.setStatus(HttpStatus.OK);
+            res.setStatus(200);
             res.setMessage("회원 삭제 성공");
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
-            res.setStatus(HttpStatus.BAD_REQUEST);
+            res.setStatus(400);
             res.setMessage("회원 삭제 실패");
         }
 
@@ -168,12 +167,12 @@ public class MemberController {
             List<MemberDto> list = memberService.getMembers();
             logger.debug("회원 목록 조회: {}", list.size());
 
-            res.setStatus(HttpStatus.OK);
+            res.setStatus(200);
             res.setMessage("회원 목록 조회 성공");
             res.setData(list);
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
-            res.setStatus(HttpStatus.BAD_REQUEST);
+            res.setStatus(400);
             res.setMessage("회원 목록 조회 실패");
             res.setData(null);
         }
@@ -196,12 +195,12 @@ public class MemberController {
             MemberDto member = memberService.getMemberByUserId(user_id);
             logger.debug("회원 정보 검색: {}", member);
 
-            res.setStatus(HttpStatus.OK);
+            res.setStatus(200);
             res.setMessage("회원 정보 검색 성공");
             res.setData(member);
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
-            res.setStatus(HttpStatus.BAD_REQUEST);
+            res.setStatus(400);
             res.setMessage("회원 정보 검색 실패");
             res.setData(null);
         }

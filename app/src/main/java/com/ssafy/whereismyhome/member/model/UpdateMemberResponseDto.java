@@ -2,7 +2,6 @@ package com.ssafy.whereismyhome.member.model;
 
 import io.swagger.annotations.ApiModel;
 import lombok.*;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
@@ -11,6 +10,6 @@ import org.springframework.http.HttpStatus;
 @ToString
 @ApiModel(value = "UpdateMemberResponseDto", description = "회원 수정 결과를 반환할 Dto")
 public class UpdateMemberResponseDto {
-    private HttpStatus status;
+    private int status;
     private String message;
 }
