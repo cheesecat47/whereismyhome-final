@@ -5,7 +5,6 @@ import com.ssafy.whereismyhome.member.model.MemberDto;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -17,8 +16,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDto loginMember(Map<String, String> map) throws SQLException {
-        return memberMapper.loginMember(map);
+    public MemberDto loginMember(String user_id, String password) throws SQLException {
+        return memberMapper.loginMember(user_id, password);
     }
 
     @Override
