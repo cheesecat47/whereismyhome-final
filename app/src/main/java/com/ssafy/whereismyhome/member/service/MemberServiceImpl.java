@@ -2,10 +2,11 @@ package com.ssafy.whereismyhome.member.service;
 
 import com.ssafy.whereismyhome.member.mapper.MemberMapper;
 import com.ssafy.whereismyhome.member.model.MemberDto;
+import com.ssafy.whereismyhome.member.model.SignUpMemberRequestDto;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.Map;
+import java.util.List;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -17,28 +18,33 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDto loginMember(Map<String, String> map) throws SQLException {
-        return memberMapper.loginMember(map);
+    public MemberDto loginMember(String user_id, String password) throws SQLException {
+        return memberMapper.loginMember(user_id, password);
     }
 
     @Override
-    public void signUpMember(MemberDto memberDto) throws SQLException {
-        memberMapper.signUpMember(memberDto);
+    public int signUpMember(SignUpMemberRequestDto memberDto) throws SQLException {
+        return memberMapper.signUpMember(memberDto);
     }
 
     @Override
-    public void updateMember(MemberDto memberDto) throws SQLException {
-        memberMapper.updateMember(memberDto);
+    public int updateMember(MemberDto memberDto) throws SQLException {
+        return memberMapper.updateMember(memberDto);
     }
 
     @Override
-    public void deleteMember(String user_id) throws SQLException {
-        memberMapper.deleteMember(user_id);
+    public int deleteMemberByUserId(String user_id) throws SQLException {
+        return memberMapper.deleteMemberByUserId(user_id);
     }
 
     @Override
-    public MemberDto getMember(String user_id) throws SQLException {
-        return memberMapper.getMember(user_id);
+    public List<MemberDto> getMembers() throws SQLException {
+        return memberMapper.getMembers();
+    }
+
+    @Override
+    public MemberDto getMemberByUserId(String user_id) throws SQLException {
+        return memberMapper.getMemberByUserId(user_id);
     }
 
 }

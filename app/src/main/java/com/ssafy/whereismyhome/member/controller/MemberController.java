@@ -1,16 +1,15 @@
 package com.ssafy.whereismyhome.member.controller;
 
-import com.ssafy.whereismyhome.member.model.MemberDto;
+import com.ssafy.whereismyhome.member.model.*;
 import com.ssafy.whereismyhome.member.service.MemberService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @Api(tags = {"유저 컨트롤러  API V1"})
@@ -27,57 +26,188 @@ public class MemberController {
 
     @ApiOperation(value = "로그인", notes = "아이디와 비밀번호를 입력 받아 로그인 처리")
     @PostMapping("/login")
-    public void loginMember(Map<String, String> map) {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "user_id", required = true, defaultValue = ""),
+            @ApiImplicitParam(name = "password", required = true, defaultValue = "")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "로그인 성공", response = LoginResponseDto.class),
+            @ApiResponse(code = 400, message = "로그인 실패", response = LoginResponseDto.class)
+    })
+    public ResponseEntity<LoginResponseDto> loginMember(String user_id, String password) {
+        LoginResponseDto res = new LoginResponseDto();
+
         try {
-            MemberDto dto = memberService.loginMember(map);
-            logger.debug("로그인 완료: {}", dto);
-        } catch (SQLException e) {
+            if (user_id.equals("") || password.equals("")) {
+                throw new Exception("아이디, 비밀번호는 필수입니다.");
+            }
+
+            MemberDto member = memberService.loginMember(user_id, password);
+            logger.debug("로그인 완료: {}", member);
+
+            res.setStatus(200);
+            res.setMessage("로그인 성공");
+            res.setData(member);
+        } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
+            res.setStatus(400);
+            res.setMessage("로그인 실패");
+            res.setData(null);
         }
+
+        return ResponseEntity
+                .status(res.getStatus())
+                .body(res);
     }
 
-    @ApiOperation(value = "회원등록", notes = "회원 정보를 입력 받아 회원 가입 처리")
+    @ApiOperation(value = "회원 등록", notes = "회원 정보를 입력 받아 회원 가입 처리")
     @PostMapping("/user")
-    public void signUpMember(MemberDto dto) {
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "회원 등록 성공", response = SignUpMemberResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 등록 실패", response = SignUpMemberResponseDto.class)
+    })
+    public ResponseEntity<SignUpMemberResponseDto> signUpMember(SignUpMemberRequestDto dto) {
+        SignUpMemberResponseDto res = new SignUpMemberResponseDto();
+
         try {
-            memberService.signUpMember(dto);
-            logger.debug("회원 등록 완료");
-        } catch (SQLException e) {
+            int cnt = memberService.signUpMember(dto);
+            assert cnt == 1;
+            logger.debug("회원 등록 완료: {}", cnt);
+
+            res.setStatus(201);
+            res.setMessage("회원 등록 성공");
+        } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
+            res.setStatus(400);
+            res.setMessage("회원 등록 실패");
         }
+
+        return ResponseEntity
+                .status(res.getStatus())
+                .body(res);
     }
 
-    @ApiOperation(value = "회원수정", notes = "회원 아이디를 입력 받아 회원 수정 처리")
+    @ApiOperation(value = "회원 수정", notes = "회원 아이디를 입력 받아 회원 수정 처리")
     @PostMapping("/user/{userid}")
-    public void updateMember(MemberDto dto) {
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "회원 수정 성공", response = UpdateMemberResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 수정 실패", response = UpdateMemberResponseDto.class)
+    })
+    public ResponseEntity<UpdateMemberResponseDto> updateMember(@PathVariable("userid") String user_id, UpdateMemberRequestDto dto) {
+        UpdateMemberResponseDto res = new UpdateMemberResponseDto();
+
         try {
-            memberService.updateMember(dto);
-            logger.debug("회원 수정 완료");
-        } catch (SQLException e) {
+            MemberDto member = memberService.getMemberByUserId(user_id);
+            assert member != null : "해당 회원 정보가 존재하지 않습니다.";
+            logger.debug("회원 수정: 기존 정보 {}", member);
+            logger.debug("회원 수정: 파라미터 {}", dto);
+
+            member.setAge(dto.getAge() > 0 ? dto.getAge() : member.getAge());
+            member.setEmail_account(dto.getEmail_account() != null ? dto.getEmail_account() : member.getEmail_account());
+            member.setEmail_domain(dto.getEmail_domain() != null ? dto.getEmail_domain() : member.getEmail_domain());
+            member.setPassword(dto.getPassword() != null ? dto.getPassword() : member.getPassword());
+            member.setSex(dto.getSex() != null ? dto.getSex() : member.getSex());
+
+            logger.debug("회원 수정: 수정될 정보 {}", member);
+
+            int cnt = memberService.updateMember(member);
+            assert cnt == 1;
+            logger.debug("회원 수정 완료: {}", cnt);
+
+            res.setStatus(200);
+            res.setMessage("회원 수정 성공");
+        } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
+            res.setStatus(400);
+            res.setMessage("회원 수정 실패");
         }
+
+        return ResponseEntity
+                .status(res.getStatus())
+                .body(res);
     }
 
-    @ApiOperation(value = "회원삭제", notes = "회원 아이디를 받아 회원 삭제 처리")
+    @ApiOperation(value = "회원 삭제", notes = "회원 아이디를 받아 회원 삭제 처리")
     @DeleteMapping("/user/{userid}")
-    public void deleteMember(@PathVariable("userid") String user_id) {
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "회원 삭제 성공", response = DeleteMemberByUserIdResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 삭제 실패", response = DeleteMemberByUserIdResponseDto.class)
+    })
+    public ResponseEntity<DeleteMemberByUserIdResponseDto> deleteMemberByUserId(@PathVariable("userid") String user_id) {
+        DeleteMemberByUserIdResponseDto res = new DeleteMemberByUserIdResponseDto();
+
         try {
-            memberService.deleteMember(user_id);
-            logger.debug("회원 삭제 완료");
-        } catch (SQLException e) {
+            int cnt = memberService.deleteMemberByUserId(user_id);
+            assert cnt == 1;
+            logger.debug("회원 삭제 완료: {}", cnt);
+
+            res.setStatus(200);
+            res.setMessage("회원 삭제 성공");
+        } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
+            res.setStatus(400);
+            res.setMessage("회원 삭제 실패");
         }
+
+        return ResponseEntity
+                .status(res.getStatus())
+                .body(res);
     }
 
-    @ApiOperation(value = "회원 정보 검색", notes = "회원 아이디를 받아 정보 검색 처리")
-    @GetMapping("/user/{userid}")
-    public void getMember(@PathVariable("userid") String user_id) {
+    @ApiOperation(value = "전체 회원 정보 조회", notes = "전체 회원 정보를 조회")
+    @GetMapping("/user")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "회원 목록 조회 성공", response = GetMembersResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 목록 조회 실패", response = GetMembersResponseDto.class)
+    })
+    public ResponseEntity<GetMembersResponseDto> getMembers() {
+        GetMembersResponseDto res = new GetMembersResponseDto();
+
         try {
-            MemberDto dto = memberService.getMember(user_id);
-            logger.debug("회원 정보 검색: {}", dto);
-        } catch (SQLException e) {
+            List<MemberDto> list = memberService.getMembers();
+            logger.debug("회원 목록 조회: {}", list.size());
+
+            res.setStatus(200);
+            res.setMessage("회원 목록 조회 성공");
+            res.setData(list);
+        } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
+            res.setStatus(400);
+            res.setMessage("회원 목록 조회 실패");
+            res.setData(null);
         }
+
+        return ResponseEntity
+                .status(res.getStatus())
+                .body(res);
+    }
+
+    @ApiOperation(value = "회원 정보 검색", notes = "회원 아이디를 받아 회원 정보 검색")
+    @GetMapping("/user/{userid}")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "회원 정보 검색 성공", response = GetMemberByUserIdResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 정보 검색 실패", response = GetMemberByUserIdResponseDto.class)
+    })
+    public ResponseEntity<GetMemberByUserIdResponseDto> getMemberByUserId(@PathVariable("userid") String user_id) {
+        GetMemberByUserIdResponseDto res = new GetMemberByUserIdResponseDto();
+
+        try {
+            MemberDto member = memberService.getMemberByUserId(user_id);
+            logger.debug("회원 정보 검색: {}", member);
+
+            res.setStatus(200);
+            res.setMessage("회원 정보 검색 성공");
+            res.setData(member);
+        } catch (Exception e) {
+            logger.error("Error: {}", e.getMessage());
+            res.setStatus(400);
+            res.setMessage("회원 정보 검색 실패");
+            res.setData(null);
+        }
+
+        return ResponseEntity
+                .status(res.getStatus())
+                .body(res);
     }
 
 }
