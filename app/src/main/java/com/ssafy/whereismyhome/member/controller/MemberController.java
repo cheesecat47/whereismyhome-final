@@ -34,15 +34,15 @@ public class MemberController {
             @ApiResponse(code = 200, message = "로그인 성공", response = LoginResponseDto.class),
             @ApiResponse(code = 400, message = "로그인 실패", response = LoginResponseDto.class)
     })
-    public ResponseEntity<LoginResponseDto> loginMember(String user_id, String password) {
+    public ResponseEntity<LoginResponseDto> loginMember(@RequestBody LoginRequestDto dto) {
         LoginResponseDto res = new LoginResponseDto();
 
         try {
-            if (user_id.equals("") || password.equals("")) {
+            if (dto.getUser_id().equals("") || dto.getPassword().equals("")) {
                 throw new Exception("아이디, 비밀번호는 필수입니다.");
             }
 
-            MemberDto member = memberService.loginMember(user_id, password);
+            MemberDto member = memberService.loginMember(dto.getUser_id(), dto.getPassword());
             logger.debug("로그인 완료: {}", member);
 
             res.setStatus(200);
@@ -66,7 +66,7 @@ public class MemberController {
             @ApiResponse(code = 201, message = "회원 등록 성공", response = SignUpMemberResponseDto.class),
             @ApiResponse(code = 400, message = "회원 등록 실패", response = SignUpMemberResponseDto.class)
     })
-    public ResponseEntity<SignUpMemberResponseDto> signUpMember(SignUpMemberRequestDto dto) {
+    public ResponseEntity<SignUpMemberResponseDto> signUpMember(@RequestBody SignUpMemberRequestDto dto) {
         SignUpMemberResponseDto res = new SignUpMemberResponseDto();
 
         try {
@@ -93,7 +93,7 @@ public class MemberController {
             @ApiResponse(code = 200, message = "회원 수정 성공", response = UpdateMemberResponseDto.class),
             @ApiResponse(code = 400, message = "회원 수정 실패", response = UpdateMemberResponseDto.class)
     })
-    public ResponseEntity<UpdateMemberResponseDto> updateMember(@PathVariable("userid") String user_id, UpdateMemberRequestDto dto) {
+    public ResponseEntity<UpdateMemberResponseDto> updateMember(@PathVariable("userid") String user_id, @RequestBody UpdateMemberRequestDto dto) {
         UpdateMemberResponseDto res = new UpdateMemberResponseDto();
 
         try {
