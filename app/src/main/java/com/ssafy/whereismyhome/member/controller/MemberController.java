@@ -32,26 +32,34 @@ public class MemberController {
     @PostMapping("/login")
     @ApiResponses({
             @ApiResponse(code = 200, message = "로그인 성공", response = LoginResponseDto.class),
-            @ApiResponse(code = 400, message = "로그인 실패", response = LoginResponseDto.class)
+            @ApiResponse(code = 401, message = "로그인 실패", response = LoginResponseDto.class),
+            @ApiResponse(code = 500, message = "로그인 실패", response = LoginResponseDto.class)
     })
     public ResponseEntity<LoginResponseDto> loginMember(@RequestBody LoginRequestDto dto) {
         LoginResponseDto res = new LoginResponseDto();
 
         try {
             if (dto.getUser_id().equals("") || dto.getPassword().equals("")) {
-                throw new Exception("아이디, 비밀번호는 필수입니다.");
+                res.setStatus(401);
+                res.setMessage("로그인 실패: 아이디, 비밀번호는 필수입니다.");
+                res.setData(dto);
+            } else {
+                MemberDto member = memberService.loginMember(dto.getUser_id(), dto.getPassword());
+                if (member == null) {
+                    res.setStatus(401);
+                    res.setMessage("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.");
+                    res.setData(dto);
+                } else {
+                    logger.debug("로그인 완료: {}", member);
+                    res.setStatus(200);
+                    res.setMessage("로그인 성공");
+                    res.setData(member);
+                }
             }
-
-            MemberDto member = memberService.loginMember(dto.getUser_id(), dto.getPassword());
-            logger.debug("로그인 완료: {}", member);
-
-            res.setStatus(200);
-            res.setMessage("로그인 성공");
-            res.setData(member);
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
-            res.setStatus(400);
-            res.setMessage("로그인 실패");
+            res.setStatus(500);
+            res.setMessage("로그인 실패: " + e.getMessage());
             res.setData(null);
         }
 
