@@ -1,14 +1,8 @@
 package com.ssafy.whereismyhome.house.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@ToString
+@Data
 public class HouseInfoDto {
     private long aptCode;
     private int buildYear;

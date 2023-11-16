@@ -2,13 +2,9 @@ package com.ssafy.whereismyhome.member.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.Data;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Data
 @ApiModel(value = "UpdateMemberRequestDto", description = "회원 수정 파라미터로 받을 Dto")
 public class UpdateMemberRequestDto {
 

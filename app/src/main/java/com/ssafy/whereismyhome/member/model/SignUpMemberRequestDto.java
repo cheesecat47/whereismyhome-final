@@ -3,13 +3,9 @@ package com.ssafy.whereismyhome.member.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
-import lombok.*;
+import lombok.Data;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Data
 @ApiModel(value = "SignUpMemberRequestDto", description = "회원 등록 파라미터로 받을 Dto")
 public class SignUpMemberRequestDto {
 
