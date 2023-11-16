@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/house")
+@RequestMapping("/house")
 @Api(value = "House", tags = {"아파트 정보 API V1"})
 @CrossOrigin("*")
 @Slf4j
