@@ -1,6 +1,6 @@
 package com.ssafy.whereismyhome.member.service;
 
-import com.ssafy.whereismyhome.member.mapper.MemberMapper;
+import com.ssafy.whereismyhome.member.model.mapper.MemberMapper;
 import com.ssafy.whereismyhome.member.model.MemberDto;
 import com.ssafy.whereismyhome.member.model.SignUpMemberRequestDto;
 import org.springframework.stereotype.Service;

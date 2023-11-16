@@ -1,6 +1,5 @@
 package com.ssafy.whereismyhome.config;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +13,6 @@ import java.util.List;
 
 @Configuration
 @EnableWebMvc
-@MapperScan(basePackages = {"com.ssafy.whereismyhome.**.mapper"})
 public class WebMvcConfiguration implements WebMvcConfigurer {
     private final Logger logger = LoggerFactory.getLogger(WebMvcConfiguration.class);
     private final List<String> patterns = Arrays.asList("/*");
