@@ -26,10 +26,6 @@ public class MemberController {
 
     @ApiOperation(value = "로그인", notes = "아이디와 비밀번호를 입력 받아 로그인 처리")
     @PostMapping("/login")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "user_id", required = true, defaultValue = ""),
-            @ApiImplicitParam(name = "password", required = true, defaultValue = "")
-    })
     @ApiResponses({
             @ApiResponse(code = 200, message = "로그인 성공", response = LoginResponseDto.class),
             @ApiResponse(code = 400, message = "로그인 실패", response = LoginResponseDto.class)
