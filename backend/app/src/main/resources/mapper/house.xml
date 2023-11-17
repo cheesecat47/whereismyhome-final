@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.whereismyhome.house.model.mapper.HouseMapper">
+
+    <select id="getDongCodeByDongName" parameterType="String" resultType="String">
+        select dongCode
+        from `dongcode`
+        where sidoName = #{sidoName}
+          and gugunName like #{gugunName}
+          and dongName = #{dongName}
+        order by dongCode;
+    </select>
+
+    <select id="getHouseInfosByDongCode" parameterType="String" resultType="houseInfoDto">
+        select aptCode,
+               buildYear,
+               roadName,
+               roadNameBonbun,
+               roadNameBubun,
+               roadNameSeq,
+               roadNameBasementCode,
+               roadNameCode,
+               dong,
+               bonbun,
+               bubun,
+               sigunguCode,
+               eubmyundongCode,
+               dongCode,
+               landCode,
+               apartmentName,
+               jibun,
+               lng,
+               lat
+        from `houseinfo`
+        where dongCode = #{dongCode}
+        order by aptCode;
+    </select>
+
+    <select id="getHouseInfoDealsByDongCode" parameterType="String" resultType="houseInfoDealDto">
+        select A.dong,
+               A.dongCode,
+               A.jibun,
+               A.apartmentName,
+               A.aptCode,
+               A.lng,
+               A.lat,
+               C.dealYear,
+               C.dealMonth,
+               C.dealDay,
+               C.dealAmount,
+               C.area
+        from (select distinct aptCode, dong, dongCode, apartmentName, jibun, lng, lat
+              from houseinfo
+              where dongCode = #{dongCode}) as A
+                 left join (SELECT aptCode, dealYear, dealMonth, dealDay, dealAmount, area
+                            from (SELECT distinct aptCode,
+                                                  dealYear,
+                                                  dealMonth,
+                                                  dealDay,
+                                                  dealAmount,
+                                                  area,
+                                                  ROW_NUMBER() OVER (PARTITION BY aptCode ORDER BY dealYear DESC, dealMonth DESC, dealDay DESC) AS rn
+                                  FROM housedeal
+                                  where aptCode in (select distinct aptCode
+                                                    from houseinfo
+                                                    where dongCode = #{dongCode})) as B
+                            where rn = 1) as C
+                           on A.aptCode = C.aptCode;
+    </select>
+
+    <select id="getHouseDealsByAptCodeYearMonth" parameterType="String" resultType="HouseDealDto">
+        select no,
+               dealAmount,
+               dealYear,
+               dealMonth,
+               dealDay,
+               area,
+               floor,
+               cancelDealType,
+               aptCode
+        from housedeal
+        where aptCode = #{aptCode}
+          and dealYear = #{year}
+          and dealMonth = #{month};
+    </select>
+
+    <select id="getSidoNames" resultType="String">
+        select distinct sidoName
+        from dongcode
+        order by sidoName;
+    </select>
+
+    <select id="getGugunNames" parameterType="String" resultType="String">
+        select distinct substring_index(gugunName, ' ', 1) as gugunName
+        from (select distinct sidoName, gugunName
+              from dongcode
+              where sidoName = #{sidoName}
+                and gugunName is not null
+              order by gugunName) as t;
+    </select>
+
+    <select id="getDongNames" parameterType="String" resultType="String">
+        select distinct substring_index(t.dongName, ' ', 1) as dongName
+        from (select distinct sidoName, gugunName, dongName
+              from dongcode
+              where sidoName = #{sidoName}
+                and gugunName like #{gugunName}
+                and dongName is not null
+              order by dongName) t;
+    </select>
+</mapper>

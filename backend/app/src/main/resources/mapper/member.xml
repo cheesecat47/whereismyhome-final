@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.whereismyhome.member.model.mapper.MemberMapper">
+
+    <select id="loginMember" parameterType="String" resultType="memberDto">
+        select user_id,
+               name,
+               age,
+               sex,
+               email_account,
+               email_domain,
+               authorization
+        from user
+        where user_id = #{user_id}
+          and password = #{password}
+    </select>
+
+    <insert id="signUpMember" parameterType="signUpMemberRequestDto">
+        insert into user (user_id, name, password, age, sex, email_account, email_domain, authorization)
+        values (#{user_id}, #{name}, #{password}, #{age}, #{sex}, #{email_account}, #{email_domain}, 0)
+    </insert>
+
+    <update id="updateMember" parameterType="MemberDto">
+        update user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="age > 0">age = #{age},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="email_account != null">email_account = #{email_account},</if>
+            <if test="email_domain != null">email_domain = #{email_domain},</if>
+        </trim>
+        where user_id = #{user_id}
+    </update>
+
+    <delete id="deleteMemberByUserId" parameterType="String">
+        delete
+        from user
+        where user_id = #{user_id}
+    </delete>
+
+    <select id="getMembers" resultType="memberDto">
+        select user_id,
+               name,
+               age,
+               sex,
+               email_account,
+               email_domain,
+               authorization,
+               created_time,
+               updated_time,
+               deleted_time
+        from user
+        order by user_id
+    </select>
+
+    <select id="getMemberByUserId" parameterType="string" resultType="memberDto">
+        select user_id,
+               name,
+               age,
+               sex,
+               email_account,
+               email_domain,
+               authorization,
+               created_time,
+               updated_time,
+               deleted_time
+        from user
+        where user_id = #{user_id}
+    </select>
+
+</mapper>
