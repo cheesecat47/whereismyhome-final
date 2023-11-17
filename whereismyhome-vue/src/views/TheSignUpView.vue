@@ -35,7 +35,7 @@ const signupEvent = () => {
 
 <template>
   <div class="isolate bg-white px-6 py-16 lg:px-8">
-    <div
+    <!-- <div
       class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
       aria-hidden="true"
     >
@@ -62,7 +62,7 @@ const signupEvent = () => {
           );
         "
       />
-    </div>
+    </div> -->
     <div class="mx-auto max-w-2xl text-center">
       <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">회원가입</h2>
       <p class="mt-4 text-sm leading-8 text-gray-600">여기 뭐적을까? 음.. 오신것을 환영합니다</p>
