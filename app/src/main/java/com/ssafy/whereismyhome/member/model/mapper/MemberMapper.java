@@ -1,4 +1,4 @@
-package com.ssafy.whereismyhome.member.mapper;
+package com.ssafy.whereismyhome.member.model.mapper;
 
 import com.ssafy.whereismyhome.member.model.MemberDto;
 import com.ssafy.whereismyhome.member.model.SignUpMemberRequestDto;

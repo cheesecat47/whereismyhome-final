@@ -2,7 +2,10 @@ package com.ssafy.whereismyhome.member.controller;
 
 import com.ssafy.whereismyhome.member.model.*;
 import com.ssafy.whereismyhome.member.service.MemberService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@Api(tags = {"유저 컨트롤러  API V1"})
+@Api(tags = {"멤버 컨트롤러  API V1"})
+@RequestMapping("/member")
 @Slf4j
 public class MemberController {
 
@@ -26,32 +30,36 @@ public class MemberController {
 
     @ApiOperation(value = "로그인", notes = "아이디와 비밀번호를 입력 받아 로그인 처리")
     @PostMapping("/login")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "user_id", required = true, defaultValue = ""),
-            @ApiImplicitParam(name = "password", required = true, defaultValue = "")
-    })
     @ApiResponses({
             @ApiResponse(code = 200, message = "로그인 성공", response = LoginResponseDto.class),
-            @ApiResponse(code = 400, message = "로그인 실패", response = LoginResponseDto.class)
+            @ApiResponse(code = 401, message = "로그인 실패", response = LoginResponseDto.class),
+            @ApiResponse(code = 500, message = "로그인 실패", response = LoginResponseDto.class)
     })
     public ResponseEntity<LoginResponseDto> loginMember(@RequestBody LoginRequestDto dto) {
         LoginResponseDto res = new LoginResponseDto();
 
         try {
             if (dto.getUser_id().equals("") || dto.getPassword().equals("")) {
-                throw new Exception("아이디, 비밀번호는 필수입니다.");
+                res.setStatus(401);
+                res.setMessage("로그인 실패: 아이디, 비밀번호는 필수입니다.");
+                res.setData(dto);
+            } else {
+                MemberDto member = memberService.loginMember(dto.getUser_id(), dto.getPassword());
+                if (member == null) {
+                    res.setStatus(401);
+                    res.setMessage("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.");
+                    res.setData(dto);
+                } else {
+                    logger.debug("로그인 완료: {}", member);
+                    res.setStatus(200);
+                    res.setMessage("로그인 성공");
+                    res.setData(member);
+                }
             }
-
-            MemberDto member = memberService.loginMember(dto.getUser_id(), dto.getPassword());
-            logger.debug("로그인 완료: {}", member);
-
-            res.setStatus(200);
-            res.setMessage("로그인 성공");
-            res.setData(member);
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
-            res.setStatus(400);
-            res.setMessage("로그인 실패");
+            res.setStatus(500);
+            res.setMessage("로그인 실패: " + e.getMessage());
             res.setData(null);
         }
 
@@ -61,7 +69,7 @@ public class MemberController {
     }
 
     @ApiOperation(value = "회원 등록", notes = "회원 정보를 입력 받아 회원 가입 처리")
-    @PostMapping("/user")
+    @PostMapping("/")
     @ApiResponses({
             @ApiResponse(code = 201, message = "회원 등록 성공", response = SignUpMemberResponseDto.class),
             @ApiResponse(code = 400, message = "회원 등록 실패", response = SignUpMemberResponseDto.class)
@@ -88,7 +96,7 @@ public class MemberController {
     }
 
     @ApiOperation(value = "회원 수정", notes = "회원 아이디를 입력 받아 회원 수정 처리")
-    @PostMapping("/user/{userid}")
+    @PostMapping("/{userid}")
     @ApiResponses({
             @ApiResponse(code = 200, message = "회원 수정 성공", response = UpdateMemberResponseDto.class),
             @ApiResponse(code = 400, message = "회원 수정 실패", response = UpdateMemberResponseDto.class)
@@ -128,7 +136,7 @@ public class MemberController {
     }
 
     @ApiOperation(value = "회원 삭제", notes = "회원 아이디를 받아 회원 삭제 처리")
-    @DeleteMapping("/user/{userid}")
+    @DeleteMapping("/{userid}")
     @ApiResponses({
             @ApiResponse(code = 200, message = "회원 삭제 성공", response = DeleteMemberByUserIdResponseDto.class),
             @ApiResponse(code = 400, message = "회원 삭제 실패", response = DeleteMemberByUserIdResponseDto.class)
@@ -155,7 +163,7 @@ public class MemberController {
     }
 
     @ApiOperation(value = "전체 회원 정보 조회", notes = "전체 회원 정보를 조회")
-    @GetMapping("/user")
+    @GetMapping("/")
     @ApiResponses({
             @ApiResponse(code = 200, message = "회원 목록 조회 성공", response = GetMembersResponseDto.class),
             @ApiResponse(code = 400, message = "회원 목록 조회 실패", response = GetMembersResponseDto.class)
@@ -183,7 +191,7 @@ public class MemberController {
     }
 
     @ApiOperation(value = "회원 정보 검색", notes = "회원 아이디를 받아 회원 정보 검색")
-    @GetMapping("/user/{userid}")
+    @GetMapping("/{userid}")
     @ApiResponses({
             @ApiResponse(code = 200, message = "회원 정보 검색 성공", response = GetMemberByUserIdResponseDto.class),
             @ApiResponse(code = 400, message = "회원 정보 검색 실패", response = GetMemberByUserIdResponseDto.class)

@@ -2,42 +2,30 @@ package com.ssafy.whereismyhome.member.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
-import lombok.*;
+import lombok.Data;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Data
 @ApiModel(value = "SignUpMemberRequestDto", description = "회원 등록 파라미터로 받을 Dto")
 public class SignUpMemberRequestDto {
 
-    @ApiModelProperty(value = "회원 아이디") // 상세 설명
-    @ApiParam(required = true)
+    @ApiModelProperty(value = "회원 아이디", required = true) // 상세 설명
     private String user_id;
 
-    @ApiModelProperty(value = "회원 이름")
-    @ApiParam(required = true)
+    @ApiModelProperty(value = "회원 이름", required = true)
     private String name;
 
-    @ApiModelProperty(value = "회원 비밀번호")
-    @ApiParam(required = true)
+    @ApiModelProperty(value = "회원 비밀번호", required = true)
     private String password;
 
-    @ApiModelProperty(value = "회원 나이")
-    @ApiParam(required = true)
+    @ApiModelProperty(value = "회원 나이", required = true)
     private int age;
 
-    @ApiModelProperty(value = "회원 성별 (M, F)")
-    @ApiParam(required = true)
+    @ApiModelProperty(value = "회원 성별 (M, F)", required = true)
     private String sex;
 
-    @ApiModelProperty(value = "회원 이메일")
-    @ApiParam(required = true)
+    @ApiModelProperty(value = "회원 이메일", required = true)
     private String email_account;
 
-    @ApiModelProperty(value = "회원 이메일 도메인, @ 뒤에 들어갈 문장 (ex. google.com)")
-    @ApiParam(required = true)
+    @ApiModelProperty(value = "회원 이메일 도메인, @ 뒤에 들어갈 문장 (ex. google.com)", required = true)
     private String email_domain;
 }
