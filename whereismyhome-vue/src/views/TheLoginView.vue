@@ -11,9 +11,8 @@ const user = ref({
 });
 
 const loginEvent = () => {
-  console.log('login');
   loginMember(
-    user,
+    user.value,
     ({ data }) => {
       console.log(data);
       router.push({ name: 'main' });
@@ -28,11 +27,6 @@ const loginEvent = () => {
 <template>
   <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-      <img
-        class="mx-auto h-10 w-auto"
-        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-        alt="hi"
-      />
       <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">로그인</h2>
       <p class="mt-4 text-center text-sm leading-8 text-gray-600">여기 뭐적을까? 음.. 오신것을 환영합니다</p>
     </div>
@@ -85,7 +79,9 @@ const loginEvent = () => {
       <p class="mt-10 text-center text-sm text-gray-500">
         처음 방문하셨나요?
         {{ '  ' }}
-        <a href="#" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">회원가입</a>
+        <RouterLink :to="{ name: 'signup' }" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+          >회원가입</RouterLink
+        >
       </p>
     </div>
   </div>
