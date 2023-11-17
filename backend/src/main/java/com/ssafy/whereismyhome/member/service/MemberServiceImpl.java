@@ -18,8 +18,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDto loginMember(String user_id, String password) throws SQLException {
-        return memberMapper.loginMember(user_id, password);
+    public MemberDto loginMember(String memberId, String password) throws SQLException {
+        return memberMapper.loginMember(memberId, password);
     }
 
     @Override
@@ -33,8 +33,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public int deleteMemberByUserId(String user_id) throws SQLException {
-        return memberMapper.deleteMemberByUserId(user_id);
+    public int deleteMemberById(String memberId) throws SQLException {
+        return memberMapper.deleteMemberById(memberId);
     }
 
     @Override
@@ -43,8 +43,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDto getMemberByUserId(String user_id) throws SQLException {
-        return memberMapper.getMemberByUserId(user_id);
+    public MemberDto getMemberById(String memberId) throws SQLException {
+        return memberMapper.getMemberById(memberId);
     }
 
 }

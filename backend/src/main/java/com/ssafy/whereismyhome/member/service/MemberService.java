@@ -9,15 +9,15 @@ import java.util.List;
 
 public interface MemberService {
 
-    MemberDto loginMember(String user_id, String password) throws SQLException;
+    MemberDto loginMember(String memberId, String password) throws SQLException;
 
     int signUpMember(SignUpMemberRequestDto memberDto) throws SQLException;
 
     int updateMember(MemberDto memberDto) throws SQLException;
 
-    int deleteMemberByUserId(String user_id) throws SQLException;
+    int deleteMemberById(String memberId) throws SQLException;
 
     List<MemberDto> getMembers() throws SQLException;
 
-    MemberDto getMemberByUserId(String user_id) throws SQLException;
+    MemberDto getMemberById(String memberId) throws SQLException;
 }

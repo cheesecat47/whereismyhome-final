@@ -39,12 +39,12 @@ public class MemberController {
         LoginResponseDto res = new LoginResponseDto();
 
         try {
-            if (dto.getUser_id().equals("") || dto.getPassword().equals("")) {
+            if (dto.getMemberId().equals("") || dto.getPassword().equals("")) {
                 res.setStatus(401);
                 res.setMessage("로그인 실패: 아이디, 비밀번호는 필수입니다.");
                 res.setData(dto);
             } else {
-                MemberDto member = memberService.loginMember(dto.getUser_id(), dto.getPassword());
+                MemberDto member = memberService.loginMember(dto.getMemberId(), dto.getPassword());
                 if (member == null) {
                     res.setStatus(401);
                     res.setMessage("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.");
@@ -78,6 +78,9 @@ public class MemberController {
         SignUpMemberResponseDto res = new SignUpMemberResponseDto();
 
         try {
+            // TODO: 아이디, 이메일 중복 검사.
+            // TODO: 사용자에게 입력 받은 동 코드가 존재하는 코드인지 확인.
+
             int cnt = memberService.signUpMember(dto);
             assert cnt == 1;
             logger.debug("회원 등록 완료: {}", cnt);
@@ -96,25 +99,26 @@ public class MemberController {
     }
 
     @ApiOperation(value = "회원 수정", notes = "회원 아이디를 입력 받아 회원 수정 처리")
-    @PostMapping("/{userid}")
+    @PutMapping("/{memberId}")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "회원 수정 성공", response = UpdateMemberResponseDto.class),
-            @ApiResponse(code = 400, message = "회원 수정 실패", response = UpdateMemberResponseDto.class)
+            @ApiResponse(code = 200, message = "회원 수정 성공", response = UpdateMemberByIdResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 수정 실패", response = UpdateMemberByIdResponseDto.class)
     })
-    public ResponseEntity<UpdateMemberResponseDto> updateMember(@PathVariable("userid") String user_id, @RequestBody UpdateMemberRequestDto dto) {
-        UpdateMemberResponseDto res = new UpdateMemberResponseDto();
+    public ResponseEntity<UpdateMemberByIdResponseDto> updateMemberById(@PathVariable("memberId") String memberId, @RequestBody UpdateMemberByIdRequestDto dto) {
+        UpdateMemberByIdResponseDto res = new UpdateMemberByIdResponseDto();
 
         try {
-            MemberDto member = memberService.getMemberByUserId(user_id);
+            MemberDto member = memberService.getMemberById(memberId);
             assert member != null : "해당 회원 정보가 존재하지 않습니다.";
             logger.debug("회원 수정: 기존 정보 {}", member);
             logger.debug("회원 수정: 파라미터 {}", dto);
 
             member.setAge(dto.getAge() > 0 ? dto.getAge() : member.getAge());
-            member.setEmail_account(dto.getEmail_account() != null ? dto.getEmail_account() : member.getEmail_account());
-            member.setEmail_domain(dto.getEmail_domain() != null ? dto.getEmail_domain() : member.getEmail_domain());
+            member.setEmailAccount(dto.getEmailAccount() != null ? dto.getEmailAccount() : member.getEmailAccount());
+            member.setEmailDomain(dto.getEmailDomain() != null ? dto.getEmailDomain() : member.getEmailDomain());
             member.setPassword(dto.getPassword() != null ? dto.getPassword() : member.getPassword());
             member.setSex(dto.getSex() != null ? dto.getSex() : member.getSex());
+            // TODO: 동 코드도 업데이트 가능하도록 (이사할 수도 있으므로). 이 때 ForeignKey 때문에 문제 발생 가능. 논리적 FK로 전환 고려.
 
             logger.debug("회원 수정: 수정될 정보 {}", member);
 
@@ -136,16 +140,16 @@ public class MemberController {
     }
 
     @ApiOperation(value = "회원 삭제", notes = "회원 아이디를 받아 회원 삭제 처리")
-    @DeleteMapping("/{userid}")
+    @DeleteMapping("/{memberId}")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "회원 삭제 성공", response = DeleteMemberByUserIdResponseDto.class),
-            @ApiResponse(code = 400, message = "회원 삭제 실패", response = DeleteMemberByUserIdResponseDto.class)
+            @ApiResponse(code = 200, message = "회원 삭제 성공", response = DeleteMemberByIdResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 삭제 실패", response = DeleteMemberByIdResponseDto.class)
     })
-    public ResponseEntity<DeleteMemberByUserIdResponseDto> deleteMemberByUserId(@PathVariable("userid") String user_id) {
-        DeleteMemberByUserIdResponseDto res = new DeleteMemberByUserIdResponseDto();
+    public ResponseEntity<DeleteMemberByIdResponseDto> deleteMemberById(@PathVariable("memberId") String memberId) {
+        DeleteMemberByIdResponseDto res = new DeleteMemberByIdResponseDto();
 
         try {
-            int cnt = memberService.deleteMemberByUserId(user_id);
+            int cnt = memberService.deleteMemberById(memberId);
             assert cnt == 1;
             logger.debug("회원 삭제 완료: {}", cnt);
 
@@ -191,16 +195,16 @@ public class MemberController {
     }
 
     @ApiOperation(value = "회원 정보 검색", notes = "회원 아이디를 받아 회원 정보 검색")
-    @GetMapping("/{userid}")
+    @GetMapping("/{memberId}")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "회원 정보 검색 성공", response = GetMemberByUserIdResponseDto.class),
-            @ApiResponse(code = 400, message = "회원 정보 검색 실패", response = GetMemberByUserIdResponseDto.class)
+            @ApiResponse(code = 200, message = "회원 정보 검색 성공", response = GetMemberByIdResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 정보 검색 실패", response = GetMemberByIdResponseDto.class)
     })
-    public ResponseEntity<GetMemberByUserIdResponseDto> getMemberByUserId(@PathVariable("userid") String user_id) {
-        GetMemberByUserIdResponseDto res = new GetMemberByUserIdResponseDto();
+    public ResponseEntity<GetMemberByIdResponseDto> getMemberById(@PathVariable("memberId") String memberId) {
+        GetMemberByIdResponseDto res = new GetMemberByIdResponseDto();
 
         try {
-            MemberDto member = memberService.getMemberByUserId(user_id);
+            MemberDto member = memberService.getMemberById(memberId);
             logger.debug("회원 정보 검색: {}", member);
 
             res.setStatus(200);

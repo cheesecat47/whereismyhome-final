@@ -9,7 +9,7 @@ import lombok.Data;
 public class SignUpMemberRequestDto {
 
     @ApiModelProperty(value = "회원 아이디", required = true) // 상세 설명
-    private String user_id;
+    private String memberId;
 
     @ApiModelProperty(value = "회원 이름", required = true)
     private String name;
@@ -24,8 +24,11 @@ public class SignUpMemberRequestDto {
     private String sex;
 
     @ApiModelProperty(value = "회원 이메일", required = true)
-    private String email_account;
+    private String emailAccount;
 
     @ApiModelProperty(value = "회원 이메일 도메인, @ 뒤에 들어갈 문장 (ex. google.com)", required = true)
-    private String email_domain;
+    private String emailDomain;
+
+    @ApiModelProperty(value = "회원이 살고 있는 지역", required = true)
+    private String dongCode;
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @ApiModel(value = "DeleteMemberByUserIdResponseDto", description = "회원 삭제 결과를 반환할 Dto")
-public class DeleteMemberByUserIdResponseDto {
+public class DeleteMemberByIdResponseDto {
     private int status;
     private String message;
 }

@@ -9,7 +9,7 @@ import lombok.Data;
 public class MemberDto {
 
     @ApiModelProperty(value = "회원 아이디") // 상세 설명
-    private String user_id;
+    private String memberId;
 
     @ApiModelProperty(value = "회원 이름")
     private String name;
@@ -24,21 +24,27 @@ public class MemberDto {
     private String sex;
 
     @ApiModelProperty(value = "회원 이메일")
-    private String email_account;
+    private String emailAccount;
 
     @ApiModelProperty(value = "회원 이메일 도메인 ")
-    private String email_domain;
+    private String emailDomain;
 
     @ApiModelProperty(value = "회원 권한")
     private String authorization;
 
     @ApiModelProperty(value = "회원 생성 시간")
-    private String created_time;
+    private String createdTime;
 
     @ApiModelProperty(value = "회원 수정 시간")
-    private String updated_time;
+    private String updatedTime;
 
     @ApiModelProperty(value = "회원 삭제 시간")
-    private String deleted_time;
+    private String deletedTime;
+
+    @ApiModelProperty(value = "회원이 살고 있는 지역")
+    private String dongCode;
+
+    @ApiModelProperty(value = "refresh token")
+    private String refreshToken;
 
 }

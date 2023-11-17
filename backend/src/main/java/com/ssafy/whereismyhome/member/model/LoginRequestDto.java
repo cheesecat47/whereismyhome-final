@@ -9,7 +9,7 @@ import lombok.Data;
 public class LoginRequestDto {
 
     @ApiModelProperty(value = "회원 아이디", required = true) // 상세 설명
-    private String user_id;
+    private String memberId;
 
     @ApiModelProperty(value = "회원 비밀번호", required = true)
     private String password;
