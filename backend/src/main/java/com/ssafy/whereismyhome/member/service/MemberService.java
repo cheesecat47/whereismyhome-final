@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface MemberService {
 
-    MemberDto loginMember(String memberId, String password) throws SQLException;
+    MemberDto loginMember(String emailAccount, String emailDomain, String password) throws SQLException;
 
     int signUpMember(SignUpMemberRequestDto memberDto) throws SQLException;
 

@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface MemberMapper {
 
-    MemberDto loginMember(String memberId, String password) throws SQLException;
+    MemberDto loginMember(String emailAccount, String emailDomain, String password) throws SQLException;
 
     int signUpMember(SignUpMemberRequestDto memberDto) throws SQLException;
 

@@ -18,8 +18,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDto loginMember(String memberId, String password) throws SQLException {
-        return memberMapper.loginMember(memberId, password);
+    public MemberDto loginMember(String emailAccount, String emailDomain, String password) throws SQLException {
+        return memberMapper.loginMember(emailAccount, emailDomain, password);
     }
 
     @Override

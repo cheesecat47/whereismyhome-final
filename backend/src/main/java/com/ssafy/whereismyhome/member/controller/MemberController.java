@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @Api(tags = {"멤버 컨트롤러  API V1"})
@@ -39,21 +41,35 @@ public class MemberController {
         LoginResponseDto res = new LoginResponseDto();
 
         try {
-            if (dto.getMemberId().equals("") || dto.getPassword().equals("")) {
+            if (dto.getEmail().equals("") || dto.getPassword().equals("")) {
                 res.setStatus(401);
                 res.setMessage("로그인 실패: 아이디, 비밀번호는 필수입니다.");
                 res.setData(dto);
             } else {
-                MemberDto member = memberService.loginMember(dto.getMemberId(), dto.getPassword());
-                if (member == null) {
+                String email = dto.getEmail();
+                logger.debug("email: {} {}", email, email.length());
+
+                String regex = "^([a-zA-Z0-9]+)@([0-9a-zA-Z]+\\.[a-z]+)$";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(email);
+                if (!matcher.matches()) {
                     res.setStatus(401);
                     res.setMessage("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.");
                     res.setData(dto);
                 } else {
-                    logger.debug("로그인 완료: {}", member);
-                    res.setStatus(200);
-                    res.setMessage("로그인 성공");
-                    res.setData(member);
+                    logger.debug("emailAccount: {} / emailDomain: {}", matcher.group(1), matcher.group(2));
+
+                    MemberDto member = memberService.loginMember(matcher.group(1), matcher.group(2), dto.getPassword());
+                    if (member == null) {
+                        res.setStatus(401);
+                        res.setMessage("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.");
+                        res.setData(dto);
+                    } else {
+                        logger.debug("로그인 완료: {}", member);
+                        res.setStatus(200);
+                        res.setMessage("로그인 성공");
+                        res.setData(member);
+                    }
                 }
             }
         } catch (Exception e) {

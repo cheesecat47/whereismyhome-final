@@ -5,16 +5,25 @@
 <mapper namespace="com.ssafy.whereismyhome.member.model.mapper.MemberMapper">
 
     <select id="loginMember" parameterType="String" resultType="memberDto">
-        select memberId,
-               name,
-               age,
-               sex,
-               emailAccount,
-               emailDomain,
-               authorization
+        select member.memberId,
+               member.emailAccount,
+               member.emailDomain,
+               member.password,
+               member.name,
+               member.age,
+               member.sex,
+               member.authorization,
+               member.refreshToken,
+               member_address.address,
+               member_address.dongCode,
+               member.createdTime,
+               member.updatedTime
         from member
-        where memberId = #{memberId}
-          and password = #{password}
+                 left join member_address
+                           on member.memberId = member_address.memberId
+        where member.deletedTime is null
+          and member.emailAccount = #{emailAccount}
+          and member.emailDomain = #{emailDomain}
     </select>
 
     <insert id="signUpMember" parameterType="signUpMemberRequestDto">
