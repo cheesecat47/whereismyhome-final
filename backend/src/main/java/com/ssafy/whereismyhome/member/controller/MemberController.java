@@ -109,25 +109,33 @@ public class MemberController {
 
         try {
             MemberDto member = memberService.getMemberById(memberId);
-            assert member != null : "해당 회원 정보가 존재하지 않습니다.";
-            logger.debug("회원 수정: 기존 정보 {}", member);
-            logger.debug("회원 수정: 파라미터 {}", dto);
+            if (member == null) {
+                res.setStatus(400);
+                res.setMessage("해당 회원 정보가 존재하지 않습니다. 정보 수정에 실패했습니다.");
+            } else {
+                logger.debug("회원 수정: 기존 정보 {}", member);
+                logger.debug("회원 수정: 파라미터 {}", dto);
 
-            member.setAge(dto.getAge() > 0 ? dto.getAge() : member.getAge());
-            member.setEmailAccount(dto.getEmailAccount() != null ? dto.getEmailAccount() : member.getEmailAccount());
-            member.setEmailDomain(dto.getEmailDomain() != null ? dto.getEmailDomain() : member.getEmailDomain());
-            member.setPassword(dto.getPassword() != null ? dto.getPassword() : member.getPassword());
-            member.setSex(dto.getSex() != null ? dto.getSex() : member.getSex());
-            // TODO: 동 코드도 업데이트 가능하도록 (이사할 수도 있으므로). 이 때 ForeignKey 때문에 문제 발생 가능. 논리적 FK로 전환 고려.
+                member.setPassword(dto.getPassword() != null ? dto.getPassword() : null);
+                member.setName(dto.getName() != null ? dto.getName() : null);
+                member.setAge(dto.getAge() > 0 ? dto.getAge() : 0);
+                member.setSex(dto.getSex() != null ? dto.getSex() : null);
+                if (dto.getAddress() != null) {
+                    // TODO: 주소 바뀌면 동 코드도 업데이트 가능하도록.
+                    member.setAddress(dto.getAddress());
+                } else {
+                    member.setAddress(null);
+                }
 
-            logger.debug("회원 수정: 수정될 정보 {}", member);
+                logger.debug("회원 수정: 수정될 정보 {}", member);
 
-            int cnt = memberService.updateMember(member);
-            assert cnt == 1;
-            logger.debug("회원 수정 완료: {}", cnt);
+                int cnt = memberService.updateMember(member);
+                assert cnt == 1;
+                logger.debug("회원 수정 완료: {}", cnt);
 
-            res.setStatus(200);
-            res.setMessage("회원 수정 성공");
+                res.setStatus(200);
+                res.setMessage("회원 수정 성공");
+            }
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
             res.setStatus(400);

@@ -25,11 +25,10 @@
     <update id="updateMember" parameterType="MemberDto">
         update member
         <trim prefix="set" suffixOverrides=",">
+            <if test="password != null">password = #{password},</if>
+            <if test="name != null">name = #{name},</if>
             <if test="age > 0">age = #{age},</if>
             <if test="sex != null">sex = #{sex},</if>
-            <if test="password != null">password = #{password},</if>
-            <if test="emailAccount != null">emailAccount = #{emailAccount},</if>
-            <if test="emailDomain != null">emailDomain = #{emailDomain},</if>
             updatedTime = now(),
         </trim>
         where memberId = #{memberId}
