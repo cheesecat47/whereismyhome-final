@@ -18,8 +18,8 @@
     </select>
 
     <insert id="signUpMember" parameterType="signUpMemberRequestDto">
-        insert into member (memberId, name, password, age, sex, emailAccount, emailDomain, authorization, dongCode)
-        values (#{memberId}, #{name}, #{password}, #{age}, #{sex}, #{emailAccount}, #{emailDomain}, 0, #{dongCode})
+        insert into member (emailAccount, emailDomain, password, name, age, sex, authorization)
+        values (#{emailAccount}, #{emailDomain}, #{password}, #{name}, #{age}, #{sex}, 0)
     </insert>
 
     <update id="updateMember" parameterType="MemberDto">

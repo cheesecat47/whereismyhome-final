@@ -79,7 +79,7 @@ public class MemberController {
 
         try {
             // TODO: 아이디, 이메일 중복 검사.
-            // TODO: 사용자에게 입력 받은 동 코드가 존재하는 코드인지 확인.
+            // TODO: 사용자에게 입력 받은 주소에 해당하는 동코드가 존재하는지 확인.
 
             int cnt = memberService.signUpMember(dto);
             assert cnt == 1;
