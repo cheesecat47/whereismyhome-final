@@ -15,7 +15,7 @@ public interface MemberService {
 
     int updateMember(MemberDto memberDto) throws SQLException;
 
-    int deleteMemberById(String memberId) throws SQLException;
+    int deleteMemberById(int memberId) throws SQLException;
 
     List<MemberDto> getMembers() throws SQLException;
 

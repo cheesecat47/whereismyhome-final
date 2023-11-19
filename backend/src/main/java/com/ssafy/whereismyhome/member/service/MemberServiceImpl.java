@@ -33,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public int deleteMemberById(String memberId) throws SQLException {
+    public int deleteMemberById(int memberId) throws SQLException {
         return memberMapper.deleteMemberById(memberId);
     }
 

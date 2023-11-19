@@ -35,11 +35,12 @@
         where memberId = #{memberId}
     </update>
 
-    <delete id="deleteMemberById" parameterType="String">
-        delete
-        from member
+    <update id="deleteMemberById" parameterType="int">
+        update member
+        set updatedTime = now(),
+            deletedTime = now()
         where memberId = #{memberId}
-    </delete>
+    </update>
 
     <select id="getMembers" resultType="memberDto">
         select member.memberId,

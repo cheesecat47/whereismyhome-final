@@ -145,7 +145,7 @@ public class MemberController {
             @ApiResponse(code = 200, message = "회원 삭제 성공", response = DeleteMemberByIdResponseDto.class),
             @ApiResponse(code = 400, message = "회원 삭제 실패", response = DeleteMemberByIdResponseDto.class)
     })
-    public ResponseEntity<DeleteMemberByIdResponseDto> deleteMemberById(@PathVariable("memberId") String memberId) {
+    public ResponseEntity<DeleteMemberByIdResponseDto> deleteMemberById(@PathVariable("memberId") int memberId) {
         DeleteMemberByIdResponseDto res = new DeleteMemberByIdResponseDto();
 
         try {
