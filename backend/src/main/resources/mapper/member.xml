@@ -42,37 +42,46 @@
     </delete>
 
     <select id="getMembers" resultType="memberDto">
-        select memberId,
-               name,
-               password,
-               age,
-               sex,
-               emailAccount,
-               emailDomain,
-               authorization,
-               createdTime,
-               updatedTime,
-               dongCode,
-               refreshToken
+        select member.memberId,
+               member.emailAccount,
+               member.emailDomain,
+               member.password,
+               member.name,
+               member.age,
+               member.sex,
+               member.authorization,
+               member.refreshToken,
+               member_address.address,
+               member_address.dongCode,
+               member.createdTime,
+               member.updatedTime
         from member
-        order by memberId
+                 left join member_address
+                           on member.memberId = member_address.memberId
+        where member.deletedTime is null
+        order by member.memberId
     </select>
 
-    <select id="getMemberById" parameterType="string" resultType="memberDto">
-        select memberId,
-               name,
-               password,
-               age,
-               sex,
-               emailAccount,
-               emailDomain,
-               authorization,
-               createdTime,
-               updatedTime,
-               dongCode,
-               refreshToken
+    <select id="getMemberById" parameterType="int" resultType="memberDto">
+        select member.memberId,
+               member.emailAccount,
+               member.emailDomain,
+               member.password,
+               member.name,
+               member.age,
+               member.sex,
+               member.authorization,
+               member.refreshToken,
+               member_address.address,
+               member_address.dongCode,
+               member.createdTime,
+               member.updatedTime
         from member
-        where memberId = #{memberId}
+                 left join member_address
+                           on member.memberId = member_address.memberId
+        where member.deletedTime is null
+          and member.memberId = #{memberId}
+        order by member.memberId
     </select>
 
 </mapper>

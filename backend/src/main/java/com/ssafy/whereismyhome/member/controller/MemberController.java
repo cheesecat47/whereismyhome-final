@@ -104,7 +104,7 @@ public class MemberController {
             @ApiResponse(code = 200, message = "회원 수정 성공", response = UpdateMemberByIdResponseDto.class),
             @ApiResponse(code = 400, message = "회원 수정 실패", response = UpdateMemberByIdResponseDto.class)
     })
-    public ResponseEntity<UpdateMemberByIdResponseDto> updateMemberById(@PathVariable("memberId") String memberId, @RequestBody UpdateMemberByIdRequestDto dto) {
+    public ResponseEntity<UpdateMemberByIdResponseDto> updateMemberById(@PathVariable("memberId") int memberId, @RequestBody UpdateMemberByIdRequestDto dto) {
         UpdateMemberByIdResponseDto res = new UpdateMemberByIdResponseDto();
 
         try {
@@ -200,7 +200,7 @@ public class MemberController {
             @ApiResponse(code = 200, message = "회원 정보 검색 성공", response = GetMemberByIdResponseDto.class),
             @ApiResponse(code = 400, message = "회원 정보 검색 실패", response = GetMemberByIdResponseDto.class)
     })
-    public ResponseEntity<GetMemberByIdResponseDto> getMemberById(@PathVariable("memberId") String memberId) {
+    public ResponseEntity<GetMemberByIdResponseDto> getMemberById(@PathVariable("memberId") int memberId) {
         GetMemberByIdResponseDto res = new GetMemberByIdResponseDto();
 
         try {

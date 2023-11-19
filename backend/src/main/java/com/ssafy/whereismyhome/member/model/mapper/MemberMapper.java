@@ -20,6 +20,6 @@ public interface MemberMapper {
 
     List<MemberDto> getMembers() throws SQLException;
 
-    MemberDto getMemberById(String memberId) throws SQLException;
+    MemberDto getMemberById(int memberId) throws SQLException;
 
 }
