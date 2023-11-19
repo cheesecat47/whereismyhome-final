@@ -8,7 +8,7 @@
         select dongCode
         from `dongcode`
         where sidoName = #{sidoName}
-          and gugunName like #{gugunName}
+          and gugunName like concat(#{gugunName}, '%')
           and dongName = #{dongName}
         order by dongCode;
     </select>
@@ -39,7 +39,8 @@
     </select>
 
     <select id="getHouseInfoDealsByDongCode" parameterType="String" resultType="houseInfoDealDto">
-        select A.dong,
+        select C.dealId,
+               A.dong,
                A.dongCode,
                A.jibun,
                A.apartmentName,
@@ -54,8 +55,9 @@
         from (select distinct aptCode, dong, dongCode, apartmentName, jibun, lng, lat
               from houseinfo
               where dongCode = #{dongCode}) as A
-                 left join (SELECT aptCode, dealYear, dealMonth, dealDay, dealAmount, area
-                            from (SELECT distinct aptCode,
+                 left join (SELECT dealId, aptCode, dealYear, dealMonth, dealDay, dealAmount, area
+                            from (SELECT distinct dealId,
+                                                  aptCode,
                                                   dealYear,
                                                   dealMonth,
                                                   dealDay,
@@ -67,11 +69,12 @@
                                                     from houseinfo
                                                     where dongCode = #{dongCode})) as B
                             where rn = 1) as C
-                           on A.aptCode = C.aptCode;
+                           on A.aptCode = C.aptCode
+        order by C.dealId desc;
     </select>
 
     <select id="getHouseDealsByAptCodeYearMonth" parameterType="String" resultType="HouseDealDto">
-        select no,
+        select dealId,
                dealAmount,
                dealYear,
                dealMonth,
@@ -82,8 +85,9 @@
                aptCode
         from housedeal
         where aptCode = #{aptCode}
-          and dealYear = #{year}
-          and dealMonth = #{month};
+        <if test="year != null"> and dealYear = #{year}</if>
+        <if test="month != null"> and dealMonth = #{month}</if>
+        order by dealId desc;
     </select>
 
     <select id="getSidoNames" resultType="String">
@@ -97,8 +101,8 @@
         from (select distinct sidoName, gugunName
               from dongcode
               where sidoName = #{sidoName}
-                and gugunName is not null
-              order by gugunName) as t;
+                and gugunName is not null) as t
+        order by gugunName;
     </select>
 
     <select id="getDongNames" parameterType="String" resultType="String">
@@ -106,7 +110,7 @@
         from (select distinct sidoName, gugunName, dongName
               from dongcode
               where sidoName = #{sidoName}
-                and gugunName like #{gugunName}
+                and gugunName like concat(#{gugunName}, '%')
                 and dongName is not null
               order by dongName) t;
     </select>

@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @ApiModel(value = "HouseDealDto", description = "거래 정보를 관리할 Dto")
 public class HouseDealDto {
-    private long no;
+    private long dealId;
     private String dealAmount;
     private int dealYear;
     private int dealMonth;
