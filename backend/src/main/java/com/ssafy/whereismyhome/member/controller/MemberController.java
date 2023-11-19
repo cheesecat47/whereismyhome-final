@@ -40,38 +40,51 @@ public class MemberController {
     public ResponseEntity<LoginResponseDto> loginMember(@RequestBody LoginRequestDto dto) {
         LoginResponseDto res = new LoginResponseDto();
 
+        label:
         try {
+            // 로그인 파라미터 유효성 검사
+
+            // 빈 문자열인지 체크
             if (dto.getEmail().equals("") || dto.getPassword().equals("")) {
                 res.setStatus(401);
                 res.setMessage("로그인 실패: 아이디, 비밀번호는 필수입니다.");
                 res.setData(dto);
-            } else {
-                String email = dto.getEmail();
-                logger.debug("email: {} {}", email, email.length());
-
-                String regex = "^([a-zA-Z0-9]+)@([0-9a-zA-Z]+\\.[a-z]+)$";
-                Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(email);
-                if (!matcher.matches()) {
-                    res.setStatus(401);
-                    res.setMessage("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.");
-                    res.setData(dto);
-                } else {
-                    logger.debug("emailAccount: {} / emailDomain: {}", matcher.group(1), matcher.group(2));
-
-                    MemberDto member = memberService.loginMember(matcher.group(1), matcher.group(2), dto.getPassword());
-                    if (member == null) {
-                        res.setStatus(401);
-                        res.setMessage("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.");
-                        res.setData(dto);
-                    } else {
-                        logger.debug("로그인 완료: {}", member);
-                        res.setStatus(200);
-                        res.setMessage("로그인 성공");
-                        res.setData(member);
-                    }
-                }
+                break label;
             }
+
+            // 이메일 형식 검사
+            String email = dto.getEmail();
+            logger.debug("email: {}", email);
+
+            Matcher matcher = Pattern
+                    .compile("^(?<emailAccount>[a-zA-Z0-9]+)@(?<emailDomain>[0-9a-zA-Z]+\\.[a-z]+)$")
+                    .matcher(email);
+            if (!matcher.matches()) {
+                logger.info("로그인 실패: 이메일 형식이 유효하지 않습니다: {}", dto);
+                res.setStatus(401);
+                res.setMessage("로그인 실패: 이메일 형식이 유효하지 않습니다.");
+                res.setData(dto);
+                break label;
+            }
+
+            // 유효성 검사는 통과했고, 이제부터는 DB에 존재하는 유저면 로그인 성공, 아니면 실패.
+            String emailAccount = matcher.group("emailAccount");
+            String emailDomain = matcher.group("emailDomain");
+            logger.debug("emailAccount: {} / emailDomain: {}", emailAccount, emailDomain);
+
+            MemberDto member = memberService.loginMember(emailAccount, emailDomain, dto.getPassword());
+            if (member == null) {
+                logger.info("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다: {}", dto);
+                res.setStatus(401);
+                res.setMessage("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.");
+                res.setData(dto);
+                break label;
+            }
+
+            logger.info("로그인 성공: {}", member);
+            res.setStatus(200);
+            res.setMessage("로그인 성공");
+            res.setData(member);
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
             res.setStatus(500);
@@ -123,35 +136,37 @@ public class MemberController {
     public ResponseEntity<UpdateMemberByIdResponseDto> updateMemberById(@PathVariable("memberId") int memberId, @RequestBody UpdateMemberByIdRequestDto dto) {
         UpdateMemberByIdResponseDto res = new UpdateMemberByIdResponseDto();
 
+        label:
         try {
             MemberDto member = memberService.getMemberById(memberId);
             if (member == null) {
                 res.setStatus(400);
                 res.setMessage("해당 회원 정보가 존재하지 않습니다. 정보 수정에 실패했습니다.");
-            } else {
-                logger.debug("회원 수정: 기존 정보 {}", member);
-                logger.debug("회원 수정: 파라미터 {}", dto);
-
-                member.setPassword(dto.getPassword() != null ? dto.getPassword() : null);
-                member.setName(dto.getName() != null ? dto.getName() : null);
-                member.setAge(dto.getAge() > 0 ? dto.getAge() : 0);
-                member.setSex(dto.getSex() != null ? dto.getSex() : null);
-                if (dto.getAddress() != null) {
-                    // TODO: 주소 바뀌면 동 코드도 업데이트 가능하도록.
-                    member.setAddress(dto.getAddress());
-                } else {
-                    member.setAddress(null);
-                }
-
-                logger.debug("회원 수정: 수정될 정보 {}", member);
-
-                int cnt = memberService.updateMember(member);
-                assert cnt == 1;
-                logger.debug("회원 수정 완료: {}", cnt);
-
-                res.setStatus(200);
-                res.setMessage("회원 수정 성공");
+                break label;
             }
+
+            logger.debug("회원 수정: 기존 정보 {}", member);
+            logger.debug("회원 수정: 파라미터 {}", dto);
+
+            member.setPassword(dto.getPassword() != null ? dto.getPassword() : null);
+            member.setName(dto.getName() != null ? dto.getName() : null);
+            member.setAge(dto.getAge() > 0 ? dto.getAge() : 0);
+            member.setSex(dto.getSex() != null ? dto.getSex() : null);
+            if (dto.getAddress() != null) {
+                // TODO: 주소 바뀌면 동 코드도 업데이트 가능하도록.
+                member.setAddress(dto.getAddress());
+            } else {
+                member.setAddress(null);
+            }
+
+            logger.debug("회원 수정: 수정될 정보 {}", member);
+
+            int cnt = memberService.updateMember(member);
+            assert cnt == 1;
+
+            logger.info("회원 수정 성공: {}", cnt);
+            res.setStatus(200);
+            res.setMessage("회원 수정 성공");
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
             res.setStatus(400);
