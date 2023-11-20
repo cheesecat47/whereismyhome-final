@@ -174,7 +174,7 @@ public class BoardController {
             logger.debug("게시글: {}", article);
             if (article == null) {
                 res.setStatus(400);
-                res.setMessage("게시글 조회 실패.");
+                res.setMessage("게시글 조회 실패");
                 break label;
             }
 
@@ -259,6 +259,57 @@ public class BoardController {
             logger.error("Error: {}", e.getMessage());
             res.setStatus(500);
             res.setMessage("게시글 수정 실패");
+        }
+
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
+    @ApiOperation(value = "deleteArticleById", notes = "게시글 ID에 해당하는 글 삭제")
+    @DeleteMapping("/{boardId}")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "게시글 삭제 성공", response = DeleteArticleByIdResponseDto.class),
+            @ApiResponse(code = 400, message = "게시글 삭제 실패", response = DeleteArticleByIdResponseDto.class),
+            @ApiResponse(code = 500, message = "게시글 삭제 실패", response = DeleteArticleByIdResponseDto.class)
+    })
+    public ResponseEntity<?> deleteArticleById(
+            @PathVariable("boardId") int boardId,
+            @RequestBody DeleteArticleByIdRequestDto dto
+    ) {
+        DeleteArticleByIdResponseDto res = new DeleteArticleByIdResponseDto();
+
+        label:
+        try {
+            // 로그인 된 회원인지 확인
+            MemberDto member = memberService.getMemberById(dto.getMemberId());
+            if (member == null) {
+                res.setStatus(400);
+                res.setMessage("해당 회원 정보가 존재하지 않습니다. 게시글 삭제에 실패했습니다.");
+                break label;
+            }
+
+            // 존재하는 게시글인지 확인
+            BoardDetailDto article = boardService.getArticleById(boardId);
+            if (article == null) {
+                res.setStatus(400);
+                res.setMessage("해당 게시글이 존재하지 않습니다. 게시글 삭제에 실패했습니다.");
+                break label;
+            }
+
+            // 로그인 한 회원이 작성한 글인지 확인
+            if (dto.getMemberId() != boardId) {
+                res.setStatus(400);
+                res.setMessage("해당 회원이 작성한 게시글이 아닙니다. 게시글 삭제에 실패했습니다.");
+                break label;
+            }
+
+            int cnt = boardService.deleteArticleById(boardId);
+            logger.info("게시글 삭제 성공: {}", cnt);
+            res.setStatus(200);
+            res.setMessage("게시글 삭제 성공");
+        } catch (Exception e) {
+            logger.error("Error: {}", e.getMessage());
+            res.setStatus(500);
+            res.setMessage("게시글 삭제 실패");
         }
 
         return ResponseEntity.status(res.getStatus()).body(res);

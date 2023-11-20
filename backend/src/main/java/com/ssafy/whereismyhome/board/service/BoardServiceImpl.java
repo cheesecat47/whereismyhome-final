@@ -40,4 +40,9 @@ public class BoardServiceImpl implements BoardService {
     public int updateArticleById(BoardDetailDto dto) throws SQLException {
         return boardMapper.updateArticleById(dto);
     }
+
+    @Override
+    public int deleteArticleById(int boardId) throws SQLException {
+        return boardMapper.deleteArticleById(boardId);
+    }
 }

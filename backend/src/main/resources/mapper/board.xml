@@ -84,4 +84,11 @@
           and memberId = #{memberId}
           and board.deletedTime is null
     </update>
+
+    <update id="deleteArticleById" parameterType="int">
+        update board
+        set updatedTime = now(),
+            deletedTime = now()
+        where boardId = #{board_id}
+    </update>
 </mapper>
