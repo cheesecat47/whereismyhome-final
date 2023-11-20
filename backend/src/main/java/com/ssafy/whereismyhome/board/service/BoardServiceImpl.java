@@ -35,4 +35,9 @@ public class BoardServiceImpl implements BoardService {
     public BoardDetailDto getArticleById(int boardId) throws SQLException {
         return boardMapper.getArticleById(boardId);
     }
+
+    @Override
+    public int updateArticleById(BoardDetailDto dto) throws SQLException {
+        return boardMapper.updateArticleById(dto);
+    }
 }

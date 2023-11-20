@@ -73,4 +73,15 @@
           and boardId = #{boardId};
     </select>
 
+    <update id="updateArticleById" parameterType="boardDetailDto">
+        update board
+        <trim prefix="set" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            updatedTime = now(),
+        </trim>
+        where boardId = #{boardId}
+          and memberId = #{memberId}
+          and board.deletedTime is null
+    </update>
 </mapper>

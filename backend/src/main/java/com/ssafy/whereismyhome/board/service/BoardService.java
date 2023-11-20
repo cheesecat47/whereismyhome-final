@@ -14,4 +14,6 @@ public interface BoardService {
     List<BoardDto> getCommunityArticles(String dongCode) throws SQLException;
 
     BoardDetailDto getArticleById(int boardId) throws SQLException;
+
+    int updateArticleById(BoardDetailDto dto) throws SQLException;
 }
