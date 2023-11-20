@@ -8,11 +8,19 @@ const mobileMenuOpen = ref(false);
 
 <template>
   <header class="bg-white border-b">
-    <nav class="mx-auto max-w-7xl flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+    <nav class="mx-auto max-w-7xl flex items-center justify-between p-5 lg:px-8" aria-label="Global">
       <div class="flex lg:flex-1">
-        <RouterLink :to="{ name: 'main' }" class="-m-1.5 p-1.5">
-          <span class="sr-only">Your Company</span>
-          <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
+        <!-- -m-1.5 p-1.5 -->
+        <RouterLink :to="{ name: 'main' }" class="flex items-center">
+          <!-- <img src="../../../public/logo.png" class="h-10 w-auto" /> -->
+          <p class="text-lg pl-2 font-bold tracking-wider">WhereIsMyHome</p>
+          <!--
+            <img
+            class="h-8 w-auto"
+            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+            alt=""
+          />
+          -->
         </RouterLink>
       </div>
       <div class="flex lg:hidden">
@@ -51,9 +59,6 @@ const mobileMenuOpen = ref(false);
         <div class="flex items-center justify-between">
           <!-- 이미지 넣을 공간 레이아웃 맞추기 위해 넣어놨습니다-->
           <div></div>
-          <!-- <a href="#" class="-m-1.5 p-1.5">
-            <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
-          </a> -->
           <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" @click="mobileMenuOpen = false">
             <span class="sr-only">Close menu</span>
             <XMarkIcon class="h-6 w-6" aria-hidden="true" />
