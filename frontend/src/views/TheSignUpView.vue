@@ -67,7 +67,7 @@ const signupEvent = () => {
       <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">회원가입</h2>
       <p class="mt-4 text-sm leading-8 text-gray-600">여기 뭐적을까? 음.. 오신것을 환영합니다</p>
     </div>
-    <form @submit.prevent="signupEvent" class="mx-auto mt-16 max-w-xl sm:mt-20">
+    <form @submit.prevent="signupEvent" class="mx-auto mt-8 max-w-xl">
       <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
         <div class="sm:col-span-2">
           <label for="user_id" class="block text-sm font-semibold leading-6 text-gray-900">아이디</label>
