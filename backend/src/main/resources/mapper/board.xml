@@ -9,4 +9,20 @@
         values (#{title}, #{content}, #{type}, #{memberId}, #{dongCode}, 0, now())
     </insert>
 
+    <select id="getNotices" resultType="boardDto">
+        select boardid,
+               title,
+               content,
+               type,
+               memberid,
+               dongcode,
+               hit,
+               createdtime,
+               updatedtime
+        from board
+        where type = 1
+          and deletedtime is null
+        order by boardId desc
+    </select>
+
 </mapper>

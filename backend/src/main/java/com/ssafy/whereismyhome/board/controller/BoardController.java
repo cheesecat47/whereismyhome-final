@@ -1,6 +1,7 @@
 package com.ssafy.whereismyhome.board.controller;
 
 import com.ssafy.whereismyhome.board.model.BoardDto;
+import com.ssafy.whereismyhome.board.model.GetNoticesResponseDto;
 import com.ssafy.whereismyhome.board.model.WriteArticleRequestDto;
 import com.ssafy.whereismyhome.board.model.WriteArticleResponseDto;
 import com.ssafy.whereismyhome.board.service.BoardService;
@@ -14,10 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Api(tags = {"게시판 컨트롤러 API V1"})
@@ -88,6 +88,37 @@ public class BoardController {
             logger.error("글 생성 실패: {}", e.getMessage());
             res.setStatus(500);
             res.setMessage("글 생성 실패");
+        }
+
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
+    @ApiOperation(value = "getNotices", notes = "전체 공지글 목록 조회")
+    @GetMapping("/notice")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "공지글 목록 조회 성공", response = GetNoticesResponseDto.class),
+            @ApiResponse(code = 400, message = "공지글 목록 조회 실패", response = GetNoticesResponseDto.class)
+    })
+    public ResponseEntity<GetNoticesResponseDto> getNotices() {
+        GetNoticesResponseDto res = new GetNoticesResponseDto();
+
+        label:
+        try {
+            List<BoardDto> list = boardService.getNotices();
+            logger.debug("공지글 목록: {}", list);
+            if (list.isEmpty()) {
+                res.setStatus(400);
+                res.setMessage("공지글 목록 조회 실패.");
+                break label;
+            }
+
+            res.setStatus(200);
+            res.setMessage("공지글 목록 조회 성공");
+            res.setData(list);
+        } catch (Exception e) {
+            logger.error("Error: {}", e.getMessage());
+            res.setStatus(500);
+            res.setMessage("공지글 목록 조회 실패.");
         }
 
         return ResponseEntity.status(res.getStatus()).body(res);

@@ -5,6 +5,7 @@ import com.ssafy.whereismyhome.board.model.mapper.BoardMapper;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -17,5 +18,10 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public int writeArticle(BoardDto dto) throws SQLException {
         return boardMapper.writeArticle(dto);
+    }
+
+    @Override
+    public List<BoardDto> getNotices() throws SQLException {
+        return boardMapper.getNotices();
     }
 }
