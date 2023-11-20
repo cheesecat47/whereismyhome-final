@@ -5,7 +5,7 @@
         <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">우리 동네</h2>
         <p class="mt-2 text-lg leading-8 text-gray-600">우리 동네 커뮤니티를 이용하여 사용자들과 소통해보세요.</p>
         <div class="flex justify-end">
-          <div class="h-9 rounded-md text-sm w-auto font-bold flex justify-center items-center border border-gray-400">
+          <div class="h-9 text-sm w-auto font-bold flex justify-center items-center border border-gray-400 shadow-md">
             <i class="px-2 far fa-edit"></i>
             <span class="pr-2">작성하기</span>
           </div>
@@ -16,10 +16,10 @@
             <input
               type="text"
               placeholder="검색어를 입력하세요"
-              class="h-9 text-sm border-0 rounded-md text-gray-700 ring-1 ring-gray-400 placeholder:text-gray-400 focus:ring-1 focus:ring-slate-700"
+              class="h-9 text-sm border-0 shadow-md border-black/5 text-gray-700 ring-1 ring-gray-400 placeholder:text-gray-400 focus:ring-1 focus:ring-slate-700"
             />
             <div
-              class="h-9 py-[1.15rem] bg-slate-600 text-white rounded-md text-sm font-semibold w-12 flex justify-center items-center border border-gray-400"
+              class="h-9 py-[1.15rem] bg-slate-600 text-white text-sm font-semibold w-12 flex justify-center items-center border border-gray-400 shadow-md"
             >
               검색
             </div>
