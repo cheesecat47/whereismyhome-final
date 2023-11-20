@@ -25,4 +25,21 @@
         order by boardId desc
     </select>
 
+    <select id="getCommunityArticles" parameterType="string" resultType="boardDto">
+        select boardid,
+               title,
+               content,
+               type,
+               memberid,
+               dongcode,
+               hit,
+               createdtime,
+               updatedtime
+        from board
+        where type = 0
+          and dongCode = #{dongCode}
+          and deletedtime is null
+        order by boardId desc;
+    </select>
+
 </mapper>

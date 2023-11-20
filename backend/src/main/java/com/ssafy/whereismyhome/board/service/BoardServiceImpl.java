@@ -24,4 +24,9 @@ public class BoardServiceImpl implements BoardService {
     public List<BoardDto> getNotices() throws SQLException {
         return boardMapper.getNotices();
     }
+
+    @Override
+    public List<BoardDto> getCommunityArticles(String dongCode) throws SQLException {
+        return boardMapper.getCommunityArticles(dongCode);
+    }
 }

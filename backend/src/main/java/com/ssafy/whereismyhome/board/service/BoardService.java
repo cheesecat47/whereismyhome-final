@@ -9,4 +9,6 @@ public interface BoardService {
     int writeArticle(BoardDto dto) throws SQLException;
 
     List<BoardDto> getNotices() throws SQLException;
+
+    List<BoardDto> getCommunityArticles(String dongCode) throws SQLException;
 }

@@ -1,9 +1,6 @@
 package com.ssafy.whereismyhome.board.controller;
 
-import com.ssafy.whereismyhome.board.model.BoardDto;
-import com.ssafy.whereismyhome.board.model.GetNoticesResponseDto;
-import com.ssafy.whereismyhome.board.model.WriteArticleRequestDto;
-import com.ssafy.whereismyhome.board.model.WriteArticleResponseDto;
+import com.ssafy.whereismyhome.board.model.*;
 import com.ssafy.whereismyhome.board.service.BoardService;
 import com.ssafy.whereismyhome.member.model.MemberDto;
 import com.ssafy.whereismyhome.member.service.MemberService;
@@ -97,7 +94,8 @@ public class BoardController {
     @GetMapping("/notice")
     @ApiResponses({
             @ApiResponse(code = 200, message = "공지글 목록 조회 성공", response = GetNoticesResponseDto.class),
-            @ApiResponse(code = 400, message = "공지글 목록 조회 실패", response = GetNoticesResponseDto.class)
+            @ApiResponse(code = 400, message = "공지글 목록 조회 실패", response = GetNoticesResponseDto.class),
+            @ApiResponse(code = 500, message = "공지글 목록 조회 실패", response = GetNoticesResponseDto.class)
     })
     public ResponseEntity<GetNoticesResponseDto> getNotices() {
         GetNoticesResponseDto res = new GetNoticesResponseDto();
@@ -119,6 +117,40 @@ public class BoardController {
             logger.error("Error: {}", e.getMessage());
             res.setStatus(500);
             res.setMessage("공지글 목록 조회 실패.");
+        }
+
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
+    @ApiOperation(value = "getCommunityArticles", notes = "회원 정보에 등록된 동 코드를 사용하여 우리 동네 글 목록 조회")
+    @GetMapping("/community/{dongCode}")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "동네 글 목록 조회 성공", response = GetNoticesResponseDto.class),
+            @ApiResponse(code = 400, message = "동네 글 목록 조회 실패", response = GetNoticesResponseDto.class),
+            @ApiResponse(code = 500, message = "동네 글 목록 조회 실패", response = GetNoticesResponseDto.class)
+    })
+    public ResponseEntity<GetCommunityArticlesResponseDto> getCommunityArticles(
+            @PathVariable("dongCode") String dongCode
+    ) {
+        GetCommunityArticlesResponseDto res = new GetCommunityArticlesResponseDto();
+
+        label:
+        try {
+            List<BoardDto> list = boardService.getCommunityArticles(dongCode);
+            logger.debug("동네 글 목록: {}", list);
+            if (list.isEmpty()) {
+                res.setStatus(400);
+                res.setMessage("동네 글 목록 조회 실패.");
+                break label;
+            }
+
+            res.setStatus(200);
+            res.setMessage("동네 글 목록 조회 성공");
+            res.setData(list);
+        } catch (Exception e) {
+            logger.error("Error: {}", e.getMessage());
+            res.setStatus(500);
+            res.setMessage("동네 글 목록 조회 실패.");
         }
 
         return ResponseEntity.status(res.getStatus()).body(res);
