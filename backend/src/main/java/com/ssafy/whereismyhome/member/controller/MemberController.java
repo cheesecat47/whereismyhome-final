@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @Api(tags = {"멤버 컨트롤러  API V1"})
@@ -38,24 +40,51 @@ public class MemberController {
     public ResponseEntity<LoginResponseDto> loginMember(@RequestBody LoginRequestDto dto) {
         LoginResponseDto res = new LoginResponseDto();
 
+        label:
         try {
-            if (dto.getUser_id().equals("") || dto.getPassword().equals("")) {
+            // 로그인 파라미터 유효성 검사
+
+            // 빈 문자열인지 체크
+            if (dto.getEmail().equals("") || dto.getPassword().equals("")) {
                 res.setStatus(401);
                 res.setMessage("로그인 실패: 아이디, 비밀번호는 필수입니다.");
                 res.setData(dto);
-            } else {
-                MemberDto member = memberService.loginMember(dto.getUser_id(), dto.getPassword());
-                if (member == null) {
-                    res.setStatus(401);
-                    res.setMessage("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.");
-                    res.setData(dto);
-                } else {
-                    logger.debug("로그인 완료: {}", member);
-                    res.setStatus(200);
-                    res.setMessage("로그인 성공");
-                    res.setData(member);
-                }
+                break label;
             }
+
+            // 이메일 형식 검사
+            String email = dto.getEmail();
+            logger.debug("email: {}", email);
+
+            Matcher matcher = Pattern
+                    .compile("^(?<emailAccount>[a-zA-Z0-9]+)@(?<emailDomain>[0-9a-zA-Z]+\\.[a-z]+)$")
+                    .matcher(email);
+            if (!matcher.matches()) {
+                logger.info("로그인 실패: 이메일 형식이 유효하지 않습니다: {}", dto);
+                res.setStatus(401);
+                res.setMessage("로그인 실패: 이메일 형식이 유효하지 않습니다.");
+                res.setData(dto);
+                break label;
+            }
+
+            // 유효성 검사는 통과했고, 이제부터는 DB에 존재하는 유저면 로그인 성공, 아니면 실패.
+            String emailAccount = matcher.group("emailAccount");
+            String emailDomain = matcher.group("emailDomain");
+            logger.debug("emailAccount: {} / emailDomain: {}", emailAccount, emailDomain);
+
+            MemberDto member = memberService.loginMember(emailAccount, emailDomain, dto.getPassword());
+            if (member == null) {
+                logger.info("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다: {}", dto);
+                res.setStatus(401);
+                res.setMessage("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.");
+                res.setData(dto);
+                break label;
+            }
+
+            logger.info("로그인 성공: {}", member);
+            res.setStatus(200);
+            res.setMessage("로그인 성공");
+            res.setData(member);
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
             res.setStatus(500);
@@ -78,6 +107,9 @@ public class MemberController {
         SignUpMemberResponseDto res = new SignUpMemberResponseDto();
 
         try {
+            // TODO: 아이디, 이메일 중복 검사.
+            // TODO: 사용자에게 입력 받은 주소에 해당하는 동코드가 존재하는지 확인.
+
             int cnt = memberService.signUpMember(dto);
             assert cnt == 1;
             logger.debug("회원 등록 완료: {}", cnt);
@@ -96,32 +128,43 @@ public class MemberController {
     }
 
     @ApiOperation(value = "회원 수정", notes = "회원 아이디를 입력 받아 회원 수정 처리")
-    @PostMapping("/{userid}")
+    @PutMapping("/{memberId}")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "회원 수정 성공", response = UpdateMemberResponseDto.class),
-            @ApiResponse(code = 400, message = "회원 수정 실패", response = UpdateMemberResponseDto.class)
+            @ApiResponse(code = 200, message = "회원 수정 성공", response = UpdateMemberByIdResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 수정 실패", response = UpdateMemberByIdResponseDto.class)
     })
-    public ResponseEntity<UpdateMemberResponseDto> updateMember(@PathVariable("userid") String user_id, @RequestBody UpdateMemberRequestDto dto) {
-        UpdateMemberResponseDto res = new UpdateMemberResponseDto();
+    public ResponseEntity<UpdateMemberByIdResponseDto> updateMemberById(@PathVariable("memberId") int memberId, @RequestBody UpdateMemberByIdRequestDto dto) {
+        UpdateMemberByIdResponseDto res = new UpdateMemberByIdResponseDto();
 
+        label:
         try {
-            MemberDto member = memberService.getMemberByUserId(user_id);
-            assert member != null : "해당 회원 정보가 존재하지 않습니다.";
+            MemberDto member = memberService.getMemberById(memberId);
+            if (member == null) {
+                res.setStatus(400);
+                res.setMessage("해당 회원 정보가 존재하지 않습니다. 정보 수정에 실패했습니다.");
+                break label;
+            }
+
             logger.debug("회원 수정: 기존 정보 {}", member);
             logger.debug("회원 수정: 파라미터 {}", dto);
 
-            member.setAge(dto.getAge() > 0 ? dto.getAge() : member.getAge());
-            member.setEmail_account(dto.getEmail_account() != null ? dto.getEmail_account() : member.getEmail_account());
-            member.setEmail_domain(dto.getEmail_domain() != null ? dto.getEmail_domain() : member.getEmail_domain());
-            member.setPassword(dto.getPassword() != null ? dto.getPassword() : member.getPassword());
-            member.setSex(dto.getSex() != null ? dto.getSex() : member.getSex());
+            member.setPassword(dto.getPassword() != null ? dto.getPassword() : null);
+            member.setName(dto.getName() != null ? dto.getName() : null);
+            member.setAge(dto.getAge() > 0 ? dto.getAge() : 0);
+            member.setSex(dto.getSex() != null ? dto.getSex() : null);
+            if (dto.getAddress() != null) {
+                // TODO: 주소 바뀌면 동 코드도 업데이트 가능하도록.
+                member.setAddress(dto.getAddress());
+            } else {
+                member.setAddress(null);
+            }
 
             logger.debug("회원 수정: 수정될 정보 {}", member);
 
             int cnt = memberService.updateMember(member);
             assert cnt == 1;
-            logger.debug("회원 수정 완료: {}", cnt);
 
+            logger.info("회원 수정 성공: {}", cnt);
             res.setStatus(200);
             res.setMessage("회원 수정 성공");
         } catch (Exception e) {
@@ -136,16 +179,16 @@ public class MemberController {
     }
 
     @ApiOperation(value = "회원 삭제", notes = "회원 아이디를 받아 회원 삭제 처리")
-    @DeleteMapping("/{userid}")
+    @DeleteMapping("/{memberId}")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "회원 삭제 성공", response = DeleteMemberByUserIdResponseDto.class),
-            @ApiResponse(code = 400, message = "회원 삭제 실패", response = DeleteMemberByUserIdResponseDto.class)
+            @ApiResponse(code = 200, message = "회원 삭제 성공", response = DeleteMemberByIdResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 삭제 실패", response = DeleteMemberByIdResponseDto.class)
     })
-    public ResponseEntity<DeleteMemberByUserIdResponseDto> deleteMemberByUserId(@PathVariable("userid") String user_id) {
-        DeleteMemberByUserIdResponseDto res = new DeleteMemberByUserIdResponseDto();
+    public ResponseEntity<DeleteMemberByIdResponseDto> deleteMemberById(@PathVariable("memberId") int memberId) {
+        DeleteMemberByIdResponseDto res = new DeleteMemberByIdResponseDto();
 
         try {
-            int cnt = memberService.deleteMemberByUserId(user_id);
+            int cnt = memberService.deleteMemberById(memberId);
             assert cnt == 1;
             logger.debug("회원 삭제 완료: {}", cnt);
 
@@ -191,16 +234,16 @@ public class MemberController {
     }
 
     @ApiOperation(value = "회원 정보 검색", notes = "회원 아이디를 받아 회원 정보 검색")
-    @GetMapping("/{userid}")
+    @GetMapping("/{memberId}")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "회원 정보 검색 성공", response = GetMemberByUserIdResponseDto.class),
-            @ApiResponse(code = 400, message = "회원 정보 검색 실패", response = GetMemberByUserIdResponseDto.class)
+            @ApiResponse(code = 200, message = "회원 정보 검색 성공", response = GetMemberByIdResponseDto.class),
+            @ApiResponse(code = 400, message = "회원 정보 검색 실패", response = GetMemberByIdResponseDto.class)
     })
-    public ResponseEntity<GetMemberByUserIdResponseDto> getMemberByUserId(@PathVariable("userid") String user_id) {
-        GetMemberByUserIdResponseDto res = new GetMemberByUserIdResponseDto();
+    public ResponseEntity<GetMemberByIdResponseDto> getMemberById(@PathVariable("memberId") int memberId) {
+        GetMemberByIdResponseDto res = new GetMemberByIdResponseDto();
 
         try {
-            MemberDto member = memberService.getMemberByUserId(user_id);
+            MemberDto member = memberService.getMemberById(memberId);
             logger.debug("회원 정보 검색: {}", member);
 
             res.setStatus(200);

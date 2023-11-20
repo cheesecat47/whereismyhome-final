@@ -8,8 +8,8 @@ import lombok.Data;
 @ApiModel(value = "LoginRequestDto", description = "로그인 파라미터로 받을 Dto")
 public class LoginRequestDto {
 
-    @ApiModelProperty(value = "회원 아이디", required = true) // 상세 설명
-    private String user_id;
+    @ApiModelProperty(value = "회원 이메일", required = true)
+    private String email;
 
     @ApiModelProperty(value = "회원 비밀번호", required = true)
     private String password;

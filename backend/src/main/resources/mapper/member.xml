@@ -5,69 +5,92 @@
 <mapper namespace="com.ssafy.whereismyhome.member.model.mapper.MemberMapper">
 
     <select id="loginMember" parameterType="String" resultType="memberDto">
-        select user_id,
-               name,
-               age,
-               sex,
-               email_account,
-               email_domain,
-               authorization
-        from user
-        where user_id = #{user_id}
-          and password = #{password}
+        select member.memberId,
+               member.emailAccount,
+               member.emailDomain,
+               member.password,
+               member.name,
+               member.age,
+               member.sex,
+               member.authorization,
+               member.refreshToken,
+               member_address.address,
+               member_address.dongCode,
+               member.createdTime,
+               member.updatedTime
+        from member
+                 left join member_address
+                           on member.memberId = member_address.memberId
+        where member.deletedTime is null
+          and member.emailAccount = #{emailAccount}
+          and member.emailDomain = #{emailDomain}
     </select>
 
     <insert id="signUpMember" parameterType="signUpMemberRequestDto">
-        insert into user (user_id, name, password, age, sex, email_account, email_domain, authorization)
-        values (#{user_id}, #{name}, #{password}, #{age}, #{sex}, #{email_account}, #{email_domain}, 0)
+        insert into member (emailAccount, emailDomain, password, name, age, sex, authorization)
+        values (#{emailAccount}, #{emailDomain}, #{password}, #{name}, #{age}, #{sex}, 0)
     </insert>
 
     <update id="updateMember" parameterType="MemberDto">
-        update user
+        update member
         <trim prefix="set" suffixOverrides=",">
+            <if test="password != null">password = #{password},</if>
+            <if test="name != null">name = #{name},</if>
             <if test="age > 0">age = #{age},</if>
             <if test="sex != null">sex = #{sex},</if>
-            <if test="password != null">password = #{password},</if>
-            <if test="email_account != null">email_account = #{email_account},</if>
-            <if test="email_domain != null">email_domain = #{email_domain},</if>
+            updatedTime = now(),
         </trim>
-        where user_id = #{user_id}
+        where memberId = #{memberId}
     </update>
 
-    <delete id="deleteMemberByUserId" parameterType="String">
-        delete
-        from user
-        where user_id = #{user_id}
-    </delete>
+    <update id="deleteMemberById" parameterType="int">
+        update member
+        set updatedTime = now(),
+            deletedTime = now()
+        where memberId = #{memberId}
+    </update>
 
     <select id="getMembers" resultType="memberDto">
-        select user_id,
-               name,
-               age,
-               sex,
-               email_account,
-               email_domain,
-               authorization,
-               created_time,
-               updated_time,
-               deleted_time
-        from user
-        order by user_id
+        select member.memberId,
+               member.emailAccount,
+               member.emailDomain,
+               member.password,
+               member.name,
+               member.age,
+               member.sex,
+               member.authorization,
+               member.refreshToken,
+               member_address.address,
+               member_address.dongCode,
+               member.createdTime,
+               member.updatedTime
+        from member
+                 left join member_address
+                           on member.memberId = member_address.memberId
+        where member.deletedTime is null
+        order by member.memberId
     </select>
 
-    <select id="getMemberByUserId" parameterType="string" resultType="memberDto">
-        select user_id,
-               name,
-               age,
-               sex,
-               email_account,
-               email_domain,
-               authorization,
-               created_time,
-               updated_time,
-               deleted_time
-        from user
-        where user_id = #{user_id}
+    <select id="getMemberById" parameterType="int" resultType="memberDto">
+        select member.memberId,
+               member.emailAccount,
+               member.emailDomain,
+               member.password,
+               member.name,
+               member.age,
+               member.sex,
+               member.authorization,
+               member.refreshToken,
+               member_address.address,
+               member_address.dongCode,
+               member.createdTime,
+               member.updatedTime
+        from member
+                 left join member_address
+                           on member.memberId = member_address.memberId
+        where member.deletedTime is null
+          and member.memberId = #{memberId}
+        order by member.memberId
     </select>
 
 </mapper>
