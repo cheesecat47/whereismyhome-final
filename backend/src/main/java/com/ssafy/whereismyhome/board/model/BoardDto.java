@@ -23,6 +23,12 @@ public class BoardDto {
     @ApiModelProperty(value = "글 작성자 ID")
     private int memberId;
 
+    @ApiModelProperty(value = "글 작성자 이메일")
+    private String memberEmail;
+
+    @ApiModelProperty(value = "글 작성자 이름")
+    private String memberName;
+
     @ApiModelProperty(value = "동 코드", notes = "지역별 게시판에 사용")
     private String dongCode;
 
@@ -35,6 +41,4 @@ public class BoardDto {
     @ApiModelProperty(value = "글 수정 시간")
     private String updatedTime;
 
-    @ApiModelProperty(value = "글 삭제 시간")
-    private String deletedTime;
 }

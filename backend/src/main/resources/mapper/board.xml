@@ -10,35 +10,45 @@
     </insert>
 
     <select id="getNotices" resultType="boardDto">
-        select boardid,
-               title,
-               content,
-               type,
-               memberid,
-               dongcode,
-               hit,
-               createdtime,
-               updatedtime
-        from board
-        where type = 1
-          and deletedtime is null
+        select board.boardid,
+               board.title,
+               board.content,
+               board.type,
+               board.memberid,
+               concat(member.emailAccount, '@', member.emailDomain) memberEmail,
+               member.name memberName,
+               board.dongcode,
+               board.hit,
+               board.createdtime,
+               board.updatedtime
+        from board,
+             member
+        where board.memberId = member.memberId
+          and board.deletedTime is null
+          and member.deletedTime is null
+          and type = 1
         order by boardId desc
     </select>
 
     <select id="getCommunityArticles" parameterType="string" resultType="boardDto">
-        select boardid,
-               title,
-               content,
-               type,
-               memberid,
-               dongcode,
-               hit,
-               createdtime,
-               updatedtime
-        from board
-        where type = 0
+        select board.boardid,
+               board.title,
+               board.content,
+               board.type,
+               board.memberid,
+               concat(member.emailAccount, '@', member.emailDomain) memberEmail,
+               member.name memberName,
+               board.dongcode,
+               board.hit,
+               board.createdtime,
+               board.updatedtime
+        from board,
+             member
+        where board.memberId = member.memberId
+          and board.deletedTime is null
+          and member.deletedTime is null
+          and type = 0
           and dongCode = #{dongCode}
-          and deletedtime is null
         order by boardId desc;
     </select>
 
