@@ -1,6 +1,9 @@
 <script setup>
+import { ref, onMounted } from 'vue';
 import KakaoMap from '../components/actualprice/KakaoMap.vue';
 import NewsComponent from '../components/actualprice/NewsComponent.vue';
+import SelectMenu from '../components/common/SelectMenu.vue';
+import { getSidoNames, getGugunNames, getDongNames } from '../api/house.js';
 
 const actualprice = [
   {
@@ -85,11 +88,85 @@ const options = {
     },
   ],
 };
+
+const sido = ref([]);
+const gugun = ref([]);
+const dong = ref([]);
+const sidoItem = ref();
+const gugunItem = ref();
+const dongItem = ref();
+
+onMounted(() => {
+  getSidoNames(
+    ({ data }) => {
+      sido.value = data.data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+});
+
+const sidoItemClick = (sido) => {
+  sidoItem.value = sido;
+  gugun.value = [];
+  dong.value = [];
+
+  console.log(gugun.value);
+  console.log(dong.value);
+  getGugunNames(
+    sido,
+    ({ data }) => {
+      gugun.value = data.data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
+const gugunItemClick = (gugun) => {
+  gugunItem.value = gugun;
+  dong.value = [];
+  getDongNames(
+    sidoItem.value,
+    gugun,
+    ({ data }) => {
+      dong.value = data.data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
+const dongItemClick = (dong) => {
+  dongItem.value = dong;
+
+  console.log(sidoItem.value, gugunItem.value, dongItem.value);
+};
 </script>
 
 <template>
+  <div class="flex gap-4 mx-auto max-w-7xl py-4 items-center">
+    <SelectMenu @item-click="sidoItemClick" class="w-48" :arr="sido" />
+    <SelectMenu @item-click="gugunItemClick" class="w-40" :arr="gugun" />
+    <SelectMenu @item-click="dongItemClick" class="w-36" :arr="dong" />
+    <div class="flex gap-2 items-center">
+      <input
+        type="text"
+        placeholder="검색어를 입력하세요"
+        class="h-9 text-sm border-0 border-black/5 text-gray-700 ring-1 ring-gray-400 placeholder:text-gray-400 focus:ring-1 focus:ring-slate-700"
+      />
+      <div
+        class="h-9 py-[1.15rem] bg-slate-600 text-white text-sm font-semibold w-12 flex justify-center items-center border border-gray-400"
+      >
+        검색
+      </div>
+    </div>
+  </div>
   <div class="flex h-full overflow-y-hidden">
-    <div class="basis-1/3 overflow-y-auto h-[calc(100vh-81px)] scrollbar-hide bg-slate-100">
+    <div class="basis-1/4 overflow-y-auto h-[calc(100vh-81px)] scrollbar-hide bg-slate-100">
       <div id="roadview" class="w-full h-64"></div>
       <div v-for="item in actualprice" :key="item.id">
         <div class="p-4 border-b bg-white">
@@ -106,7 +183,9 @@ const options = {
       <Highcharts class="py-3" :options="options"></Highcharts>
       <NewsComponent />
     </div>
-    <KakaoMap class="" />
+    <div class="basis-3/4">
+      <KakaoMap class="" />
+    </div>
   </div>
 </template>
 
