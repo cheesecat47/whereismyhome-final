@@ -45,3 +45,41 @@ VALUES
 	((select memberId from member where emailAccount = 'cheesecat47'), '경상북도 구미시 도량동', (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1)),
 	((select memberId from member where emailAccount = 'dltmdgus4802'), '경상북도 구미시 진평동', (select dongCode from `whereismyhome`.`dongcode` where dongName like '진평%' limit 1))
 ;
+
+
+-- -----------------------------------------------------
+-- Table `whereismyhome`.`board`
+-- -----------------------------------------------------
+INSERT INTO `board` (title, content, type, memberId, dongCode, hit, createdTime)
+VALUES
+    ('title1', 'content1', 0, (select memberId from member where emailAccount = 'dltmdgus4802'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 14),
+    ('title2', 'content2', 0, (select memberId from member where emailAccount = 'cheesecat47'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 2, now() - 13),
+    ('title3', 'content3', 0, (select memberId from member where emailAccount = 'cheesecat47'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 3, now() - 12),
+    ('title4', 'content4', 0, (select memberId from member where emailAccount = 'dltmdgus4802'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 11),
+    ('title5', 'content5', 0, (select memberId from member where emailAccount = 'cheesecat47'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 10),
+    ('title6', 'content6', 0, (select memberId from member where emailAccount = 'dltmdgus4802'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 9),
+    ('title7', 'content7', 0, (select memberId from member where emailAccount = 'cheesecat47'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 8),
+    ('title8', 'content8', 0, (select memberId from member where emailAccount = 'dltmdgus4802'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 7),
+    ('title9', 'content9', 0, (select memberId from member where emailAccount = 'cheesecat47'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 6),
+    ('title10', 'content10', 0, (select memberId from member where emailAccount = 'dltmdgus4802'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 5),
+    ('title11', 'content11', 0, (select memberId from member where emailAccount = 'cheesecat47'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 4),
+    ('title12', 'content12', 0, (select memberId from member where emailAccount = 'dltmdgus4802'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 3),
+    ('title13', 'content13', 0, (select memberId from member where emailAccount = 'cheesecat47'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 2),
+    ('title14', 'content14', 0, (select memberId from member where emailAccount = 'dltmdgus4802'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 1),
+    ('title15', 'content15', 0, (select memberId from member where emailAccount = 'cheesecat47'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now()),
+    ('title1', 'content1', 1, (select memberId from member where emailAccount = 'dltmdgus4802'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 14),
+    ('title2', 'content2', 1, (select memberId from member where emailAccount = 'dltmdgus4802'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 2, now() - 13),
+    ('title3', 'content3', 1, (select memberId from member where emailAccount = 'cheesecat47'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 3, now() - 12),
+    ('title4', 'content4', 1, (select memberId from member where emailAccount = 'dltmdgus4802'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 11),
+    ('title5', 'content5', 1, (select memberId from member where emailAccount = 'cheesecat47'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 10),
+    ('title6', 'content6', 1, (select memberId from member where emailAccount = 'dltmdgus4802'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 9),
+    ('title7', 'content7', 1, (select memberId from member where emailAccount = 'cheesecat47'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 8),
+    ('title8', 'content8', 1, (select memberId from member where emailAccount = 'dltmdgus4802'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 7),
+    ('title9', 'content9', 1, (select memberId from member where emailAccount = 'dltmdgus4802'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 6),
+    ('title10', 'content10', 1, (select memberId from member where emailAccount = 'cheesecat47'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 5),
+    ('title11', 'content11', 1, (select memberId from member where emailAccount = 'cheesecat47'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 4),
+    ('title12', 'content12', 1, (select memberId from member where emailAccount = 'cheesecat47'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 3),
+    ('title13', 'content13', 1, (select memberId from member where emailAccount = 'dltmdgus4802'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 2),
+    ('title14', 'content14', 1, (select memberId from member where emailAccount = 'cheesecat47'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now() - 1),
+    ('title15', 'content15', 1, (select memberId from member where emailAccount = 'dltmdgus4802'), (select dongCode from `whereismyhome`.`dongcode` where dongName like '도량%' limit 1), 1, now())
+;
