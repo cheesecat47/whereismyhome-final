@@ -1,5 +1,6 @@
 package com.ssafy.whereismyhome.board.service;
 
+import com.ssafy.whereismyhome.board.model.BoardDetailDto;
 import com.ssafy.whereismyhome.board.model.BoardDto;
 
 import java.sql.SQLException;
@@ -11,4 +12,6 @@ public interface BoardService {
     List<BoardDto> getNotices() throws SQLException;
 
     List<BoardDto> getCommunityArticles(String dongCode) throws SQLException;
+
+    BoardDetailDto getArticleById(int boardId) throws SQLException;
 }

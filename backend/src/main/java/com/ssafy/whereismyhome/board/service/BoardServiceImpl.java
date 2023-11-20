@@ -1,5 +1,6 @@
 package com.ssafy.whereismyhome.board.service;
 
+import com.ssafy.whereismyhome.board.model.BoardDetailDto;
 import com.ssafy.whereismyhome.board.model.BoardDto;
 import com.ssafy.whereismyhome.board.model.mapper.BoardMapper;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,10 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public List<BoardDto> getCommunityArticles(String dongCode) throws SQLException {
         return boardMapper.getCommunityArticles(dongCode);
+    }
+
+    @Override
+    public BoardDetailDto getArticleById(int boardId) throws SQLException {
+        return boardMapper.getArticleById(boardId);
     }
 }

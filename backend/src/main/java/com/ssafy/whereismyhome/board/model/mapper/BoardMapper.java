@@ -1,5 +1,6 @@
 package com.ssafy.whereismyhome.board.model.mapper;
 
+import com.ssafy.whereismyhome.board.model.BoardDetailDto;
 import com.ssafy.whereismyhome.board.model.BoardDto;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,4 +14,6 @@ public interface BoardMapper {
     List<BoardDto> getNotices() throws SQLException;
 
     List<BoardDto> getCommunityArticles(String dongCode) throws SQLException;
+
+    BoardDetailDto getArticleById(int boardId) throws SQLException;
 }

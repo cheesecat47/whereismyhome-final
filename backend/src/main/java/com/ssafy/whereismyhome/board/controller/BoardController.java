@@ -155,4 +155,39 @@ public class BoardController {
 
         return ResponseEntity.status(res.getStatus()).body(res);
     }
+
+    @ApiOperation(value = "getArticleById", notes = "게시글 아이디에 해당하는 글 조회")
+    @GetMapping("/{boardId}")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "게시글 조회 성공", response = BoardDto.class),
+            @ApiResponse(code = 400, message = "게시글 조회 실패", response = BoardDto.class),
+            @ApiResponse(code = 500, message = "게시글 조회 실패", response = BoardDto.class)
+    })
+    public ResponseEntity<GetArticleByIdResponseDto> getArticleById(
+            @PathVariable("boardId") int boardId
+    ) {
+        GetArticleByIdResponseDto res = new GetArticleByIdResponseDto();
+
+        label:
+        try {
+            BoardDetailDto article = boardService.getArticleById(boardId);
+            logger.debug("게시글: {}", article);
+            if (article == null) {
+                res.setStatus(400);
+                res.setMessage("게시글 조회 실패.");
+                break label;
+            }
+
+            res.setStatus(200);
+            res.setMessage("게시글 조회 성공");
+            res.setData(article);
+        } catch (Exception e) {
+            logger.error("Error: {}", e.getMessage());
+            res.setStatus(500);
+            res.setMessage("동네 글 목록 조회 실패.");
+        }
+
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
 }
