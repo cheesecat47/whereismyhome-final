@@ -128,6 +128,7 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "로그아웃 성공", response = LogoutResponseDto.class),
             @ApiResponse(code = 400, message = "로그아웃 실패", response = LogoutResponseDto.class),
+            @ApiResponse(code = 401, message = "로그아웃 실패", response = LogoutResponseDto.class),
             @ApiResponse(code = 500, message = "로그아웃 실패", response = LogoutResponseDto.class)
     })
     public ResponseEntity<LogoutResponseDto> logoutMember(
@@ -150,11 +151,21 @@ public class MemberController {
             String memberEmail = String.format("%s@%s", member.getEmailAccount(), member.getEmailDomain());
 
             String token = request.getHeader("Authorization");
+            logger.debug("token: {}", token);
+
+            if (!jwtUtil.checkToken(token)) {
+                msg = "로그아웃 실패: 사용 불가능한 토큰입니다.";
+                logger.info(msg);
+                res.setStatus(401);
+                res.setMessage(msg);
+                break label;
+            }
+
             String tokenEmail = jwtUtil.getMemberEmail(token);
             if (!tokenEmail.equals(memberEmail)) {
-                msg = "로그아웃 실패: 잘못된 접근입니다.";
+                msg = "로그아웃 실패: 사용 불가능한 토큰입니다.";
                 logger.info(msg);
-                res.setStatus(400);
+                res.setStatus(401);
                 res.setMessage(msg);
                 break label;
             }

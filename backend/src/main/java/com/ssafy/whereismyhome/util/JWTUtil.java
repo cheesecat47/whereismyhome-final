@@ -21,7 +21,7 @@ public class JWTUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(JWTUtil.class);
 
-    @Value("${jwt.salt")
+    @Value("${jwt.salt}")
     private String salt;
 
     @Value("${jwt.access-token.expiretime}")
