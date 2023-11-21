@@ -11,9 +11,9 @@ import java.util.List;
 public interface BoardMapper {
     int writeArticle(BoardDetailDto dto) throws SQLException;
 
-    List<BoardListDto> getNotices(String orderBy) throws SQLException;
+    List<BoardListDto> getNotices(String searchBy, String searchKeyword, String orderBy) throws SQLException;
 
-    List<BoardListDto> getCommunityArticles(String dongCode, String orderBy) throws SQLException;
+    List<BoardListDto> getCommunityArticles(String dongCode, String searchBy, String searchKeyword, String orderBy) throws SQLException;
 
     BoardDetailDto getArticleById(int boardId) throws SQLException;
 

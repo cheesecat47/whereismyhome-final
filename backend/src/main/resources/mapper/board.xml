@@ -25,6 +25,14 @@
           and board.deletedTime is null
           and member.deletedTime is null
           and type = 1
+        <if test="searchBy != null and searchKeyword != null">
+            <choose>
+                <when test="searchBy == 'title'">and board.title</when>
+                <when test="searchBy == 'memberName'">and member.name</when>
+                <when test="searchBy == 'content'">and board.content</when>
+            </choose>
+            like concat('%', #{searchKeyword}, '%')
+        </if>
         order by board.boardId<if test="orderBy == 'desc'"> desc</if>
     </select>
 
@@ -44,6 +52,14 @@
           and board.deletedTime is null
           and member.deletedTime is null
           and dongCode = #{dongCode}
+        <if test="searchBy != null and searchKeyword != null">
+            <choose>
+                <when test="searchBy == 'title'">and board.title</when>
+                <when test="searchBy == 'memberName'">and member.name</when>
+                <when test="searchBy == 'content'">and board.content</when>
+            </choose>
+            like concat('%', #{searchKeyword}, '%')
+        </if>
         order by board.boardId<if test="orderBy == 'desc'"> desc</if>
     </select>
 
