@@ -33,7 +33,7 @@ public class BoardController {
     @ApiOperation(value = "writeArticle", notes = "글 생성")
     @PostMapping("/")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "글 생성 성공", response = WriteArticleResponseDto.class),
+            @ApiResponse(code = 201, message = "글 생성 성공", response = WriteArticleResponseDto.class),
             @ApiResponse(code = 401, message = "글 생성 실패", response = WriteArticleResponseDto.class),
             @ApiResponse(code = 500, message = "글 생성 실패", response = WriteArticleResponseDto.class)
     })
