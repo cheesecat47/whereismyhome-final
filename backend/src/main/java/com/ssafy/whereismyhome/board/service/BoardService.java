@@ -9,9 +9,9 @@ import java.util.List;
 public interface BoardService {
     int writeArticle(BoardDetailDto dto) throws SQLException;
 
-    List<BoardListDto> getNotices() throws SQLException;
+    List<BoardListDto> getNotices(String orderBy) throws SQLException;
 
-    List<BoardListDto> getCommunityArticles(String dongCode) throws SQLException;
+    List<BoardListDto> getCommunityArticles(String dongCode, String orderBy) throws SQLException;
 
     BoardDetailDto getArticleById(int boardId) throws SQLException;
 

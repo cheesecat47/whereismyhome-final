@@ -22,13 +22,13 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<BoardListDto> getNotices() throws SQLException {
-        return boardMapper.getNotices();
+    public List<BoardListDto> getNotices(String orderBy) throws SQLException {
+        return boardMapper.getNotices(orderBy);
     }
 
     @Override
-    public List<BoardListDto> getCommunityArticles(String dongCode) throws SQLException {
-        return boardMapper.getCommunityArticles(dongCode);
+    public List<BoardListDto> getCommunityArticles(String dongCode, String orderBy) throws SQLException {
+        return boardMapper.getCommunityArticles(dongCode, orderBy);
     }
 
     @Override

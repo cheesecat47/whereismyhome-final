@@ -9,7 +9,7 @@
         values (#{title}, #{content}, #{type}, #{memberId}, #{dongCode}, 0, now())
     </insert>
 
-    <select id="getNotices" resultType="boardListDto">
+    <select id="getNotices" parameterType="string" resultType="boardListDto">
         select board.boardid,
                board.title,
                board.type,
@@ -25,7 +25,7 @@
           and board.deletedTime is null
           and member.deletedTime is null
           and type = 1
-        order by boardId desc
+        order by board.boardId<if test="orderBy == 'desc'"> desc</if>
     </select>
 
     <select id="getCommunityArticles" parameterType="string" resultType="boardListDto">
@@ -44,7 +44,7 @@
           and board.deletedTime is null
           and member.deletedTime is null
           and dongCode = #{dongCode}
-        order by boardId desc;
+        order by board.boardId<if test="orderBy == 'desc'"> desc</if>
     </select>
 
     <select id="getArticleById" parameterType="int" resultType="boardDetailDto">

@@ -4,10 +4,7 @@ import com.ssafy.whereismyhome.board.model.*;
 import com.ssafy.whereismyhome.board.service.BoardService;
 import com.ssafy.whereismyhome.member.model.MemberDto;
 import com.ssafy.whereismyhome.member.service.MemberService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,12 +96,23 @@ public class BoardController {
             @ApiResponse(code = 400, message = "공지글 목록 조회 실패", response = GetNoticesResponseDto.class),
             @ApiResponse(code = 500, message = "공지글 목록 조회 실패", response = GetNoticesResponseDto.class)
     })
-    public ResponseEntity<GetNoticesResponseDto> getNotices() {
+    public ResponseEntity<GetNoticesResponseDto> getNotices(
+            @RequestParam(required = false, defaultValue = "desc") @ApiParam(value = "정렬 방법(asc, desc). 기본은 최근순(desc).") String orderBy
+    ) {
         GetNoticesResponseDto res = new GetNoticesResponseDto();
 
         label:
         try {
-            List<BoardListDto> list = boardService.getNotices();
+            // orderBy 키워드가 적절히 들어왔는지 확인.
+            if (!orderBy.matches("asc|desc")) {
+                logger.debug("공지글 목록 조회 실패: orderBy: {}", orderBy);
+                res.setStatus(400);
+                res.setMessage("공지글 목록 조회 실패: 정렬 방식을 다시 한 번 확인해주세요.");
+                break label;
+            }
+            logger.debug("공지글 목록 조회: orderBy: {}", orderBy);
+
+            List<BoardListDto> list = boardService.getNotices(orderBy);
             logger.debug("공지글 목록: {}", list);
             if (list.isEmpty()) {
                 res.setStatus(400);
@@ -132,13 +140,23 @@ public class BoardController {
             @ApiResponse(code = 500, message = "동네 글 목록 조회 실패", response = GetNoticesResponseDto.class)
     })
     public ResponseEntity<GetCommunityArticlesResponseDto> getCommunityArticles(
-            @PathVariable("dongCode") String dongCode
+            @PathVariable("dongCode") String dongCode,
+            @RequestParam(required = false, defaultValue = "desc") @ApiParam(value = "정렬 방법(asc, desc). 기본은 최근순(desc).") String orderBy
     ) {
         GetCommunityArticlesResponseDto res = new GetCommunityArticlesResponseDto();
 
         label:
         try {
-            List<BoardListDto> list = boardService.getCommunityArticles(dongCode);
+            // orderBy 키워드가 적절히 들어왔는지 확인.
+            if (orderBy != null && !orderBy.matches("asc|desc")) {
+                logger.debug("동네 글 목록 조회 실패: orderBy: {}", orderBy);
+                res.setStatus(400);
+                res.setMessage("동네 글 목록 조회 실패: 정렬 방식을 다시 한 번 확인해주세요.");
+                break label;
+            }
+            logger.debug("동네 글 목록 조회: orderBy: {}", orderBy);
+
+            List<BoardListDto> list = boardService.getCommunityArticles(dongCode, orderBy);
             logger.debug("동네 글 목록: {}", list);
             if (list.isEmpty()) {
                 res.setStatus(400);
