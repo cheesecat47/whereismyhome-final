@@ -2,16 +2,19 @@ package com.ssafy.whereismyhome.member.controller;
 
 import com.ssafy.whereismyhome.member.model.*;
 import com.ssafy.whereismyhome.member.service.MemberService;
+import com.ssafy.whereismyhome.util.JWTUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,50 +23,52 @@ import java.util.regex.Pattern;
 @Api(tags = {"멤버 컨트롤러  API V1"})
 @RequestMapping("/member")
 @Slf4j
+@RequiredArgsConstructor
 public class MemberController {
 
     private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
     private final MemberService memberService;
 
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
-    }
+    private final JWTUtil jwtUtil;
 
-    @ApiOperation(value = "로그인", notes = "아이디와 비밀번호를 입력 받아 로그인 처리")
+    @ApiOperation(value = "로그인", notes = "회원 이메일과 비밀번호를 입력 받아 로그인 처리")
     @PostMapping("/login")
     @ApiResponses({
             @ApiResponse(code = 200, message = "로그인 성공", response = LoginResponseDto.class),
             @ApiResponse(code = 401, message = "로그인 실패", response = LoginResponseDto.class),
             @ApiResponse(code = 500, message = "로그인 실패", response = LoginResponseDto.class)
     })
-    public ResponseEntity<LoginResponseDto> loginMember(@RequestBody LoginRequestDto dto) {
+    public ResponseEntity<LoginResponseDto> loginMember(
+            @RequestBody LoginRequestDto params
+    ) {
         LoginResponseDto res = new LoginResponseDto();
 
         label:
         try {
             // 로그인 파라미터 유효성 검사
+            logger.debug("params: {}", params);
 
             // 빈 문자열인지 체크
-            if (dto.getEmail().equals("") || dto.getPassword().equals("")) {
+            String email = params.getEmail();
+            String password = params.getPassword();
+            if (email == null || password == null || email.equals("") || password.equals("")) {
+                logger.debug("로그인 실패: 아이디, 비밀번호는 필수입니다: {}", params);
                 res.setStatus(401);
                 res.setMessage("로그인 실패: 아이디, 비밀번호는 필수입니다.");
-                res.setData(dto);
+                res.setData(params);
                 break label;
             }
 
             // 이메일 형식 검사
-            String email = dto.getEmail();
-            logger.debug("email: {}", email);
-
             Matcher matcher = Pattern
-                    .compile("^(?<emailAccount>[a-zA-Z0-9]+)@(?<emailDomain>[0-9a-zA-Z]+\\.[a-z]+)$")
+                    .compile("^(?<emailAccount>[a-zA-Z0-9]{1,50})@(?<emailDomain>(ssafy|gmail)\\.com)$")
                     .matcher(email);
             if (!matcher.matches()) {
-                logger.info("로그인 실패: 이메일 형식이 유효하지 않습니다: {}", dto);
+                logger.info("로그인 실패: 이메일 형식이 유효하지 않습니다: {}", params);
                 res.setStatus(401);
                 res.setMessage("로그인 실패: 이메일 형식이 유효하지 않습니다.");
-                res.setData(dto);
+                res.setData(params);
                 break label;
             }
 
@@ -72,19 +77,38 @@ public class MemberController {
             String emailDomain = matcher.group("emailDomain");
             logger.debug("emailAccount: {} / emailDomain: {}", emailAccount, emailDomain);
 
-            MemberDto member = memberService.loginMember(emailAccount, emailDomain, dto.getPassword());
+            MemberDto member = memberService.loginMember(emailAccount, emailDomain, params.getPassword());
             if (member == null) {
-                logger.info("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다: {}", dto);
+                logger.info("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다: {}", params);
                 res.setStatus(401);
                 res.setMessage("로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.");
-                res.setData(dto);
+                res.setData(params);
+                break label;
+            }
+
+            // 로그인 성공했으면 토큰 발급
+            String accessToken = jwtUtil.createAccessToken(email);
+            String refreshToken = jwtUtil.createRefreshToken(email);
+            logger.debug("accessToken: {} / refreshToken: {}", accessToken, refreshToken);
+
+            // 발급 받은 refresh token을 DB에 저장
+            int cnt = memberService.saveRefreshToken(String.valueOf(member.getMemberId()), refreshToken);
+            if (cnt != 1) {
+                logger.info("로그인 실패: 토큰 발행 중 오류가 발생했습니다.");
+                res.setStatus(401);
+                res.setMessage("로그인 실패: 토큰 발행 중 오류가 발생했습니다.");
+                res.setData(params);
                 break label;
             }
 
             logger.info("로그인 성공: {}", member);
             res.setStatus(200);
             res.setMessage("로그인 성공");
-            res.setData(member);
+            res.setData(new HashMap<String, Object>() {{
+                put("memberInfo", member);
+                put("access-token", accessToken);
+                put("refresh-token", refreshToken);
+            }});
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
             res.setStatus(500);
