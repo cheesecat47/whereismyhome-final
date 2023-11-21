@@ -31,11 +31,38 @@
 
 2. API 서버 실행
 
-   ```bash
-   cd backend
-   ./mvnw package
-   java -jar target/whereismyhome_gumi_sjy_lsh-0.0.1-SNAPSHOT.jar
-   ```
+    1. `backend` 디렉토리로 이동
+
+       ```bash
+       cd backend
+       ```
+
+    2. `.env` 파일의 환경 변수 확인
+
+       ```yaml
+       SERVER_PORT=YOUR_SERVER_PORT
+       
+       DB_HOST=YOUR_DB_HOST 
+       DB_PORT=YOUR_DB_PORT 
+       DB_SCHEMA=YOUR_DB_NAME 
+       DB_USER=YOUR_USER 
+       DB_PASSWORD=YOUR_PASSWORD
+       
+       JWT_SALT=YOUR_SECRET
+       ```   
+
+    3. 실행
+       
+       ```bash 
+       # 환경변수 적용
+       set -a; source .env; set +a
+       
+       # Maven 패키징
+       ./mvnw package
+       
+       # 실행 
+       java -jar target/whereismyhome_gumi_sjy_lsh-0.0.1-SNAPSHOT.jar 
+       ```
 
 3. Frontend 개발 서버 실행
 
