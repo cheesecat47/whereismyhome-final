@@ -252,7 +252,7 @@ public class BoardController {
             }
 
             // 로그인 한 회원이 작성한 글인지 확인
-            if (dto.getMemberId() != boardId) {
+            if (dto.getMemberId() != article.getMemberId()) {
                 res.setStatus(400);
                 res.setMessage("게시글 수정 실패: 해당 회원이 작성한 게시글이 아닙니다.");
                 break label;
