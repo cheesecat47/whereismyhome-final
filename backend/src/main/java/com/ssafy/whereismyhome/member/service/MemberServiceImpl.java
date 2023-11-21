@@ -48,8 +48,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public int saveRefreshToken(String memberId, String refreshToken) throws SQLException {
-        return memberMapper.saveRefreshToken(memberId, refreshToken);
+    public int updateRefreshToken(String memberId, String refreshToken) throws SQLException {
+        return memberMapper.updateRefreshToken(memberId, refreshToken);
     }
 
 }

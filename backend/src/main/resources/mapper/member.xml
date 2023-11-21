@@ -94,7 +94,7 @@
     </select>
 
     <!-- memberId가 일치하는 유저의 RefreshToken 값을 업데이트하고 업데이트 된 시각을 현재 시각으로 변경. -->
-    <update id="saveRefreshToken" parameterType="string">
+    <update id="updateRefreshToken" parameterType="string">
         update member
         set member.refreshToken = #{refreshToken},
             member.updatedTime  = now()

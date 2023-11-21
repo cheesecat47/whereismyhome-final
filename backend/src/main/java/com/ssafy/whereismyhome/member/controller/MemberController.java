@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -89,10 +90,11 @@ public class MemberController {
             // 로그인 성공했으면 토큰 발급
             String accessToken = jwtUtil.createAccessToken(email);
             String refreshToken = jwtUtil.createRefreshToken(email);
+            member.setRefreshToken(refreshToken);
             logger.debug("accessToken: {} / refreshToken: {}", accessToken, refreshToken);
 
             // 발급 받은 refresh token을 DB에 저장
-            int cnt = memberService.saveRefreshToken(String.valueOf(member.getMemberId()), refreshToken);
+            int cnt = memberService.updateRefreshToken(String.valueOf(member.getMemberId()), refreshToken);
             if (cnt != 1) {
                 logger.info("로그인 실패: 토큰 발행 중 오류가 발생했습니다.");
                 res.setStatus(401);
@@ -112,13 +114,72 @@ public class MemberController {
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
             res.setStatus(500);
-            res.setMessage("로그인 실패: " + e.getMessage());
+            res.setMessage("로그인 실패");
             res.setData(null);
         }
 
         return ResponseEntity
                 .status(res.getStatus())
                 .body(res);
+    }
+
+    @ApiOperation(value = "logoutMember", notes = "회원 아이디가 일치하는 유저 로그아웃 처리")
+    @PostMapping("/logout/{memberId}")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "로그아웃 성공", response = LogoutResponseDto.class),
+            @ApiResponse(code = 400, message = "로그아웃 실패", response = LogoutResponseDto.class),
+            @ApiResponse(code = 500, message = "로그아웃 실패", response = LogoutResponseDto.class)
+    })
+    public ResponseEntity<LogoutResponseDto> logoutMember(
+            @PathVariable("memberId") int memberId,
+            HttpServletRequest request
+    ) {
+        LogoutResponseDto res = new LogoutResponseDto();
+        String msg = null;
+
+        label:
+        try {
+            MemberDto member = memberService.getMemberById(memberId);
+            if (member == null) {
+                msg = "로그아웃 실패: 해당하는 멤버가 존재하지 않습니다.";
+                logger.info(msg);
+                res.setStatus(400);
+                res.setMessage(msg);
+                break label;
+            }
+            String memberEmail = String.format("%s@%s", member.getEmailAccount(), member.getEmailDomain());
+
+            String token = request.getHeader("Authorization");
+            String tokenEmail = jwtUtil.getMemberEmail(token);
+            if (!tokenEmail.equals(memberEmail)) {
+                msg = "로그아웃 실패: 잘못된 접근입니다.";
+                logger.info(msg);
+                res.setStatus(400);
+                res.setMessage(msg);
+                break label;
+            }
+
+            int cnt = memberService.updateRefreshToken(String.valueOf(member.getMemberId()), null);
+            if (cnt != 1) {
+                msg = "로그아웃 실패: 토큰 업데이트 중 오류가 발생했습니다.";
+                logger.info(msg);
+                res.setStatus(400);
+                res.setMessage(msg);
+                break label;
+            }
+
+            msg = "로그아웃 성공";
+            logger.info(msg);
+            res.setStatus(200);
+            res.setMessage(msg);
+        } catch (Exception e) {
+            msg = "로그아웃 실패";
+            logger.error("{}: {}", msg, e.getMessage());
+            res.setStatus(500);
+            res.setMessage(msg);
+        }
+
+        return ResponseEntity.status(res.getStatus()).body(res);
     }
 
     @ApiOperation(value = "회원 등록", notes = "회원 정보를 입력 받아 회원 가입 처리")

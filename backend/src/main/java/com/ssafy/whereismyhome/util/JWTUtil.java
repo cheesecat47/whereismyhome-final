@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -95,6 +96,9 @@ public class JWTUtil {
      */
     public boolean checkToken(String token) {
         try {
+            token = token.replaceAll("^Bearer ", "");
+            logger.debug("token: {}", token);
+
             // JSON Web Signature(JWS): 서버에서 인증을 근거로 인증 정보를 서버의 privkey로 서명한 것을 토큰화한 것.
             Jws<Claims> claims = Jwts.parser()
                     .setSigningKey(this.generateKey())  // 서명 검증을 위한 secret 세팅.
@@ -106,5 +110,28 @@ public class JWTUtil {
             logger.error("Error parsing claims: {}", e);
             return false;
         }
+    }
+
+    /**
+     * 토큰에서 회원 이메일 추출 후 반환
+     *
+     * @param token 요청에 포함된 토큰
+     * @return email
+     */
+    public String getMemberEmail(String token) {
+        Jws<Claims> claims = null;
+        try {
+            token = token.replaceAll("^Bearer ", "");
+            logger.debug("token: {}", token);
+
+            claims = Jwts.parser()
+                    .setSigningKey(this.generateKey())
+                    .parseClaimsJws(token);
+            logger.debug("claims: {}", claims);
+        } catch (Exception e) {
+            logger.error("Error parsing claims: {}", e);
+        }
+        Map<String, Object> body = claims.getBody();
+        return (String) body.get("email");
     }
 }
