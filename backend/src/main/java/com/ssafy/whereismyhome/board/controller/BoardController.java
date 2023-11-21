@@ -44,8 +44,6 @@ public class BoardController {
 
         label:
         try {
-            logger.debug("dto: {}", dto);
-
             // 빈 문자열인지 체크
             String title = dto.getTitle();
             String content = dto.getContent();
@@ -76,7 +74,11 @@ public class BoardController {
             boardDto.setDongCode(dto.getDongCode() == null ? member.getDongCode() : dto.getDongCode());
 
             int cnt = boardService.writeArticle(boardDto);
-            assert cnt == 1;
+            if (cnt != 1) {
+                res.setStatus(400);
+                res.setMessage("글 생성 실패");
+                break label;
+            }
             logger.info("글 생성 성공: {}", cnt);
 
             res.setStatus(201);
@@ -303,6 +305,12 @@ public class BoardController {
             }
 
             int cnt = boardService.deleteArticleById(boardId);
+            if (cnt != 1) {
+                res.setStatus(400);
+                res.setMessage("게시글 삭제 실패");
+                break label;
+            }
+
             logger.info("게시글 삭제 성공: {}", cnt);
             res.setStatus(200);
             res.setMessage("게시글 삭제 성공");
