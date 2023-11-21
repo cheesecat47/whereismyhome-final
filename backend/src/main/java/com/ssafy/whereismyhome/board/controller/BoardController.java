@@ -143,12 +143,14 @@ public class BoardController {
 
             List<BoardListDto> list = boardService.getNotices(searchBy, searchKeyword, orderBy);
             logger.debug("공지글 목록: {}", list);
-            if (list.isEmpty()) {
+            if (list == null) {
+                logger.debug("공지글 목록 조회 실패");
                 res.setStatus(400);
                 res.setMessage("공지글 목록 조회 실패");
                 break label;
             }
 
+            logger.info("공지글 목록 조회 성공");
             res.setStatus(200);
             res.setMessage("공지글 목록 조회 성공");
             res.setData(list);
@@ -216,12 +218,14 @@ public class BoardController {
 
             List<BoardListDto> list = boardService.getCommunityArticles(dongCode, searchBy, searchKeyword, orderBy);
             logger.debug("동네 글 목록: {}", list);
-            if (list.isEmpty()) {
+            if (list == null) {
+                logger.debug("동네 글 목록 조회 실패");
                 res.setStatus(400);
                 res.setMessage("동네 글 목록 조회 실패");
                 break label;
             }
 
+            logger.debug("동네 글 목록 조회 성공");
             res.setStatus(200);
             res.setMessage("동네 글 목록 조회 성공");
             res.setData(list);
@@ -251,11 +255,13 @@ public class BoardController {
             BoardDetailDto article = boardService.getArticleById(boardId);
             logger.debug("게시글: {}", article);
             if (article == null) {
+                logger.debug("게시글 조회 실패");
                 res.setStatus(400);
                 res.setMessage("게시글 조회 실패: ID에 해당하는 글이 존재하지 않습니다.");
                 break label;
             }
 
+            logger.info("게시글 조회 성공");
             res.setStatus(200);
             res.setMessage("게시글 조회 성공");
             res.setData(article);
@@ -288,6 +294,7 @@ public class BoardController {
             String newTitle = dto.getTitle();
             String newContent = dto.getContent();
             if ((newTitle != null && newTitle.isEmpty()) || (newContent != null && newContent.isEmpty())) {
+                logger.debug("게시글 수정 실패: newTitle: {}, newContent: {}", newTitle, newContent);
                 res.setStatus(400);
                 res.setMessage("게시글 수정 실패: 빈 문자열은 입력할 수 없습니다.");
                 break label;
@@ -296,6 +303,7 @@ public class BoardController {
             // 로그인 된 회원인지 확인
             MemberDto member = memberService.getMemberById(dto.getMemberId());
             if (member == null) {
+                logger.debug("게시글 수정 실패");
                 res.setStatus(400);
                 res.setMessage("게시글 수정 실패: 해당 회원 정보가 존재하지 않습니다.");
                 break label;
@@ -304,6 +312,7 @@ public class BoardController {
             // 존재하는 게시글인지 확인
             BoardDetailDto article = boardService.getArticleById(boardId);
             if (article == null) {
+                logger.debug("게시글 수정 실패");
                 res.setStatus(400);
                 res.setMessage("게시글 수정 실패: 해당 게시글이 존재하지 않습니다.");
                 break label;
@@ -311,6 +320,7 @@ public class BoardController {
 
             // 로그인 한 회원이 작성한 글인지 확인
             if (dto.getMemberId() != article.getMemberId()) {
+                logger.debug("게시글 수정 실패");
                 res.setStatus(400);
                 res.setMessage("게시글 수정 실패: 해당 회원이 작성한 게시글이 아닙니다.");
                 break label;
@@ -325,6 +335,7 @@ public class BoardController {
             logger.debug("게시글 수정: 수정될 정보 {}", article);
             int cnt = boardService.updateArticleById(article);
             if (cnt != 1) {
+                logger.debug("게시글 수정 실패");
                 res.setStatus(400);
                 res.setMessage("게시글 수정 실패");
                 break label;
@@ -360,6 +371,7 @@ public class BoardController {
             // 로그인 된 회원인지 확인
             MemberDto member = memberService.getMemberById(dto.getMemberId());
             if (member == null) {
+                logger.debug("게시글 삭제 실패");
                 res.setStatus(400);
                 res.setMessage("게시글 삭제 실패: 해당 회원 정보가 존재하지 않습니다.");
                 break label;
@@ -368,6 +380,7 @@ public class BoardController {
             // 존재하는 게시글인지 확인
             BoardDetailDto article = boardService.getArticleById(boardId);
             if (article == null) {
+                logger.debug("게시글 삭제 실패");
                 res.setStatus(400);
                 res.setMessage("게시글 삭제 실패: 해당 게시글이 존재하지 않습니다.");
                 break label;
@@ -375,6 +388,7 @@ public class BoardController {
 
             // 로그인 한 회원이 작성한 글인지 확인
             if (dto.getMemberId() != boardId) {
+                logger.debug("게시글 삭제 실패");
                 res.setStatus(400);
                 res.setMessage("게시글 삭제 실패: 해당 회원이 작성한 게시글이 아닙니다.");
                 break label;
