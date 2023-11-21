@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.whereismyhome.board.model.mapper.BoardMapper">
+
+    <insert id="writeArticle" parameterType="boardDetailDto">
+        insert into `board`(title, content, type, memberId, dongCode, hit, createdTime)
+        values (#{title}, #{content}, #{type}, #{memberId}, #{dongCode}, 0, now())
+    </insert>
+
+    <select id="getNotices" parameterType="string" resultType="boardListDto">
+        select board.boardid,
+               board.title,
+               board.type,
+               board.memberid,
+               concat(member.emailAccount, '@', member.emailDomain) memberEmail,
+               member.name memberName,
+               board.dongcode,
+               board.hit,
+               board.createdtime
+        from board,
+             member
+        where board.memberId = member.memberId
+          and board.deletedTime is null
+          and member.deletedTime is null
+          and type = 1
+        <if test="searchBy != null and searchKeyword != null">
+            <choose>
+                <when test="searchBy == 'title'">and board.title</when>
+                <when test="searchBy == 'memberName'">and member.name</when>
+                <when test="searchBy == 'content'">and board.content</when>
+            </choose>
+            like concat('%', #{searchKeyword}, '%')
+        </if>
+        order by board.boardId<if test="orderBy == 'desc'"> desc</if>
+    </select>
+
+    <select id="getCommunityArticles" parameterType="string" resultType="boardListDto">
+        select board.boardid,
+               board.title,
+               board.type,
+               board.memberid,
+               concat(member.emailAccount, '@', member.emailDomain) memberEmail,
+               member.name memberName,
+               board.dongcode,
+               board.hit,
+               board.createdtime
+        from board,
+             member
+        where board.memberId = member.memberId
+          and board.deletedTime is null
+          and member.deletedTime is null
+          and dongCode = #{dongCode}
+        <if test="searchBy != null and searchKeyword != null">
+            <choose>
+                <when test="searchBy == 'title'">and board.title</when>
+                <when test="searchBy == 'memberName'">and member.name</when>
+                <when test="searchBy == 'content'">and board.content</when>
+            </choose>
+            like concat('%', #{searchKeyword}, '%')
+        </if>
+        order by board.boardId<if test="orderBy == 'desc'"> desc</if>
+    </select>
+
+    <select id="getArticleById" parameterType="int" resultType="boardDetailDto">
+        select board.boardid,
+               board.title,
+               board.content,
+               board.type,
+               board.memberid,
+               concat(member.emailAccount, '@', member.emailDomain) memberEmail,
+               member.name memberName,
+               board.dongcode,
+               board.hit,
+               board.createdtime,
+               board.updatedtime
+        from board,
+             member
+        where board.memberId = member.memberId
+          and board.deletedTime is null
+          and member.deletedTime is null
+          and boardId = #{boardId};
+    </select>
+
+    <update id="updateArticleById" parameterType="boardDetailDto">
+        update board
+        <trim prefix="set" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            updatedTime = now(),
+        </trim>
+        where boardId = #{boardId}
+          and memberId = #{memberId}
+          and board.deletedTime is null
+    </update>
+
+    <update id="deleteArticleById" parameterType="int">
+        update board
+        set updatedTime = now(),
+            deletedTime = now()
+        where boardId = #{board_id}
+    </update>
+</mapper>
