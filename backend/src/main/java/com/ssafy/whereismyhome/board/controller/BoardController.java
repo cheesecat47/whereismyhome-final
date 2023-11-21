@@ -106,7 +106,7 @@ public class BoardController {
             logger.debug("공지글 목록: {}", list);
             if (list.isEmpty()) {
                 res.setStatus(400);
-                res.setMessage("공지글 목록 조회 실패.");
+                res.setMessage("공지글 목록 조회 실패");
                 break label;
             }
 
@@ -116,7 +116,7 @@ public class BoardController {
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
             res.setStatus(500);
-            res.setMessage("공지글 목록 조회 실패.");
+            res.setMessage("공지글 목록 조회 실패");
         }
 
         return ResponseEntity.status(res.getStatus()).body(res);
@@ -140,7 +140,7 @@ public class BoardController {
             logger.debug("동네 글 목록: {}", list);
             if (list.isEmpty()) {
                 res.setStatus(400);
-                res.setMessage("동네 글 목록 조회 실패.");
+                res.setMessage("동네 글 목록 조회 실패");
                 break label;
             }
 
@@ -150,7 +150,7 @@ public class BoardController {
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
             res.setStatus(500);
-            res.setMessage("동네 글 목록 조회 실패.");
+            res.setMessage("동네 글 목록 조회 실패");
         }
 
         return ResponseEntity.status(res.getStatus()).body(res);
@@ -184,7 +184,7 @@ public class BoardController {
         } catch (Exception e) {
             logger.error("Error: {}", e.getMessage());
             res.setStatus(500);
-            res.setMessage("동네 글 목록 조회 실패");
+            res.setMessage("게시글 조회 실패");
         }
 
         return ResponseEntity.status(res.getStatus()).body(res);
@@ -219,7 +219,7 @@ public class BoardController {
             MemberDto member = memberService.getMemberById(dto.getMemberId());
             if (member == null) {
                 res.setStatus(400);
-                res.setMessage("해당 회원 정보가 존재하지 않습니다. 정보 수정에 실패했습니다.");
+                res.setMessage("게시글 수정 실패: 해당 회원 정보가 존재하지 않습니다.");
                 break label;
             }
 
@@ -227,14 +227,14 @@ public class BoardController {
             BoardDetailDto article = boardService.getArticleById(boardId);
             if (article == null) {
                 res.setStatus(400);
-                res.setMessage("해당 게시글이 존재하지 않습니다. 정보 수정에 실패했습니다.");
+                res.setMessage("게시글 수정 실패: 해당 게시글이 존재하지 않습니다.");
                 break label;
             }
 
             // 로그인 한 회원이 작성한 글인지 확인
             if (dto.getMemberId() != boardId) {
                 res.setStatus(400);
-                res.setMessage("해당 회원이 작성한 게시글이 아닙니다. 정보 수정에 실패했습니다.");
+                res.setMessage("게시글 수정 실패: 해당 회원이 작성한 게시글이 아닙니다.");
                 break label;
             }
 
@@ -283,7 +283,7 @@ public class BoardController {
             MemberDto member = memberService.getMemberById(dto.getMemberId());
             if (member == null) {
                 res.setStatus(400);
-                res.setMessage("해당 회원 정보가 존재하지 않습니다. 게시글 삭제에 실패했습니다.");
+                res.setMessage("게시글 삭제 실패: 해당 회원 정보가 존재하지 않습니다.");
                 break label;
             }
 
@@ -291,14 +291,14 @@ public class BoardController {
             BoardDetailDto article = boardService.getArticleById(boardId);
             if (article == null) {
                 res.setStatus(400);
-                res.setMessage("해당 게시글이 존재하지 않습니다. 게시글 삭제에 실패했습니다.");
+                res.setMessage("게시글 삭제 실패: 해당 게시글이 존재하지 않습니다.");
                 break label;
             }
 
             // 로그인 한 회원이 작성한 글인지 확인
             if (dto.getMemberId() != boardId) {
                 res.setStatus(400);
-                res.setMessage("해당 회원이 작성한 게시글이 아닙니다. 게시글 삭제에 실패했습니다.");
+                res.setMessage("게시글 삭제 실패: 해당 회원이 작성한 게시글이 아닙니다.");
                 break label;
             }
 
