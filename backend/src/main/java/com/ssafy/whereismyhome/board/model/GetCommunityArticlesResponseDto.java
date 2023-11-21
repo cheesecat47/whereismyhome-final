@@ -13,5 +13,5 @@ public class GetCommunityArticlesResponseDto {
 
     private String message;
 
-    private List<BoardDto> data;
+    private List<BoardListDto> data;
 }

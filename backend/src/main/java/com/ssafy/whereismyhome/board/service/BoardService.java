@@ -1,17 +1,17 @@
 package com.ssafy.whereismyhome.board.service;
 
 import com.ssafy.whereismyhome.board.model.BoardDetailDto;
-import com.ssafy.whereismyhome.board.model.BoardDto;
+import com.ssafy.whereismyhome.board.model.BoardListDto;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public interface BoardService {
-    int writeArticle(BoardDto dto) throws SQLException;
+    int writeArticle(BoardDetailDto dto) throws SQLException;
 
-    List<BoardDto> getNotices() throws SQLException;
+    List<BoardListDto> getNotices() throws SQLException;
 
-    List<BoardDto> getCommunityArticles(String dongCode) throws SQLException;
+    List<BoardListDto> getCommunityArticles(String dongCode) throws SQLException;
 
     BoardDetailDto getArticleById(int boardId) throws SQLException;
 

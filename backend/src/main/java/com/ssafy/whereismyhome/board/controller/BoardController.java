@@ -65,7 +65,7 @@ public class BoardController {
             }
 
             // 글 작성
-            BoardDto boardDto = new BoardDto();
+            BoardDetailDto boardDto = new BoardDetailDto();
             boardDto.setTitle(dto.getTitle());
             boardDto.setContent(dto.getContent());
             boardDto.setType(0);
@@ -104,7 +104,7 @@ public class BoardController {
 
         label:
         try {
-            List<BoardDto> list = boardService.getNotices();
+            List<BoardListDto> list = boardService.getNotices();
             logger.debug("공지글 목록: {}", list);
             if (list.isEmpty()) {
                 res.setStatus(400);
@@ -138,7 +138,7 @@ public class BoardController {
 
         label:
         try {
-            List<BoardDto> list = boardService.getCommunityArticles(dongCode);
+            List<BoardListDto> list = boardService.getCommunityArticles(dongCode);
             logger.debug("동네 글 목록: {}", list);
             if (list.isEmpty()) {
                 res.setStatus(400);
@@ -161,9 +161,9 @@ public class BoardController {
     @ApiOperation(value = "getArticleById", notes = "게시글 아이디에 해당하는 글 조회")
     @GetMapping("/{boardId}")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "게시글 조회 성공", response = BoardDto.class),
-            @ApiResponse(code = 400, message = "게시글 조회 실패", response = BoardDto.class),
-            @ApiResponse(code = 500, message = "게시글 조회 실패", response = BoardDto.class)
+            @ApiResponse(code = 200, message = "게시글 조회 성공", response = BoardListDto.class),
+            @ApiResponse(code = 400, message = "게시글 조회 실패", response = BoardListDto.class),
+            @ApiResponse(code = 500, message = "게시글 조회 실패", response = BoardListDto.class)
     })
     public ResponseEntity<GetArticleByIdResponseDto> getArticleById(
             @PathVariable("boardId") int boardId
@@ -176,7 +176,7 @@ public class BoardController {
             logger.debug("게시글: {}", article);
             if (article == null) {
                 res.setStatus(400);
-                res.setMessage("게시글 조회 실패");
+                res.setMessage("게시글 조회 실패: ID에 해당하는 글이 존재하지 않습니다.");
                 break label;
             }
 

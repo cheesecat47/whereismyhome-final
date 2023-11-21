@@ -4,23 +4,21 @@
 
 <mapper namespace="com.ssafy.whereismyhome.board.model.mapper.BoardMapper">
 
-    <insert id="writeArticle" parameterType="boardDto">
+    <insert id="writeArticle" parameterType="boardDetailDto">
         insert into `board`(title, content, type, memberId, dongCode, hit, createdTime)
         values (#{title}, #{content}, #{type}, #{memberId}, #{dongCode}, 0, now())
     </insert>
 
-    <select id="getNotices" resultType="boardDto">
+    <select id="getNotices" resultType="boardListDto">
         select board.boardid,
                board.title,
-               board.content,
                board.type,
                board.memberid,
                concat(member.emailAccount, '@', member.emailDomain) memberEmail,
                member.name memberName,
                board.dongcode,
                board.hit,
-               board.createdtime,
-               board.updatedtime
+               board.createdtime
         from board,
              member
         where board.memberId = member.memberId
@@ -30,24 +28,21 @@
         order by boardId desc
     </select>
 
-    <select id="getCommunityArticles" parameterType="string" resultType="boardDto">
+    <select id="getCommunityArticles" parameterType="string" resultType="boardListDto">
         select board.boardid,
                board.title,
-               board.content,
                board.type,
                board.memberid,
                concat(member.emailAccount, '@', member.emailDomain) memberEmail,
                member.name memberName,
                board.dongcode,
                board.hit,
-               board.createdtime,
-               board.updatedtime
+               board.createdtime
         from board,
              member
         where board.memberId = member.memberId
           and board.deletedTime is null
           and member.deletedTime is null
-          and type = 0
           and dongCode = #{dongCode}
         order by boardId desc;
     </select>
@@ -69,7 +64,6 @@
         where board.memberId = member.memberId
           and board.deletedTime is null
           and member.deletedTime is null
-          and type = 0
           and boardId = #{boardId};
     </select>
 
