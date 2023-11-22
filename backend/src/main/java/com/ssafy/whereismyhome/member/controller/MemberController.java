@@ -128,7 +128,7 @@ public class MemberController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
-    @ApiOperation(value = "logoutMember", notes = "회원 아이디가 일치하는 유저 로그아웃 처리")
+    @ApiOperation(value = "logoutMember", notes = "회원 아이디가 일치하는 유저 로그아웃 처리. 로그인 필요.")
     @PostMapping("/logout/{memberId}")
     @ApiResponses({
             @ApiResponse(code = 200, message = "로그아웃 성공", response = LogoutResponseDto.class),
@@ -205,7 +205,7 @@ public class MemberController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
-    @ApiOperation(value = "refreshToken", notes = "만료된 Access Token 재발급")
+    @ApiOperation(value = "refreshToken", notes = "만료된 Access Token 재발급. 로그인 필요.")
     @PostMapping("/refresh/{memberId}")
     @ApiResponses({
             @ApiResponse(code = 201, message = "토큰 재발급 성공", response = RefreshTokenResponseDto.class),
@@ -330,7 +330,7 @@ public class MemberController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
-    @ApiOperation(value = "updateMemberById", notes = "회원 아이디를 입력 받아 회원 수정 처리")
+    @ApiOperation(value = "updateMemberById", notes = "회원 아이디를 입력 받아 회원 수정 처리. 로그인 필요.")
     @PutMapping("/{memberId}")
     @ApiResponses({
             @ApiResponse(code = 200, message = "회원 정보 수정 성공", response = UpdateMemberByIdResponseDto.class),
@@ -433,7 +433,7 @@ public class MemberController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
-    @ApiOperation(value = "회원 삭제", notes = "회원 아이디를 받아 회원 삭제 처리")
+    @ApiOperation(value = "회원 삭제", notes = "회원 아이디를 받아 회원 삭제 처리. 로그인 필요.")
     @DeleteMapping("/{memberId}")
     @ApiResponses({
             @ApiResponse(code = 200, message = "회원 삭제 성공", response = DeleteMemberByIdResponseDto.class),
@@ -518,7 +518,7 @@ public class MemberController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
-    @ApiOperation(value = "전체 회원 정보 조회", notes = "전체 회원 정보를 조회")
+    @ApiOperation(value = "전체 회원 정보 조회", notes = "전체 회원 정보를 조회. 로그인 필요.")
     @GetMapping("/")
     @ApiResponses({
             @ApiResponse(code = 200, message = "회원 목록 조회 성공", response = GetMembersResponseDto.class),
@@ -571,7 +571,7 @@ public class MemberController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
-    @ApiOperation(value = "회원 정보 검색", notes = "회원 아이디를 받아 회원 정보 검색")
+    @ApiOperation(value = "회원 정보 검색", notes = "회원 아이디를 받아 회원 정보 검색. 로그인 필요.")
     @GetMapping("/{memberId}")
     @ApiResponses({
             @ApiResponse(code = 200, message = "회원 정보 검색 성공", response = GetMemberByIdResponseDto.class),
