@@ -193,6 +193,73 @@ public class MemberController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
+    @ApiOperation(value = "refreshToken", notes = "만료된 Access Token 재발급")
+    @PostMapping("/refresh/{memberId}")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "토큰 재발급 성공", response = RefreshTokenResponseDto.class),
+            @ApiResponse(code = 400, message = "토큰 재발급 실패", response = RefreshTokenResponseDto.class),
+            @ApiResponse(code = 401, message = "토큰 재발급 실패", response = RefreshTokenResponseDto.class),
+            @ApiResponse(code = 500, message = "토큰 재발급 실패", response = RefreshTokenResponseDto.class)
+    })
+    public ResponseEntity<RefreshTokenResponseDto> refreshToken(
+            @PathVariable("memberId") int memberId,
+            HttpServletRequest request
+    ) {
+        RefreshTokenResponseDto res = new RefreshTokenResponseDto();
+        String msg = null;
+
+        label:
+        try {
+            MemberDto member = memberService.getMemberById(memberId);
+            if (member == null) {
+                msg = "토큰 재발급 실패: 해당하는 멤버가 존재하지 않습니다.";
+                logger.info(msg);
+                res.setStatus(400);
+                res.setMessage(msg);
+                break label;
+            }
+            String memberEmail = String.format("%s@%s", member.getEmailAccount(), member.getEmailDomain());
+
+            String refreshToken = request.getHeader("Refresh");
+            logger.debug("refreshToken: {}", refreshToken);
+
+            if (!jwtUtil.checkToken(refreshToken)) {
+                msg = "토큰 재발급 실패: 사용 불가능한 토큰입니다.";
+                logger.info(msg);
+                res.setStatus(401);
+                res.setMessage(msg);
+                break label;
+            }
+
+            String tokenEmail = jwtUtil.getMemberEmail(refreshToken);
+            if (!tokenEmail.equals(memberEmail)) {
+                msg = "토큰 재발급 실패: 사용 불가능한 토큰입니다.";
+                logger.info(msg);
+                res.setStatus(401);
+                res.setMessage(msg);
+                break label;
+            }
+
+            String newAccessToken = jwtUtil.createAccessToken(memberEmail);
+            logger.debug("newAccessToken: {}", newAccessToken);
+
+            msg = "토큰 재발급 성공";
+            logger.info("{}: {}", msg, newAccessToken);
+            res.setStatus(201);
+            res.setMessage(msg);
+            res.setData(new HashMap<String, Object>() {{
+                put("access-token", newAccessToken);
+            }});
+        } catch (Exception e) {
+            msg = "토큰 재발급 실패";
+            logger.error("{}: {}", msg, e.getMessage());
+            res.setStatus(500);
+            res.setMessage(msg);
+        }
+
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
+
     @ApiOperation(value = "회원 등록", notes = "회원 정보를 입력 받아 회원 가입 처리")
     @PostMapping("/")
     @ApiResponses({
