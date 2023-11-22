@@ -17,8 +17,6 @@ watch(props, (newValue) => {
     selectItem.value = '선택없음';
   }
 });
-
-// const sort = [{ name: '최신순' }, { name: '오래된순' }];
 </script>
 
 <template>
