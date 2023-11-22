@@ -11,5 +11,5 @@ public class GetArticleByIdResponseDto {
 
     private String message;
 
-    private BoardDetailDto data;
+    private Object data;
 }

@@ -8,4 +8,5 @@ import lombok.Data;
 public class UpdateMemberByIdResponseDto {
     private int status;
     private String message;
+    private Object data;
 }

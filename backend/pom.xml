@@ -56,16 +56,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- JSP Setting -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-jasper</artifactId>
-        </dependency>
-
         <!-- Datasource를 사용하기 위해 commons-dbcp2를 추가. -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -85,6 +75,18 @@
             <version>3.0.0</version>
         </dependency>
 
+        <!-- JWT -->
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
