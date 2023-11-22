@@ -54,4 +54,9 @@ public class HouseServiceImpl implements HouseService {
     public void addDongViewHistory(String memberId, String dongCode) {
         houseMapper.addDongViewHistory(memberId, dongCode);
     }
+
+    @Override
+    public void addAptViewHistory(String memberId, String aptCode) {
+        houseMapper.addAptViewHistory(memberId, aptCode);
+    }
 }
