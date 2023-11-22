@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <div class="p-4 bg-white">
+  <div class="p-4 bg-white border-t">
     <p class="font-bold">부동산 최신뉴스를 한번에</p>
     <div class="flex gap-4 pt-4">
       <div class="text-center">
