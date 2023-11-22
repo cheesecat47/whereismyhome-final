@@ -11,4 +11,5 @@ public class DeleteArticleByIdResponseDto {
 
     private String message;
 
+    private Object data;
 }

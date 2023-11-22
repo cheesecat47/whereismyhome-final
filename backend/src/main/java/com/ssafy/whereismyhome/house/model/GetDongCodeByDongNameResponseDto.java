@@ -8,5 +8,5 @@ import lombok.Data;
 public class GetDongCodeByDongNameResponseDto {
     private int status;
     private String message;
-    private String data;
+    private Object data;
 }

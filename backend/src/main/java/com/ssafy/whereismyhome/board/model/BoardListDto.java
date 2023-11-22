@@ -14,6 +14,9 @@ public class BoardListDto {
     @ApiModelProperty(value = "글 제목")
     private String title;
 
+    @ApiModelProperty(value = "글 내용")
+    private String content;
+
     @ApiModelProperty(value = "글 타입", notes = "공지는 1, 일반 글은 0. 관리자만 설정 가능.")
     private int type;
 

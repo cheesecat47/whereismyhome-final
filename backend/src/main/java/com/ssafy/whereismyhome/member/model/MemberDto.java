@@ -14,7 +14,7 @@ public class MemberDto {
     @ApiModelProperty(value = "회원 이메일")
     private String emailAccount;
 
-    @ApiModelProperty(value = "회원 이메일 도메인, @ 뒤에 들어갈 문장 (ex. google.com)")
+    @ApiModelProperty(value = "회원 이메일 도메인, @ 뒤에 들어갈 문장. gmail.com 또는 ssafy.com만 사용 가능.")
     private String emailDomain;
 
     @ApiModelProperty(value = "회원 비밀번호")

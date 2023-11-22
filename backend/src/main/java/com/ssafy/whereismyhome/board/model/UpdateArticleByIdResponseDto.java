@@ -11,4 +11,6 @@ public class UpdateArticleByIdResponseDto {
 
     private String message;
 
+    private Object data;
+
 }
