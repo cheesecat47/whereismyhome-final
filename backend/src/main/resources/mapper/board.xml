@@ -106,4 +106,10 @@
             deletedTime = now()
         where boardId = #{board_id}
     </update>
+
+    <update id="increaseArticleHit" parameterType="int">
+        update board
+        set hit = hit + 1
+        where boardId = #{board_id}
+    </update>
 </mapper>

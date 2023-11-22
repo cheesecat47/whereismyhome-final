@@ -45,4 +45,9 @@ public class BoardServiceImpl implements BoardService {
     public int deleteArticleById(int boardId) throws SQLException {
         return boardMapper.deleteArticleById(boardId);
     }
+
+    @Override
+    public void increaseArticleHit(int boardId) throws SQLException {
+        boardMapper.increaseArticleHit(boardId);
+    }
 }
