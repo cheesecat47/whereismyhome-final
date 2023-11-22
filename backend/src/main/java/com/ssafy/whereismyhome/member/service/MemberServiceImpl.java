@@ -47,4 +47,9 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.getMemberById(memberId);
     }
 
+    @Override
+    public int updateRefreshToken(String memberId, String refreshToken) throws SQLException {
+        return memberMapper.updateRefreshToken(memberId, refreshToken);
+    }
+
 }

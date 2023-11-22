@@ -20,4 +20,6 @@ public interface MemberService {
     List<MemberDto> getMembers() throws SQLException;
 
     MemberDto getMemberById(int memberId) throws SQLException;
+
+    int updateRefreshToken(String memberId, String refreshToken) throws SQLException;
 }
