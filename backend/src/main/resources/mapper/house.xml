@@ -114,4 +114,10 @@
                 and dongName is not null
               order by dongName) t;
     </select>
+
+    <insert id="addDongViewHistory" parameterType="string">
+        insert into `dong_view_history`(memberId, dongCode, createdTime)
+            value (#{memberId}, #{dongCode}, now())
+    </insert>
+
 </mapper>

@@ -1,7 +1,6 @@
 package com.ssafy.whereismyhome.util;
 
 
-import com.ssafy.whereismyhome.member.service.MemberService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -96,16 +95,21 @@ public class JWTUtil {
     }
 
     private Jws<Claims> parseClaims(String token) {
-        token = token.replaceAll("^Bearer ", "");
-        logger.debug("token: {}", token);
+        try {
+            token = token.replaceAll("^Bearer ", "");
+            logger.debug("token: {}", token);
 
-        // JSON Web Signature(JWS): 서버에서 인증을 근거로 인증 정보를 서버의 privkey로 서명한 것을 토큰화한 것.
-        Jws<Claims> claims = Jwts.parser()
-                .setSigningKey(this.generateKey())  // 서명 검증을 위한 secret 세팅.
-                .parseClaimsJws(token);             // token을 파싱하여 원본 JWS 얻기.
-        // Claims는 Map의 구현체 형태
-        logger.debug("claims: {}", claims);
-        return claims;
+            // JSON Web Signature(JWS): 서버에서 인증을 근거로 인증 정보를 서버의 privkey로 서명한 것을 토큰화한 것.
+            Jws<Claims> claims = Jwts.parser()
+                    .setSigningKey(this.generateKey())  // 서명 검증을 위한 secret 세팅.
+                    .parseClaimsJws(token);             // token을 파싱하여 원본 JWS 얻기.
+            // Claims는 Map의 구현체 형태
+            logger.debug("claims: {}", claims);
+            return claims;
+        } catch (Exception e) {
+            logger.error("Error parsing claims: {}", e.getMessage());
+            return null;
+        }
     }
 
     /**
