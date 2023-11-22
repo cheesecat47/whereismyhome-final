@@ -40,7 +40,7 @@ const loginEvent = () => {
               v-model="user.user_id"
               type="text"
               required=""
-              class="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              class="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:text-sm sm:leading-6"
             />
           </div>
         </div>
@@ -49,7 +49,7 @@ const loginEvent = () => {
           <div class="flex items-center justify-between">
             <label for="password" class="block text-sm font-medium leading-6 text-gray-900">비밀번호</label>
             <div class="text-sm">
-              <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">비밀번호를 잊어버리셨나요?</a>
+              <a href="#" class="font-semibold text-teal-600 hover:text-teal-500">비밀번호를 잊어버리셨나요?</a>
             </div>
           </div>
           <div class="mt-2">
@@ -60,7 +60,7 @@ const loginEvent = () => {
               type="password"
               autocomplete="current-password"
               required=""
-              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:text-sm sm:leading-6"
             />
           </div>
         </div>
@@ -69,7 +69,7 @@ const loginEvent = () => {
           <button
             @click="loginEvent"
             type="submit"
-            class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            class="flex w-full justify-center rounded-md bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600"
           >
             로그인
           </button>
@@ -79,7 +79,7 @@ const loginEvent = () => {
       <p class="mt-10 text-center text-sm text-gray-500">
         처음 방문하셨나요?
         {{ '  ' }}
-        <RouterLink :to="{ name: 'signup' }" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+        <RouterLink :to="{ name: 'signup' }" class="font-semibold leading-6 text-teal-600 hover:text-teal-500"
           >회원가입</RouterLink
         >
       </p>

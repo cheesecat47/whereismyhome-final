@@ -10,17 +10,8 @@ const mobileMenuOpen = ref(false);
   <header class="bg-white border-b">
     <nav class="mx-auto max-w-7xl flex items-center justify-between p-5 lg:px-8" aria-label="Global">
       <div class="flex lg:flex-1">
-        <!-- -m-1.5 p-1.5 -->
         <RouterLink :to="{ name: 'main' }" class="flex items-center">
-          <!-- <img src="../../../public/logo.png" class="h-10 w-auto" /> -->
           <p class="text-lg pl-2 font-bold tracking-wider">WhereIsMyHome</p>
-          <!--
-            <img
-            class="h-8 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt=""
-          />
-          -->
         </RouterLink>
       </div>
       <div class="flex lg:hidden">
