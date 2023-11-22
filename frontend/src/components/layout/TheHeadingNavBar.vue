@@ -1,7 +1,25 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { Dialog, DialogPanel, PopoverGroup } from '@headlessui/vue';
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
+import { storeToRefs } from 'pinia';
+import { useMemberStore } from '../../stores/memberStore.js';
+
+const memberStore = useMemberStore();
+const { isLogin, userInfo } = storeToRefs(memberStore);
+// const { userLogout } = memberStore;
+const loginCheck = ref(false);
+
+watch(isLogin, () => {
+  loginCheck.value = isLogin.value;
+  console.log(loginCheck.value);
+});
+
+const logoutClick = () => {
+  isLogin.value = false;
+  userInfo.value = false;
+  alert('로그아웃되었습니다');
+};
 
 const mobileMenuOpen = ref(false);
 </script>
@@ -35,10 +53,18 @@ const mobileMenuOpen = ref(false);
           >공지사항</RouterLink
         >
       </PopoverGroup>
-      <div class="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
+      <div v-if="!isLogin" class="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
         <RouterLink :to="{ name: 'login' }" class="text-base font-semibold leading-6 text-gray-900">로그인</RouterLink>
         <RouterLink :to="{ name: 'signup' }" class="text-base font-semibold leading-6 text-gray-900"
           >회원가입</RouterLink
+        >
+      </div>
+      <div v-else class="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
+        <RouterLink :to="{ name: 'main' }" class="text-base font-semibold leading-6 text-gray-900"
+          >마이페이지</RouterLink
+        >
+        <RouterLink @click="logoutClick" :to="{ name: 'main' }" class="text-base font-semibold leading-6 text-gray-900"
+          >로그아웃</RouterLink
         >
       </div>
     </nav>
@@ -74,7 +100,7 @@ const mobileMenuOpen = ref(false);
                 >공지사항</RouterLink
               >
             </div>
-            <div class="py-6">
+            <div v-if="!isLogin" class="py-6">
               <RouterLink
                 :to="{ name: 'login' }"
                 class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
@@ -84,6 +110,14 @@ const mobileMenuOpen = ref(false);
                 :to="{ name: 'signup' }"
                 class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >회원가입</RouterLink
+              >
+            </div>
+            <div class="py-6">
+              <RouterLink
+                @click="logoutClick"
+                :to="{ name: 'main' }"
+                class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                >로그아웃</RouterLink
               >
             </div>
           </div>
