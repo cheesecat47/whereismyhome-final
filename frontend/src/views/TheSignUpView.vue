@@ -5,26 +5,26 @@ import { signupMember } from '../api/member';
 
 const router = useRouter();
 const userInfo = ref({
-  user_id: '',
+  emailAccount: '',
+  emailDomain: '',
   name: '',
   password: '',
   age: '',
   sex: '',
-  email_account: '',
-  email_domain: '',
+  address: '',
 });
 
 const email_full = ref('');
 
 const signupEvent = () => {
-  userInfo.value.email_account = email_full.value.split('@')[0];
-  userInfo.value.email_domain = email_full.value.split('@')[1];
+  userInfo.value.emailAccount = email_full.value.split('@')[0];
+  userInfo.value.emailDomain = email_full.value.split('@')[1];
+  console.log(userInfo.value);
   signupMember(
-    userInfo,
+    userInfo.value,
     ({ data }) => {
-      console.log(data);
+      router.push({ name: 'login' });
       alert('회원가입이 성공적으로 이루어졌습니다.');
-      router.push({ name: 'main' });
     },
     (error) => {
       console.log(error);
@@ -42,13 +42,14 @@ const signupEvent = () => {
     <form @submit.prevent="signupEvent" class="mx-auto mt-8 max-w-xl">
       <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
         <div class="sm:col-span-2">
-          <label for="user_id" class="block text-sm font-semibold leading-6 text-gray-900">아이디</label>
+          <label for="email" class="block text-sm font-semibold leading-6 text-gray-900">이메일</label>
           <div class="mt-2.5">
             <input
-              v-model="userInfo.user_id"
-              type="text"
-              name="user_id"
-              id="user_id"
+              v-model="email_full"
+              type="email"
+              name="email"
+              id="email"
+              autocomplete="email"
               class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:text-sm sm:leading-6"
             />
           </div>
@@ -89,8 +90,10 @@ const signupEvent = () => {
           </div>
         </div>
         <div class="sm:col-span-2">
-          <label for="age" class="block text-sm font-semibold leading-6 text-gray-900">나이</label>
-          <p class="mt-1 text-sm leading-6 text-gray-600">숫자만 입력하세요. Ex) 26</p>
+          <div class="flex w-full gap-2">
+            <label for="age" class="block text-sm font-semibold leading-6 text-gray-900">나이</label>
+            <p class="text-xs leading-6 text-gray-600">숫자만 입력하세요. Ex) 26</p>
+          </div>
           <div class="mt-2.5">
             <input
               v-model="userInfo.age"
@@ -102,19 +105,18 @@ const signupEvent = () => {
           </div>
         </div>
         <div class="sm:col-span-2">
-          <label for="email" class="block text-sm font-semibold leading-6 text-gray-900">이메일</label>
+          <label for="address" class="block text-sm font-semibold leading-6 text-gray-900">주소</label>
           <div class="mt-2.5">
             <input
-              v-model="email_full"
-              type="email"
-              name="email"
-              id="email"
-              autocomplete="email"
+              v-model="userInfo.address"
+              type="text"
+              name="address"
+              id="address"
+              autocomplete="address"
               class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:text-sm sm:leading-6"
             />
           </div>
         </div>
-
         <fieldset>
           <legend class="text-sm font-semibold leading-6 text-gray-900">성별을 선택하세요</legend>
           <div class="mt-4 flex">
