@@ -5,6 +5,7 @@ import TheMainView from '../views/TheMainView.vue';
 import TheCommunityView from '../views/TheCommunityView.vue';
 import TheNoticeView from '../views/TheNoticeView.vue';
 import TheActualPriceView from '../views/TheActualPriceView.vue';
+import CommunityWrite from '../components/community/CommunityWrite.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,11 @@ const router = createRouter({
       path: '/community',
       name: 'community',
       component: TheCommunityView,
+    },
+    {
+      path: '/community/write',
+      name: 'community-write',
+      component: CommunityWrite,
     },
     {
       path: '/actualprice',
