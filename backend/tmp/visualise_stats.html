@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script>
+        window.onload = (() => {
+            axios.get('http://localhost/stats/favourite/dong')
+                .then(({data}) => {
+                    console.log(data.data)
+                    data.data.forEach((item) => {
+                        console.log(item)
+                    })
+
+                    const sidoNameArr = data.data.map((item) => {
+                        return [item['sidoName'], item['gugunName'], item['dongName']].join(' ')
+                    })
+                    const viewsArr = data.data.map((item) => {
+                        return item.views
+                    })
+
+                    console.log(sidoNameArr)
+
+                    Highcharts.chart('chart', {
+                        chart: {
+                            type: 'bar'
+                        },
+                        title: {
+                            text: '최근 7일간 인기 있는 (조회수가 많은) 동 Top 5 이름과 조회수',
+                            align: 'center'
+                        },
+                        xAxis: {
+                            categories: sidoNameArr,
+                            title: {
+                                text: null
+                            },
+                            gridLineWidth: 1,
+                            lineWidth: 0
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: '조회수',
+                                align: 'high'
+                            },
+                            labels: {
+                                overflow: 'justify'
+                            },
+                            gridLineWidth: 0
+                        },
+                        series: [{
+                            name: '조회수',
+                            data: viewsArr
+                        }]
+                    })
+                })
+        })
+    </script>
+</head>
+<body>
+<div id="chart"></div>
+</body>
+</html>
