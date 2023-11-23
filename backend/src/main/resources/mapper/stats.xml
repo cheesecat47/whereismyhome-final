@@ -42,4 +42,24 @@
         order by views desc;
     </select>
 
+    <!-- 아파트 코드가 일치하는 아파트의 최근 5년간 평균 거래가 조회 -->
+    <select id="getAptDealAmountAvg" parameterType="string" resultType="aptDealAmountAvgDto">
+        select houseinfo.aptCode,
+               dongcode.sidoName,
+               dongcode.gugunName,
+               dongcode.dongName,
+               houseinfo.apartmentName,
+               apt_deal_amount_avg.dealYear,
+               apt_deal_amount_avg.dealAmountAvg
+        from (select aptCode, dealYear, round(avg(replace(dealAmount, ',', '')), 2) dealAmountAvg
+              from housedeal
+              where aptCode = #{aptCode}
+                and dealYear >= year(date_add(now(), interval - 5 year))
+              group by aptCode, dealYear) apt_deal_amount_avg,
+             houseinfo,
+             dongcode
+        where apt_deal_amount_avg.aptCode = houseinfo.aptCode
+          and houseinfo.dongCode = dongcode.dongCode;
+    </select>
+
 </mapper>
