@@ -1,5 +1,6 @@
 package com.ssafy.whereismyhome.stats.service;
 
+import com.ssafy.whereismyhome.stats.model.AptDealAmountAvgDto;
 import com.ssafy.whereismyhome.stats.model.FavouriteAptDto;
 import com.ssafy.whereismyhome.stats.model.FavouriteDongDto;
 import com.ssafy.whereismyhome.stats.model.mapper.StatsMapper;
@@ -22,5 +23,10 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public List<FavouriteAptDto> getFavouriteAptTop5() throws SQLException {
         return statsMapper.getFavouriteAptTop5();
+    }
+
+    @Override
+    public List<AptDealAmountAvgDto> getAptDealAmountAvg(String aptCode) throws SQLException {
+        return statsMapper.getAptDealAmountAvg(aptCode);
     }
 }
