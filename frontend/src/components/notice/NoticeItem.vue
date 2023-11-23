@@ -14,7 +14,7 @@ const itemClick = (boardId) => {
     @click="itemClick(item.boardId)"
     v-for="(item, index) in noticeData"
     :key="index"
-    class="mx-auto flex max-w-7xl items-center justify-between p-5 border-b border-gray-200 text-center cursor-pointer"
+    class="hover:bg-slate-100 mx-auto flex max-w-7xl items-center justify-between p-5 border-b border-gray-200 text-center cursor-pointer"
   >
     <div class="basis-1/12 text-teal-700 font-bold">
       <p>{{ item.boardId }}</p>
