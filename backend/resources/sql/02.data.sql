@@ -91,9 +91,9 @@ insert into `whereismyhome`.`dong_view_history`(memberId, dongCode, createdTime)
 values
     (1,@dongCode_doryang,'2023-11-11'),(1,@dongCode_doryang,'2023-11-21'),(2,@dongCode_doryang,'2023-11-02'),(2,@dongCode_doryang,'2023-11-19'),(2,@dongCode_doryang,'2023-11-21'),
     (1,@dongCode_doryang,'2023-11-08'),(2,@dongCode_doryang,'2023-11-10'),(1,@dongCode_doryang,'2023-10-29'),(2,@dongCode_doryang,'2023-11-19'),(2,@dongCode_doryang,'2023-11-02'),
-    (2,@dongCode_doryang,'2023-11-08'),(2,@dongCode_doryang,'2023-11-05'),(2,@dongCode_doryang,'2023-10-27'),(1,@dongCode_doryang,'2023-11-13'),(2,@dongCode_doryang,'2023-10-30'),
-    (1,@dongCode_doryang,'2023-10-31'),(1,@dongCode_doryang,'2023-11-08'),(2,@dongCode_doryang,'2023-10-26'),(1,@dongCode_doryang,'2023-10-24'),(1,@dongCode_doryang,'2023-11-03'),
-    (2,@dongCode_jinpyung,'2023-10-24'),(1,@dongCode_jinpyung,'2023-10-23'),(1,@dongCode_jinpyung,'2023-11-02'),(1,@dongCode_jinpyung,'2023-10-27'),(2,@dongCode_jinpyung,'2023-10-23'),
+    (2,@dongCode_doryang,'2023-11-08'),(2,@dongCode_doryang,'2023-11-05'),(2,@dongCode_doryang,'2023-10-27'),(1,@dongCode_doryang,'2023-11-13'),(2,@dongCode_doryang,'2023-11-23'),
+    (1,@dongCode_doryang,'2023-10-31'),(1,@dongCode_doryang,'2023-11-08'),(2,@dongCode_doryang,'2023-11-23'),(1,@dongCode_doryang,'2023-11-24'),(1,@dongCode_doryang,'2023-11-03'),
+    (2,@dongCode_jinpyung,'2023-11-24'),(1,@dongCode_jinpyung,'2023-10-23'),(1,@dongCode_jinpyung,'2023-11-02'),(1,@dongCode_jinpyung,'2023-10-27'),(2,@dongCode_jinpyung,'2023-10-23'),
     (2,@dongCode_jinpyung,'2023-10-24'),(2,@dongCode_jinpyung,'2023-11-01'),(1,@dongCode_jinpyung,'2023-11-08'),(1,@dongCode_jinpyung,'2023-11-19'),(1,@dongCode_jinpyung,'2023-11-21'),
     (1,@dongCode_jinpyung,'2023-10-24'),(2,@dongCode_jinpyung,'2023-10-27'),(1,@dongCode_jinpyung,'2023-11-11'),(2,@dongCode_jinpyung,'2023-11-03'),(2,@dongCode_jinpyung,'2023-10-29'),
     (2,@dongCode_jinpyung,'2023-11-09'),(1,@dongCode_jinpyung,'2023-11-20'),(2,@dongCode_jinpyung,'2023-11-13'),(2,@dongCode_jinpyung,'2023-11-02'),(1,@dongCode_jinpyung,'2023-11-14'),
@@ -107,9 +107,40 @@ values
     (2,@dongCode_inyi,'2023-11-20'),(2,@dongCode_inyi,'2023-11-08'),(2,@dongCode_inyi,'2023-11-19'),(2,@dongCode_inyi,'2023-10-26'),(2,@dongCode_inyi,'2023-10-29'),
     (1,@dongCode_hwangsang,'2023-11-15'),(2,@dongCode_hwangsang,'2023-11-16'),(2,@dongCode_hwangsang,'2023-11-18'),(2,@dongCode_hwangsang,'2023-11-08'),(2,@dongCode_hwangsang,'2023-10-29'),
     (1,@dongCode_hwangsang,'2023-11-12'),(2,@dongCode_hwangsang,'2023-11-12'),(1,@dongCode_hwangsang,'2023-11-18'),(1,@dongCode_hwangsang,'2023-11-03'),(2,@dongCode_hwangsang,'2023-10-29'),
-    (1,@dongCode_hwangsang,'2023-10-26'),(1,@dongCode_hwangsang,'2023-10-27'),(2,@dongCode_hwangsang,'2023-11-08'),(1,@dongCode_hwangsang,'2023-11-10'),(1,@dongCode_hwangsang,'2023-10-25'),
-    (2,@dongCode_hwangsang,'2023-11-15'),(1,@dongCode_hwangsang,'2023-10-27'),(2,@dongCode_hwangsang,'2023-11-21'),(2,@dongCode_hwangsang,'2023-10-31'),(1,@dongCode_hwangsang,'2023-11-09');
+    (1,@dongCode_hwangsang,'2023-11-21'),(1,@dongCode_hwangsang,'2023-10-27'),(2,@dongCode_hwangsang,'2023-11-08'),(1,@dongCode_hwangsang,'2023-11-10'),(1,@dongCode_hwangsang,'2023-10-25'),
+    (2,@dongCode_hwangsang,'2023-11-23'),(1,@dongCode_hwangsang,'2023-10-27'),(2,@dongCode_hwangsang,'2023-11-21'),(2,@dongCode_hwangsang,'2023-10-31'),(1,@dongCode_hwangsang,'2023-11-09');
 
+
+-- -----------------------------------------------------
+-- Table `whereismyhome`.`apt_view_history`
+-- -----------------------------------------------------
+set @aptCode_1 = (select aptCode from `whereismyhome`.`houseinfo` where dongCode = @dongCode_doryang order by aptCode limit 1 offset 1);
+set @aptCode_2 = (select aptCode from `whereismyhome`.`houseinfo` where dongCode = @dongCode_doryang order by aptCode limit 1 offset 2);
+set @aptCode_3 = (select aptCode from `whereismyhome`.`houseinfo` where dongCode = @dongCode_doryang order by aptCode limit 1 offset 3);
+set @aptCode_4 = (select aptCode from `whereismyhome`.`houseinfo` where dongCode = @dongCode_doryang order by aptCode limit 1 offset 4);
+set @aptCode_5 = (select aptCode from `whereismyhome`.`houseinfo` where dongCode = @dongCode_doryang order by aptCode limit 1 offset 5);
+insert into `whereismyhome`.apt_view_history(memberId, aptCode, createdTime)
+values
+    (1,@aptCode_1,'2023-11-11'),(1,@aptCode_1,'2023-11-21'),(2,@aptCode_1,'2023-11-02'),(2,@aptCode_1,'2023-11-19'),(2,@aptCode_1,'2023-11-21'),
+    (1,@aptCode_1,'2023-11-08'),(2,@aptCode_1,'2023-11-10'),(1,@aptCode_1,'2023-10-29'),(2,@aptCode_1,'2023-11-19'),(2,@aptCode_1,'2023-11-02'),
+    (2,@aptCode_1,'2023-11-08'),(2,@aptCode_1,'2023-11-05'),(2,@aptCode_1,'2023-10-27'),(1,@aptCode_1,'2023-11-13'),(2,@aptCode_1,'2023-11-24'),
+    (1,@aptCode_1,'2023-10-31'),(1,@aptCode_1,'2023-11-08'),(2,@aptCode_1,'2023-10-26'),(1,@aptCode_1,'2023-10-24'),(1,@aptCode_1,'2023-11-03'),
+    (2,@aptCode_2,'2023-10-24'),(1,@aptCode_2,'2023-10-23'),(1,@aptCode_2,'2023-11-02'),(1,@aptCode_2,'2023-10-27'),(2,@aptCode_2,'2023-10-23'),
+    (2,@aptCode_2,'2023-10-24'),(2,@aptCode_2,'2023-11-01'),(1,@aptCode_2,'2023-11-08'),(1,@aptCode_2,'2023-11-19'),(1,@aptCode_2,'2023-11-21'),
+    (1,@aptCode_2,'2023-10-24'),(2,@aptCode_2,'2023-10-27'),(1,@aptCode_2,'2023-11-11'),(2,@aptCode_2,'2023-11-03'),(2,@aptCode_2,'2023-10-29'),
+    (2,@aptCode_2,'2023-11-09'),(1,@aptCode_2,'2023-11-20'),(2,@aptCode_2,'2023-11-13'),(2,@aptCode_2,'2023-11-02'),(1,@aptCode_2,'2023-11-14'),
+    (2,@aptCode_3,'2023-11-12'),(1,@aptCode_3,'2023-11-11'),(1,@aptCode_3,'2023-11-13'),(2,@aptCode_3,'2023-11-08'),(1,@aptCode_3,'2023-11-01'),
+    (1,@aptCode_3,'2023-11-02'),(1,@aptCode_3,'2023-11-09'),(2,@aptCode_3,'2023-11-11'),(2,@aptCode_3,'2023-10-25'),(1,@aptCode_3,'2023-11-17'),
+    (1,@aptCode_3,'2023-10-29'),(2,@aptCode_3,'2023-11-04'),(2,@aptCode_3,'2023-10-23'),(1,@aptCode_3,'2023-11-02'),(1,@aptCode_3,'2023-11-10'),
+    (2,@aptCode_3,'2023-11-01'),(1,@aptCode_3,'2023-11-16'),(1,@aptCode_3,'2023-10-31'),(1,@aptCode_3,'2023-10-31'),(2,@aptCode_3,'2023-10-31'),
+    (1,@aptCode_4,'2023-11-05'),(2,@aptCode_4,'2023-11-05'),(1,@aptCode_4,'2023-10-23'),(1,@aptCode_4,'2023-10-29'),(1,@aptCode_4,'2023-11-07'),
+    (1,@aptCode_4,'2023-11-01'),(2,@aptCode_4,'2023-11-10'),(2,@aptCode_4,'2023-11-14'),(2,@aptCode_4,'2023-11-14'),(2,@aptCode_4,'2023-11-20'),
+    (2,@aptCode_4,'2023-11-13'),(1,@aptCode_4,'2023-11-14'),(2,@aptCode_4,'2023-10-26'),(1,@aptCode_4,'2023-11-06'),(1,@aptCode_4,'2023-11-10'),
+    (2,@aptCode_4,'2023-11-20'),(2,@aptCode_4,'2023-11-08'),(2,@aptCode_4,'2023-11-19'),(2,@aptCode_4,'2023-10-26'),(2,@aptCode_4,'2023-10-29'),
+    (1,@aptCode_5,'2023-11-15'),(2,@aptCode_5,'2023-11-16'),(2,@aptCode_5,'2023-11-18'),(2,@aptCode_5,'2023-11-08'),(2,@aptCode_5,'2023-10-29'),
+    (1,@aptCode_5,'2023-11-12'),(2,@aptCode_5,'2023-11-12'),(1,@aptCode_5,'2023-11-18'),(1,@aptCode_5,'2023-11-22'),(2,@aptCode_5,'2023-10-29'),
+    (1,@aptCode_5,'2023-10-26'),(1,@aptCode_5,'2023-11-23'),(2,@aptCode_5,'2023-11-08'),(1,@aptCode_5,'2023-11-10'),(1,@aptCode_5,'2023-10-25'),
+    (2,@aptCode_5,'2023-11-15'),(1,@aptCode_5,'2023-11-22'),(2,@aptCode_5,'2023-11-21'),(2,@aptCode_5,'2023-10-31'),(1,@aptCode_5,'2023-11-09');
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
