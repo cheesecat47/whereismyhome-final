@@ -1,9 +1,17 @@
 <script setup>
+import { useRouter } from 'vue-router';
+
 defineProps({ noticeData: Array });
+const router = useRouter();
+
+const itemClick = (boardId) => {
+  router.push({ name: 'notice-detail', params: { boardId: boardId } });
+};
 </script>
 
 <template>
   <div
+    @click="itemClick(item.boardId)"
     v-for="(item, index) in noticeData"
     :key="index"
     class="mx-auto flex max-w-7xl items-center justify-between p-5 border-b border-gray-200 text-center cursor-pointer"

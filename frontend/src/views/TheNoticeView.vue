@@ -9,7 +9,6 @@ const currentPage = ref(1);
 const totalPage = ref(1);
 const targetData = ref([]);
 const onPageChange = (val) => {
-  console.log(val + '번 페이지로 이동 준비 끝!!!');
   currentPage.value = val;
 };
 
@@ -20,7 +19,7 @@ onMounted(() => {
       totalPage.value = Math.ceil(allNoticeData.value.length / 10);
       targetData.value = chunk(allNoticeData.value, 10);
 
-      console.log(totalPage.value);
+      console.log(data.data);
     },
     (error) => {
       console.log(error);
@@ -30,11 +29,9 @@ onMounted(() => {
 
 function chunk(data = [], size = 1) {
   const arr = [];
-
   for (let i = 0; i < data.length; i += size) {
     arr.push(data.slice(i, i + size));
   }
-
   return arr;
 }
 </script>
@@ -77,7 +74,6 @@ function chunk(data = [], size = 1) {
     <NoticeItem :noticeData="targetData[currentPage - 1]" />
   </div>
   <VPagination :current-page="currentPage" :total-page="totalPage" @pageChange="onPageChange" />
-  <!-- <VPagination :current-page="currentPage" :total-page="totalPage" @pageChange="onPageChange"></VPagination> -->
 </template>
 
 <style scoped></style>

@@ -18,3 +18,7 @@ export const getCommunityArticles = (dongCode, searchBy, searchKeyword, orderBy,
     .then(success)
     .catch(fail);
 };
+
+export const getArticleById = (boardId, success, fail) => {
+  local.get(`/board/${boardId}`).then(success).catch(fail);
+};

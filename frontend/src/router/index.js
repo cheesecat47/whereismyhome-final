@@ -6,6 +6,7 @@ import TheCommunityView from '../views/TheCommunityView.vue';
 import TheNoticeView from '../views/TheNoticeView.vue';
 import TheActualPriceView from '../views/TheActualPriceView.vue';
 import CommunityWrite from '../components/community/CommunityWrite.vue';
+import NoticeDetailItem from '../components/notice/NoticeDetailItem.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,11 @@ const router = createRouter({
       path: '/notice',
       name: 'notice',
       component: TheNoticeView,
+    },
+    {
+      path: '/notice/:boardId',
+      name: 'notice-detail',
+      component: NoticeDetailItem,
     },
     {
       path: '/community',
