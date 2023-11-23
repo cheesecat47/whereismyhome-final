@@ -22,3 +22,8 @@ export const getCommunityArticles = (dongCode, searchBy, searchKeyword, orderBy,
 export const getArticleById = (boardId, success, fail) => {
   local.get(`/board/${boardId}`).then(success).catch(fail);
 };
+
+export const writeArticle = async (board, success, fail) => {
+  local.defaults.headers['Authorization'] = sessionStorage.getItem('accessToken');
+  await local.post('/board/', JSON.stringify(board)).then(success).catch(fail);
+};
