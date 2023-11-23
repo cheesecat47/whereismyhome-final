@@ -1,9 +1,18 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { signupMember } from '../api/member';
+import VSelectMenu from '../components/common/VSelectMenu.vue';
+import { getSidoNames, getGugunNames, getDongNames } from '../api/house.js';
 
 const router = useRouter();
+const sido = ref([]);
+const gugun = ref([]);
+const dong = ref([]);
+const sidoItem = ref();
+const gugunItem = ref();
+const dongItem = ref();
+
 const userInfo = ref({
   emailAccount: '',
   emailDomain: '',
@@ -19,10 +28,13 @@ const email_full = ref('');
 const signupEvent = () => {
   userInfo.value.emailAccount = email_full.value.split('@')[0];
   userInfo.value.emailDomain = email_full.value.split('@')[1];
+  userInfo.value.address = sidoItem.value + ' ' + gugunItem.value + ' ' + dongItem.value;
+
   console.log(userInfo.value);
   signupMember(
     userInfo.value,
     ({ data }) => {
+      console.log(data);
       router.push({ name: 'login' });
       alert('회원가입이 성공적으로 이루어졌습니다.');
     },
@@ -30,6 +42,48 @@ const signupEvent = () => {
       console.log(error);
     }
   );
+};
+
+onMounted(() => {
+  getSidoNames(
+    ({ data }) => {
+      sido.value = data.data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+});
+
+const sidoItemClick = (sido) => {
+  sidoItem.value = sido;
+  getGugunNames(
+    sido,
+    ({ data }) => {
+      gugun.value = data.data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
+const gugunItemClick = (gugun) => {
+  gugunItem.value = gugun;
+  getDongNames(
+    sidoItem.value,
+    gugun,
+    ({ data }) => {
+      dong.value = data.data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
+const dongItemClick = (dong) => {
+  dongItem.value = dong;
 };
 </script>
 
@@ -77,6 +131,24 @@ const signupEvent = () => {
             />
           </div>
         </div>
+        <div class="sm:col-span-2">
+          <label for="address" class="block text-sm font-semibold leading-6 text-gray-900">주소</label>
+          <div class="flex gap-2">
+            <VSelectMenu @item-click="sidoItemClick" class="basis-1/4" :arr="sido" />
+            <VSelectMenu @item-click="gugunItemClick" class="basis-1/4" :arr="gugun" />
+            <VSelectMenu @item-click="dongItemClick" class="basis-1/4" :arr="dong" />
+          </div>
+          <!-- <div class="mt-2.5">
+            <input
+              v-model="userInfo.address"
+              type="text"
+              name="address"
+              id="address"
+              autocomplete="address"
+              class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:text-sm sm:leading-6"
+            />
+          </div> -->
+        </div>
         <div>
           <label for="name" class="block text-sm font-semibold leading-6 text-gray-900">이름</label>
           <div class="mt-2.5">
@@ -104,19 +176,7 @@ const signupEvent = () => {
             />
           </div>
         </div>
-        <div class="sm:col-span-2">
-          <label for="address" class="block text-sm font-semibold leading-6 text-gray-900">주소</label>
-          <div class="mt-2.5">
-            <input
-              v-model="userInfo.address"
-              type="text"
-              name="address"
-              id="address"
-              autocomplete="address"
-              class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-        </div>
+
         <fieldset>
           <legend class="text-sm font-semibold leading-6 text-gray-900">성별을 선택하세요</legend>
           <div class="mt-4 flex">
