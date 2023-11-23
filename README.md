@@ -49,10 +49,10 @@
        DB_PASSWORD=YOUR_PASSWORD
        
        JWT_SALT=YOUR_SECRET
-       ```   
+       ```
 
     3. 실행
-       
+
        ```bash 
        # 환경변수 적용
        set -a; source .env; set +a
@@ -63,6 +63,10 @@
        # 실행 
        java -jar target/whereismyhome_gumi_sjy_lsh-0.0.1-SNAPSHOT.jar 
        ```
+
+    4. IDE에서 실행 시 참고
+
+        - 이클립스 환경 변수 등록 <https://proni.tistory.com/127>
 
 3. Frontend 개발 서버 실행
 

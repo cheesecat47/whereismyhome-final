@@ -2,6 +2,7 @@ package com.ssafy.whereismyhome.house.controller;
 
 import com.ssafy.whereismyhome.house.model.*;
 import com.ssafy.whereismyhome.house.service.HouseService;
+import com.ssafy.whereismyhome.util.JWTUtil;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,6 +28,8 @@ public class HouseController {
     private static final Logger logger = LoggerFactory.getLogger(HouseController.class);
 
     private final HouseService houseService;
+
+    private final JWTUtil jwtUtil;
 
     @ApiOperation(value = "getDongCodeByDongName", notes = "동 이름으로 동 코드 조회")
     @GetMapping("/dongCode")
@@ -92,7 +96,7 @@ public class HouseController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
-    @ApiOperation(value = "getHouseInfosByDongCode", notes = "동 코드로 아파트 목록 조회")
+    @ApiOperation(value = "getHouseInfosByDongCode", notes = "동 코드로 아파트 목록 조회. 로그인 된 상태면 동 조회 기록 남김.")
     @GetMapping("/houseinfo")
     @ApiResponses({
             @ApiResponse(code = 200, message = "아파트 목록 조회 성공", response = GetHouseInfosByDongCodeResponseDto.class),
@@ -100,7 +104,8 @@ public class HouseController {
             @ApiResponse(code = 500, message = "아파트 목록 조회 실패", response = GetHouseInfosByDongCodeResponseDto.class)
     })
     public ResponseEntity<GetHouseInfosByDongCodeResponseDto> getHouseInfosByDongCode(
-            @ApiParam(value = "동 코드", required = true) String dongCode
+            @ApiParam(value = "동 코드", required = true) String dongCode,
+            HttpServletRequest request
     ) {
         GetHouseInfosByDongCodeResponseDto res = new GetHouseInfosByDongCodeResponseDto();
         String msg;
@@ -119,6 +124,17 @@ public class HouseController {
                     put("dongCode", dongCode);
                 }});
                 break label;
+            }
+
+            // 로그인 된 상태이면 이 동네 정보를 조회했다고 history에 추가
+            String token = request.getHeader("Authorization");
+            if (token != null) {
+                // 이 API는 로그인 된 상태 아니더라도 이용 가능하므로 토큰이 만료되었다면 카운트만 안 올리면 됨.
+                if (jwtUtil.checkToken(token)) {
+                    int memberId = jwtUtil.getMemberId(token);
+                    houseService.addDongViewHistory(String.valueOf(memberId), dongCode);
+                    logger.debug("동 조회수 카운트: {} {}", memberId, dongCode);
+                }
             }
 
             // TODO: 로그인 된 상태면 내가 좋아요를 눌렀는지 여부도 포함 필요.
@@ -185,7 +201,7 @@ public class HouseController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
-    @ApiOperation(value = "getHouseDealsByAptCodeYearMonth", notes = "아파트 번호로 거래 목록 조회. 기본은 최근순(아이디 역순)")
+    @ApiOperation(value = "getHouseDealsByAptCodeYearMonth", notes = "아파트 번호로 거래 목록 조회. 기본은 최근순(아이디 역순). 로그인 된 상태면 아파트 조회 기록 남김.")
     @GetMapping("/housedeal")
     @ApiResponses({
             @ApiResponse(code = 200, message = "아파트 최근 거래 목록 조회 성공", response = GetHouseDealsByAptCodeYearMonthResponseDto.class),
@@ -195,7 +211,8 @@ public class HouseController {
     public ResponseEntity<GetHouseDealsByAptCodeYearMonthResponseDto> getHouseDealsByAptCodeYearMonth(
             @ApiParam(value = "아파트 코드", required = true) String aptCode,
             @ApiParam(value = "연도(4자리)") String year,
-            @ApiParam(value = "월(2자리, 0포함)") String month
+            @ApiParam(value = "월(2자리, 0포함)") String month,
+            HttpServletRequest request
     ) {
         GetHouseDealsByAptCodeYearMonthResponseDto res = new GetHouseDealsByAptCodeYearMonthResponseDto();
         String msg;
@@ -216,6 +233,17 @@ public class HouseController {
                     put("month", month);
                 }});
                 break label;
+            }
+
+            // 로그인 된 상태이면 이 아파트 정보를 조회했다고 history에 추가
+            String token = request.getHeader("Authorization");
+            if (token != null) {
+                // 이 API는 로그인 된 상태 아니더라도 이용 가능하므로 토큰이 만료되었다면 카운트만 안 올리면 됨.
+                if (jwtUtil.checkToken(token)) {
+                    int memberId = jwtUtil.getMemberId(token);
+                    houseService.addAptViewHistory(String.valueOf(memberId), aptCode);
+                    logger.debug("아파트 조회수 카운트: {} {}", memberId, aptCode);
+                }
             }
 
             List<HouseDealDto> list = houseService.getHouseDealsByAptCodeYearMonth(aptCode, year, month);

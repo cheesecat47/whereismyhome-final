@@ -114,4 +114,17 @@
                 and dongName is not null
               order by dongName) t;
     </select>
+
+    <!-- 로그인 된 사용자가 동 정보 조회 시 기록 남김. 조회수 통계에 활용. -->
+    <insert id="addDongViewHistory" parameterType="string">
+        insert into `dong_view_history`(memberId, dongCode, createdTime)
+            value (#{memberId}, #{dongCode}, now())
+    </insert>
+
+    <!-- 로그인 된 사용자가 아파트 정보 조회 시 기록 남김. 조회수 통계에 활용. -->
+    <insert id="addAptViewHistory" parameterType="string">
+        insert into `apt_view_history`(memberId, aptCode, createdTime)
+            value (#{memberId}, #{aptCode}, now())
+    </insert>
+
 </mapper>
