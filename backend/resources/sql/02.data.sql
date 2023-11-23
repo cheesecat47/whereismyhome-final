@@ -26,10 +26,14 @@ USE `whereismyhome`;
 -- -----------------------------------------------------
 INSERT INTO `member` (emailAccount, emailDomain, password, name, age, sex, authorization)
 VALUES ('cheesecat47', 'gmail.com', '1234', '신주용', 20, 'M', 1),
-       ('dltmdgus4802', 'gmail.com', '1234', '이승현', 20, 'M', 1)
+       ('dltmdgus4802', 'gmail.com', '1234', '이승현', 20, 'M', 1),
+       ('gsarang1', 'ssafy.com', '1234', '김재웅', 20, 'M', 1),
+       ('eyl.lee', 'ssafy.com', '1234', '이은영', 20, 'F', 1)
 ;
 set @memberId_cheesecat47 = (select memberId from member where emailAccount = 'cheesecat47');
 set @memberId_dltmdgus4802 = (select memberId from member where emailAccount = 'dltmdgus4802');
+set @memberId_gsarang1 = (select memberId from member where emailAccount = 'gsarang1');
+set @memberId_eyl.lee = (select memberId from member where emailAccount = 'eyl.lee');
 
 -- -----------------------------------------------------
 -- Table `whereismyhome`.`member_address`
@@ -42,7 +46,9 @@ set @dongCode_hwangsang = (select dongCode from `whereismyhome`.`dongcode` where
 INSERT INTO `member_address` (memberId, address, dongCode)
 VALUES
     (@memberId_cheesecat47, '경상북도 구미시 도량동', @dongCode_doryang),
-    (@memberId_dltmdgus4802, '경상북도 구미시 진평동', @dongCode_jinpyung)
+    (@memberId_dltmdgus4802, '경상북도 구미시 진평동', @dongCode_jinpyung),
+    (@memberId_gsarang1, '경상북도 구미시 진평동', @dongCode_jinpyung),
+    (@memberId_eyl.lee, '경상북도 구미시 도량동', @dongCode_doryang)
 ;
 
 
@@ -52,20 +58,20 @@ VALUES
 -- -----------------------------------------------------
 INSERT INTO `board` (title, content, type, memberId, dongCode, hit, createdTime)
 VALUES
-    ('낙동강 산책', '낙동강 체육공원 천둥 오리도 벌써 왔네요', 0, @memberId_dltmdgus4802, @dongCode_jinpyung, floor(rand() * 89) + 47, now() - 14),
-    ('라면축제에왔어요', '농심에서 라끼남 강호동출현 ㅎㅎ', 0, @memberId_cheesecat47, @dongCode_doryang, floor(rand() * 89) + 47, now() - 13),
+    ('낙동강 산책', '낙동강 체육공원 천둥 오리도 벌써 왔네요', 0, @memberId_gsarang1, @dongCode_jinpyung, floor(rand() * 89) + 47, now() - 14),
+    ('라면축제에왔어요', '농심에서 라끼남 강호동출현 ㅎㅎ', 0, @memberId_eyl.lee, @dongCode_doryang, floor(rand() * 89) + 47, now() - 13),
     ('짐옮길려고 하는데 용달추천 부탁드려용', '급하게 찾아보아여 아시는 곳이나 저렴한 곳이나 추천부탁드려욤', 0, @memberId_cheesecat47, @dongCode_doryang, floor(rand() * 89) + 47, now() - 12),
     ('남자 머리 커트', '머리 싸게 하는곳 추천 부탁드립니다.', 0, @memberId_dltmdgus4802, @dongCode_jinpyung, floor(rand() * 89) + 47, now() - 11),
     ('라면축제 저도구경', '제2회라면축제라네요.\n첨 왔는데 사람도 넘 많고\n바람도 넘 마니 부네요.', 0, @memberId_cheesecat47, @dongCode_doryang, floor(rand() * 89) + 47, now() - 10),
     ('원평동 붕어빵', '붕어빵 파는 곳 좀 알려주세요 ~', 0, @memberId_dltmdgus4802, @dongCode_jinpyung, floor(rand() * 89) + 47, now() - 9),
-    ('롤드컵', '식당에서 롤드컵 보고싶은데 틀어주는 음식점 없겠죠...', 0, @memberId_cheesecat47, @dongCode_doryang, floor(rand() * 89) + 47, now() - 8),
-    ('피아노', '혹 피아노 어른왕초보 배울수있는데\n아시는분있나요?\n추천부탁드려요?', 0, @memberId_dltmdgus4802, @dongCode_jinpyung, floor(rand() * 89) + 47, now() - 7),
+    ('롤드컵', '식당에서 롤드컵 보고싶은데 틀어주는 음식점 없겠죠...', 0, @memberId_eyl.lee, @dongCode_doryang, floor(rand() * 89) + 47, now() - 8),
+    ('피아노', '혹 피아노 어른왕초보 배울수있는데\n아시는분있나요?\n추천부탁드려요?', 0, @memberId_gsarang1, @dongCode_jinpyung, floor(rand() * 89) + 47, now() - 7),
     ('중화요리 관심 있는분', '댓글 달아주세요', 0, @memberId_cheesecat47, @dongCode_doryang, floor(rand() * 89) + 47, now() - 6),
     ('황상동에서 신평동으로 이사짐요', '안녕하십니까\n황상동에서 신평동까지\n매트리스 한개입니다\n3만원에 해줄 주실분요\n엘베가 없습니다ㅠㅠ', 0, @memberId_dltmdgus4802, @dongCode_jinpyung, floor(rand() * 89) + 47, now() - 5),
     ('건조기를 사고싶은데 어떻게 운반하나요..??', '건조기 사고싶은데 혼자서 운반은 힘들거 같은데 좋은 방법이 있을가요..?? 차는 있는데 들어 갈지가 의문이네여 거래해 보신분 계시나요', 0, @memberId_cheesecat47, @dongCode_doryang, floor(rand() * 89) + 47, now() - 4),
     ('저녁먹고', '걷기운동하실남녀분들있으신가요?운동삼아해볼려고합니다', 0, @memberId_dltmdgus4802, @dongCode_jinpyung, floor(rand() * 89) + 47, now() - 3),
-    ('도량1동 붕어빵 파는곳 아시는분', '도량1동이나 원호쪽에 붕어빵 파는곳 없나요?! 슈붕 너무 먹고싶은데ㅜㅜ', 0, @memberId_cheesecat47, @dongCode_doryang, floor(rand() * 89) + 47, now() - 2),
-    ('토요일 배드민턴 벙🏸', '장소는 참석자들과 상의하겠습니다', 0, @memberId_dltmdgus4802, @dongCode_jinpyung, floor(rand() * 89) + 47, now() - 1),
+    ('도량1동 붕어빵 파는곳 아시는분', '도량1동이나 원호쪽에 붕어빵 파는곳 없나요?! 슈붕 너무 먹고싶은데ㅜㅜ', 0, @memberId_eyl.lee, @dongCode_doryang, floor(rand() * 89) + 47, now() - 2),
+    ('토요일 배드민턴 벙🏸', '장소는 참석자들과 상의하겠습니다', 0, @memberId_gsarang1, @dongCode_jinpyung, floor(rand() * 89) + 47, now() - 1),
     ('휘닉스파크⛷️', '12월 첫째주 휘팍 가요😀', 0, @memberId_cheesecat47, @dongCode_doryang, floor(rand() * 89) + 47, now()),
     ('[완료] 데이터센터 장애로 인한 접속 불안정 안내 건', '안녕하세요.\n부동산 거래의 시작과 끝.\n\'부동산플래닛\'입니다.\n\n데이터센터 장애로 인하여 \n금일(08.06,일) AM 04:28 ~ AM 06:20까지 2시간동안 서버장애로 인해 접속이 되지 않았으나\n현재는 정상적으로 사용가능합니다.', 1, @memberId_dltmdgus4802, @dongCode_jinpyung, floor(rand() * 89) + 47, '2023-08-06'),
     ('실거래 데이터 08월 15일자 기준 업데이트 안내', '안녕하세요. \n\n부동산 거래의 시작과 끝.\n\'부동산플래닛\'입니다.\n\n언제 어디서든 전국 토지·건물 실거래가와 매물을\n한 번에 확인할 수 있는 \'실거래가 조회\' 서비스의\n실거래 데이터가 2023년 08월 15일자(국토교통부 데이터 공개일자) 기준으로\n반영되었습니다.', 1, @memberId_dltmdgus4802, @dongCode_jinpyung, floor(rand() * 89) + 47, '2023-08-17'),
