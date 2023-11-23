@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.whereismyhome.stats.model.mapper.StatsMapper">
+
+    <!-- 최근 7일간 인기 있는 (조회수가 많은) 동 top 5 이름 join해서 출력 -->
+    <select id="getFavouriteDongTop5" resultType="favouriteDongDto">
+        select dongcode.dongCode,
+               dongcode.sidoName,
+               dongcode.gugunName,
+               dongcode.dongName,
+               dong_view_top_5.views
+        from (select dongCode, count(*) views
+              from dong_view_history
+              where createdTime > date_add(now(), interval - 7 day)
+              group by dongCode
+              limit 5) dong_view_top_5,
+             dongcode
+        where dong_view_top_5.dongCode = dongcode.dongCode
+        order by views desc;
+    </select>
+
+    <!-- 최근 7일간 인기 있는 (조회수가 많은) 아파트 top 5 이름 join해서 출력 -->
+    <select id="getFavouriteAptTop5" resultType="favouriteAptDto">
+        select houseinfo.aptCode,
+               dongcode.sidoName,
+               dongcode.gugunName,
+               dongcode.dongName,
+               houseinfo.apartmentName,
+               apt_view_top_5.views
+        from (select aptCode, count(*) views
+              from apt_view_history
+              where createdTime > date_add(now(), interval - 7 day)
+              group by aptCode
+              order by views desc
+              limit 5) apt_view_top_5,
+             houseinfo,
+             dongcode
+        where apt_view_top_5.aptCode = houseinfo.aptCode
+          and houseinfo.dongCode = dongcode.dongCode
+        order by views desc;
+    </select>
+
+</mapper>
