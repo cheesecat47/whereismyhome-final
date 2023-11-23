@@ -16,22 +16,8 @@ import {
 } from '../api/house.js';
 import { getAptDealAmountAvg } from '../api/stats';
 import RoadView from '../components/actualprice/RoadView.vue';
-import { onClickOutside } from '@vueuse/core';
 
 const seriesOption = ref([]);
-// 차트 api options
-
-// 바깥영역 클릭시
-// const out = ref(null);
-// onClickOutside(out, (event) => {
-//   console.log(event);
-//   drawer.value = false;
-// });
-
-// const dropdownHandler = (event) => {
-//   console.log(event)
-//   dropdown.value = false
-// }
 
 const houseInfo = ref([]);
 
@@ -43,6 +29,13 @@ const gugunItem = ref();
 const dongItem = ref();
 
 const drawer = ref(false);
+
+const detailHouseInfo = ref({});
+const detailDealInfo = ref({});
+const location = ref({
+  lat: 0,
+  lng: 0,
+});
 
 onMounted(() => {
   getSidoNames(
@@ -136,8 +129,6 @@ const detailView = (props) => {
   getAptDealAmountAvg(
     props.aptCode,
     ({ data }) => {
-      console.log(data);
-
       seriesOption.value = {
         colors: ['rgb(15 118 110)'],
         chart: {
@@ -165,8 +156,6 @@ const detailView = (props) => {
           },
         ],
       };
-
-      console.log(seriesOption.value);
     },
     (error) => {
       console.log(error);
@@ -199,15 +188,6 @@ const markerDetail = (aptCode) => {
   );
   drawer.value = true;
 };
-
-const detailHouseInfo = ref({});
-const detailDealInfo = ref({});
-const location = ref({
-  lat: 0,
-  lng: 0,
-});
-
-onClickOutside;
 
 const init = () => {
   gugun.value = [];
