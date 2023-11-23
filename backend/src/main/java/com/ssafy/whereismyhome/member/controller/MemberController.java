@@ -321,8 +321,8 @@ public class MemberController {
                 break label;
             }
 
-            MemberDto member = memberService.getMemberByEmail(emailAccount, emailDomain);
-            if (member != null) {
+            boolean isEmailDuplicated = memberService.checkEmailDuplicate(emailAccount, emailDomain);
+            if (isEmailDuplicated) {
                 msg = "회원 등록 실패: 이 이메일은 사용할 수 없습니다";
                 logger.info("{}: {}", msg, email);
                 res.setStatus(400);
@@ -702,8 +702,8 @@ public class MemberController {
             String emailDomain = matcher.group("emailDomain");
             logger.debug("emailAccount: {} / emailDomain: {}", emailAccount, emailDomain);
 
-            MemberDto member = memberService.getMemberByEmail(emailAccount, emailDomain);
-            if (member != null) {
+            boolean isEmailDuplicated = memberService.checkEmailDuplicate(emailAccount, emailDomain);
+            if (isEmailDuplicated) {
                 msg = "이메일 중복 체크: 이 이메일은 사용할 수 없습니다";
                 logger.info("{}: {}", msg, email);
                 res.setStatus(200);

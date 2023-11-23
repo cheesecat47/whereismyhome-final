@@ -24,5 +24,5 @@ public interface MemberMapper {
 
     int updateRefreshToken(String memberId, String refreshToken) throws SQLException;
 
-    MemberDto getMemberByEmail(String emailAccount, String emailDomain) throws SQLException;
+    int checkEmailDuplicate(String emailAccount, String emailDomain) throws SQLException;
 }

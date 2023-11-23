@@ -1,8 +1,10 @@
 package com.ssafy.whereismyhome.member.service;
 
-import com.ssafy.whereismyhome.member.model.mapper.MemberMapper;
 import com.ssafy.whereismyhome.member.model.MemberDto;
 import com.ssafy.whereismyhome.member.model.SignUpMemberRequestDto;
+import com.ssafy.whereismyhome.member.model.mapper.MemberMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -10,6 +12,8 @@ import java.util.List;
 
 @Service
 public class MemberServiceImpl implements MemberService {
+
+    private static final Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
 
     private final MemberMapper memberMapper;
 
@@ -53,8 +57,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDto getMemberByEmail(String emailAccount, String emailDomain) throws SQLException {
-        return memberMapper.getMemberByEmail(emailAccount, emailDomain);
+    public boolean checkEmailDuplicate(String emailAccount, String emailDomain) throws SQLException {
+        int cnt = memberMapper.checkEmailDuplicate(emailAccount, emailDomain);
+        logger.debug("checkEmailDuplicate: cnt: {}", cnt);
+        return cnt > 0;
     }
 
 }
