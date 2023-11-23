@@ -60,7 +60,7 @@ const mobileMenuOpen = ref(false);
         >
       </div>
       <div v-else class="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
-        <RouterLink :to="{ name: 'main' }" class="text-base font-semibold leading-6 text-gray-900"
+        <RouterLink :to="{ name: 'mypage' }" class="text-base font-semibold leading-6 text-gray-900"
           >마이페이지</RouterLink
         >
         <RouterLink @click="logoutClick" :to="{ name: 'main' }" class="text-base font-semibold leading-6 text-gray-900"
