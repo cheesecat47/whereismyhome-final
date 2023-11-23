@@ -24,7 +24,7 @@ watch(props, (newValue) => {
     <Listbox v-model="selectItem">
       <div class="relative">
         <ListboxButton
-          class="relative w-full cursor-default bg-white py-2 pl-3 pr-5 text-left border border-black/30 text-sm"
+          class="relative w-full cursor-default bg-white py-2 pl-3 pr-5 text-left border border-gray-300 text-sm"
         >
           <span class="block truncate">{{ selectItem }}</span>
           <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">

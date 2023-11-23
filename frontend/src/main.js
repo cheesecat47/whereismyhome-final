@@ -17,7 +17,6 @@ import VueHighcharts from 'vue-highcharts';
 import vClickOutside from 'v-click-outside';
 
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
-// import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 const app = createApp(App);
 

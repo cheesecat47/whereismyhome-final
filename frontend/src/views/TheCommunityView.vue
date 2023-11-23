@@ -72,139 +72,6 @@ const searchButtonClick = () => {
   );
 };
 
-const posts = [
-  {
-    id: 1,
-    title: '타이틀 입니다',
-    description:
-      '내용입니다 내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다',
-    date: 'Mar 16, 2020',
-    datetime: '2020-03-16',
-    author: {
-      name: '이승현',
-      role: '26',
-      imageUrl: '../../public/Mask group.png',
-    },
-  },
-  {
-    id: 1,
-    title: '타이틀 입니다',
-    description:
-      '내용입니다 내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다',
-    date: 'Mar 16, 2020',
-    datetime: '2020-03-16',
-    author: {
-      name: '이승현',
-      role: '26',
-      imageUrl: '../../public/Mask group.png',
-    },
-  },
-  {
-    id: 1,
-    title: '타이틀 입니다',
-    description:
-      '내용입니다 내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다',
-    date: 'Mar 16, 2020',
-    datetime: '2020-03-16',
-    author: {
-      name: '이승현',
-      role: '26',
-      imageUrl: '../../public/Mask group.png',
-    },
-  },
-  {
-    id: 1,
-    title: '타이틀 입니다',
-    description:
-      '내용입니다 내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다',
-    date: 'Mar 16, 2020',
-    datetime: '2020-03-16',
-    author: {
-      name: '이승현',
-      role: '26',
-      imageUrl: '../../public/Mask group.png',
-    },
-  },
-  {
-    id: 1,
-    title: '타이틀 입니다',
-    description:
-      '내용입니다 내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다',
-    date: 'Mar 16, 2020',
-    datetime: '2020-03-16',
-    author: {
-      name: '이승현',
-      role: '26',
-      imageUrl: '../../public/Mask group.png',
-    },
-  },
-  {
-    id: 1,
-    title: '타이틀 입니다',
-    description:
-      '내용입니다 내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다',
-    date: 'Mar 16, 2020',
-    datetime: '2020-03-16',
-    author: {
-      name: '이승현',
-      role: '26',
-      imageUrl: '../../public/Mask group.png',
-    },
-  },
-  {
-    id: 1,
-    title: '타이틀 입니다',
-    description:
-      '내용입니다 내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다',
-    date: 'Mar 16, 2020',
-    datetime: '2020-03-16',
-    author: {
-      name: '이승현',
-      role: '26',
-      imageUrl: '../../public/Mask group.png',
-    },
-  },
-  {
-    id: 1,
-    title: '타이틀 입니다',
-    description:
-      '내용입니다 내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다',
-    date: 'Mar 16, 2020',
-    datetime: '2020-03-16',
-    author: {
-      name: '이승현',
-      role: '26',
-      imageUrl: '../../public/Mask group.png',
-    },
-  },
-  {
-    id: 1,
-    title: '타이틀 입니다',
-    description:
-      '내용입니다 내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다',
-    date: 'Mar 16, 2020',
-    datetime: '2020-03-16',
-    author: {
-      name: '이승현',
-      role: '26',
-      imageUrl: '../../public/Mask group.png',
-    },
-  },
-  {
-    id: 1,
-    title: '타이틀 입니다',
-    description:
-      '내용입니다 내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다',
-    date: 'Mar 16, 2020',
-    datetime: '2020-03-16',
-    author: {
-      name: '이승현',
-      role: '26',
-      imageUrl: '../../public/Mask group.png',
-    },
-  },
-];
-
 const selectView = ['최신순', '오래된 순'];
 const selectSearch = ['제목', '작성자', '내용'];
 </script>
@@ -242,7 +109,7 @@ const selectSearch = ['제목', '작성자', '내용'];
               v-model="searchText"
               type="text"
               placeholder="검색어를 입력하세요"
-              class="h-9 text-sm border-0 border-black/5 text-gray-700 ring-1 ring-gray-400 placeholder:text-gray-400 focus:ring-1 focus:ring-slate-700"
+              class="h-9 text-sm border-0 text-gray-700 ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-slate-700"
             />
             <div
               @click="searchButtonClick"
@@ -257,11 +124,7 @@ const selectSearch = ['제목', '작성자', '내용'];
       <div
         class="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-10 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3"
       >
-        <article
-          v-for="post in communityData"
-          :key="post.id"
-          class="flex max-w-xl flex-col items-start justify-between border-solid border-2 p-4"
-        >
+        <article v-for="post in communityData" :key="post.id" class="max-w-xl border-solid border-2 p-4">
           <CommunityItem :post="post" />
         </article>
       </div>

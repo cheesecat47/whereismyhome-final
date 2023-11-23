@@ -52,7 +52,7 @@ onMounted(() => {
       각종 공지사항, 공고와 새로운 소식을 제공하는 공간입니다.
     </div>
     <div class="border-y-2 border-black flex flex-col">
-      <div class="my-2 p-4">
+      <div class="my-2 p-4 px-8">
         <p class="font-bold text-2xl">{{ detailData.title }}</p>
         <div class="flex justify-between pt-2">
           <div class="flex gap-8">
@@ -63,7 +63,7 @@ onMounted(() => {
         </div>
       </div>
 
-      <div class="border-t p-4 w-full h-96">
+      <div class="border-t p-8 py-10 w-full h-96 whitespace-pre-line">
         {{ detailData.content }}
       </div>
     </div>
@@ -110,30 +110,6 @@ onMounted(() => {
         </div>
       </fieldset>
     </div>
-    <!-- <div>
-      <p class="">{{ detailData.title }}</p>
-    </div>
-    <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-      <div class="sm:col-span-2">
-        <label for="user_id" class="block text-sm font-semibold leading-6 text-gray-900">제목</label>
-        <div class="mt-2.5">
-          <div
-            class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:text-sm sm:leading-6"
-          />
-        </div>
-      </div>
-      <div class="sm:col-span-2">
-        <label for="message" class="block text-sm font-semibold leading-6 text-gray-900">내용</label>
-        <div class="mt-2.5">
-          <textarea
-            name="message"
-            id="message"
-            rows="8"
-            class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-600 sm:text-sm sm:leading-6"
-          />
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
