@@ -18,7 +18,7 @@
 
 1. MySQL 8.0.34 버전 설치 확인.
 2. `./backend/resources/sql/sql.zip` 파일 압축 해제
-3. MySQL Workbench 실행, DB 연결 후 `schema.sql`, `data.sql`, `20220315_aptcrawl.sql` 파일 순서대로 실행.
+3. MySQL Workbench 실행, DB 연결 후 `01.schema.sql`, `02.data.sql`, `*.20220315_aptcrawl.*.sql` 파일 순서대로 실행.
 
 ### Run locally
 
