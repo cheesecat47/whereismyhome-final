@@ -3,6 +3,11 @@ import { ref, onMounted } from 'vue';
 import { getCommunityArticles } from '../api/board.js';
 import VSelectMenu from '../components/common/VSelectMenu.vue';
 import CommunityItem from '../components/community/CommunityItem.vue';
+import { useMemberStore } from '../stores/memberStore.js';
+import { storeToRefs } from 'pinia';
+
+const memberStore = useMemberStore();
+const { userInfo } = storeToRefs(memberStore);
 
 const communityData = ref([]);
 const orderBy = ref('desc');
@@ -11,7 +16,7 @@ const searchText = ref('');
 
 onMounted(() => {
   getCommunityArticles(
-    4719010300,
+    userInfo.value.dongCode,
     null,
     null,
     null,
@@ -29,7 +34,7 @@ const orderClick = (order) => {
   searchBy.value = searchBy.value == '' ? null : searchBy.value;
   searchText.value = searchText.value == '' ? null : searchText.value;
   getCommunityArticles(
-    4719010300,
+    userInfo.value.dongCode,
     searchBy.value,
     searchText.value,
     orderBy.value,
@@ -57,7 +62,7 @@ const searchSelectClick = (search) => {
 
 const searchButtonClick = () => {
   getCommunityArticles(
-    4719010300,
+    userInfo.value.dongCode,
     searchBy.value,
     searchText.value,
     orderBy.value,

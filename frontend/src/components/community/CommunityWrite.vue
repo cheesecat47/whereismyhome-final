@@ -1,5 +1,45 @@
 <script setup>
 import { ref } from 'vue';
+import { useMemberStore } from '../../stores/memberStore.js';
+import { storeToRefs } from 'pinia';
+import { writeArticle } from '../../api/board.js';
+import { useRoute, useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const memberStore = useMemberStore();
+
+const { userInfo } = storeToRefs(memberStore);
+const boardInfo = ref({
+  content: '',
+  dongCode: '',
+  memberId: 0,
+  title: '',
+});
+console.log(userInfo.value);
+const writeClick = () => {
+  boardInfo.value.content = content.value;
+  boardInfo.value.title = title.value;
+  boardInfo.value.dongCode = userInfo.value.dongCode;
+  boardInfo.value.memberId = userInfo.value.memberId;
+  console.log(boardInfo.value);
+
+  writeArticle(
+    boardInfo.value,
+    ({ data }) => {
+      console.log(data);
+      if (data.status == 201) {
+        router.push({ name: 'community' });
+      } else if (data.status == 401) {
+        alert('로그인이 필요한 서비스입니다.');
+        router.push({ name: 'login' });
+      }
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
 
 const title = ref('');
 const content = ref('');
@@ -11,12 +51,13 @@ const content = ref('');
       <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">커뮤니티</h2>
       <p class="mt-4 text-sm leading-8 text-gray-600">우리 동네 커뮤니티를 이용하여 사용자들과 소통해보세요.</p>
     </div>
-    <form @submit.prevent="signupEvent" class="mx-auto mt-6 max-w-xl">
+    <form @submit.prevent="writeClick" class="mx-auto mt-6 max-w-xl">
       <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
         <div class="sm:col-span-2">
           <label for="user_id" class="block text-sm font-semibold leading-6 text-gray-900">제목</label>
           <div class="mt-2.5">
             <input
+              v-model="title"
               type="text"
               name="user_id"
               id="user_id"
@@ -28,6 +69,7 @@ const content = ref('');
           <label for="message" class="block text-sm font-semibold leading-6 text-gray-900">내용</label>
           <div class="mt-2.5">
             <textarea
+              v-model="content"
               name="message"
               id="message"
               rows="8"
