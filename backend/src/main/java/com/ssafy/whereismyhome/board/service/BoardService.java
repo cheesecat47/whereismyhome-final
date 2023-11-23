@@ -18,4 +18,6 @@ public interface BoardService {
     int updateArticleById(BoardDetailDto dto) throws SQLException;
 
     int deleteArticleById(int boardId) throws SQLException;
+
+    void increaseArticleHit(int boardId) throws SQLException;
 }

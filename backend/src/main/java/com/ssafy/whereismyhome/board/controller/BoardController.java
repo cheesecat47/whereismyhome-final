@@ -307,7 +307,8 @@ public class BoardController {
             @ApiResponse(code = 500, message = "게시글 조회 실패", response = BoardListDto.class)
     })
     public ResponseEntity<GetArticleByIdResponseDto> getArticleById(
-            @PathVariable("boardId") int boardId
+            @PathVariable("boardId") @ApiParam(value = "게시글 ID") int boardId,
+            HttpServletRequest request
     ) {
         GetArticleByIdResponseDto res = new GetArticleByIdResponseDto();
         String msg;
@@ -325,6 +326,17 @@ public class BoardController {
                     put("boardId", boardId);
                 }});
                 break label;
+            }
+
+            // 로그인 된 상태이면 이 글 조회수 + 1
+            String token = request.getHeader("Authorization");
+            if (token != null) {
+                // 이 API는 로그인 된 상태 아니더라도 이용 가능하므로 토큰이 만료되었다면 카운트만 안 올리면 됨.
+                if (jwtUtil.checkToken(token)) {
+                    int memberId = jwtUtil.getMemberId(token);
+                    boardService.increaseArticleHit(boardId);
+                    logger.debug("게시글 조회수 카운트: {} {}", memberId, boardId);
+                }
             }
 
             msg = "게시글 조회 성공";

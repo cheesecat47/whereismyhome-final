@@ -22,4 +22,6 @@ public interface MemberService {
     MemberDto getMemberById(int memberId) throws SQLException;
 
     int updateRefreshToken(String memberId, String refreshToken) throws SQLException;
+
+    boolean checkEmailDuplicate(String emailAccount, String emailDomain) throws SQLException;
 }

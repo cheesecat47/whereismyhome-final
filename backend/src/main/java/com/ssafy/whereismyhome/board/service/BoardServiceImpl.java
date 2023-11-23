@@ -3,18 +3,16 @@ package com.ssafy.whereismyhome.board.service;
 import com.ssafy.whereismyhome.board.model.BoardDetailDto;
 import com.ssafy.whereismyhome.board.model.BoardListDto;
 import com.ssafy.whereismyhome.board.model.mapper.BoardMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
     private final BoardMapper boardMapper;
-
-    public BoardServiceImpl(BoardMapper boardMapper) {
-        this.boardMapper = boardMapper;
-    }
 
     @Override
     public int writeArticle(BoardDetailDto dto) throws SQLException {
@@ -44,5 +42,10 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public int deleteArticleById(int boardId) throws SQLException {
         return boardMapper.deleteArticleById(boardId);
+    }
+
+    @Override
+    public void increaseArticleHit(int boardId) throws SQLException {
+        boardMapper.increaseArticleHit(boardId);
     }
 }

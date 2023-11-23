@@ -57,6 +57,7 @@
           and board.deletedTime is null
           and member.deletedTime is null
           and dongCode = #{dongCode}
+          and type = 0
         <if test="searchBy != null and searchKeyword != null">
             <choose>
                 <when test="searchBy == 'title'">and board.title</when>
@@ -104,6 +105,12 @@
         update board
         set updatedTime = now(),
             deletedTime = now()
+        where boardId = #{board_id}
+    </update>
+
+    <update id="increaseArticleHit" parameterType="int">
+        update board
+        set hit = hit + 1
         where boardId = #{board_id}
     </update>
 </mapper>

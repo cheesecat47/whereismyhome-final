@@ -22,4 +22,8 @@ public interface HouseMapper {
     List<String> getGugunNames(String sidoName);
 
     List<String> getDongNames(String sidoName, String gugunName);
+
+    void addDongViewHistory(String memberId, String dongCode);
+
+    void addAptViewHistory(String memberId, String aptCode);
 }
