@@ -114,6 +114,7 @@
           and member.emailAccount = #{emailAccount}
           and member.emailDomain = #{emailDomain}
         order by member.memberId
+        limit 1
     </select>
 
     <!-- memberId가 일치하는 유저의 RefreshToken 값을 업데이트하고 업데이트 된 시각을 현재 시각으로 변경. -->

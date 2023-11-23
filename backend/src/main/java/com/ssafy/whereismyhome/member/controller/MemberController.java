@@ -293,7 +293,8 @@ public class MemberController {
     @PostMapping("/")
     @ApiResponses({
             @ApiResponse(code = 201, message = "회원 등록 성공", response = SignUpMemberResponseDto.class),
-            @ApiResponse(code = 400, message = "회원 등록 실패", response = SignUpMemberResponseDto.class)
+            @ApiResponse(code = 400, message = "회원 등록 실패", response = SignUpMemberResponseDto.class),
+            @ApiResponse(code = 500, message = "회원 등록 실패", response = SignUpMemberResponseDto.class)
     })
     public ResponseEntity<SignUpMemberResponseDto> signUpMember(
             @RequestBody SignUpMemberRequestDto dto
@@ -303,7 +304,36 @@ public class MemberController {
 
         label:
         try {
-            // TODO: 아이디, 이메일 중복 검사.
+            // 아이디, 이메일 중복 검사.
+            // 이메일 형식 검사
+            String emailAccount = dto.getEmailAccount();
+            String emailDomain = dto.getEmailDomain();
+            String email = String.format("%s@%s", emailAccount, emailDomain);
+            Matcher matcher = Pattern.compile(EMAIL_REGEX).matcher(email);
+            if (!matcher.matches()) {
+                msg = "회원 등록 실패: 이메일 형식이 유효하지 않습니다";
+                logger.info("{}: {}", msg, email);
+                res.setStatus(400);
+                res.setMessage(msg);
+                res.setData(new HashMap<String, Object>(){{
+                    put("email", email);
+                }});
+                break label;
+            }
+
+            MemberDto member = memberService.getMemberByEmail(emailAccount, emailDomain);
+            if (member != null) {
+                msg = "회원 등록 실패: 이 이메일은 사용할 수 없습니다";
+                logger.info("{}: {}", msg, email);
+                res.setStatus(400);
+                res.setMessage(msg);
+                res.setData(new HashMap<String, Object>(){{
+                    put("duplicate", true);
+                    put("email", email);
+                }});
+                break label;
+            }
+
             // TODO: 사용자에게 입력 받은 주소에 해당하는 동코드가 존재하는지 확인.
 
             int cnt = memberService.signUpMember(dto);
