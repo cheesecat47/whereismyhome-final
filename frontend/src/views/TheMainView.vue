@@ -7,21 +7,22 @@ import { getFavouriteAptTop5, getFavouriteDongTop5 } from '../api/stats.js';
 
 const callouts = [
   {
-    name: 'Desk and Office',
-    description: 'Work from home accessories',
+    name: 'JTBC News',
+    description: '좋은 아파트 분양 받고 싶다면 ‘이것’ 꼭 알아둬라',
     imageSrc: '../../public/carousel2.jpg',
+    link: 'https://www.youtube.com/watch?v=LCsLHCAOWq0',
   },
   {
-    name: 'Self-Improvement',
-    description: 'Journals and note-taking',
+    name: '아파트써처',
+    description: '5억대, 6억대까지 떨어진 서울 40평대 역세권 아파트 10곳',
     imageSrc: '../../public/carousel3.jpg',
-    imageAlt: 'Wood table with porcelain mug, leather journal, brass pen, leather key ring, and a houseplant.',
+    link: 'https://www.youtube.com/watch?v=q07hJMYKsxQ',
   },
   {
-    name: 'Travel',
-    description: 'Daily commute essentials',
+    name: '김작가 TV',
+    description: '집값 정말 큰일 터질 겁니다, 공포의 2024년 부동산 전망',
     imageSrc: '../../public/carousel4.jpg',
-    imageAlt: 'Collection of four insulated travel bottles on wooden shelf.',
+    link: 'https://www.youtube.com/watch?v=1aJxwyRKJL0&t=1022s',
   },
 ];
 
@@ -243,22 +244,24 @@ onMounted(() => {
     <div class="bg-gray-100">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-2xl py-16 sm:py-24 lg:max-w-none lg:py-32">
-          <h2 class="text-2xl font-bold text-gray-900">Collections</h2>
+          <h2 class="text-2xl font-bold text-gray-900">추천 유튜브 ></h2>
 
           <div class="mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0">
             <div v-for="callout in callouts" :key="callout.name" class="group relative">
-              <div
-                class="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64"
-              >
-                <img :src="callout.imageSrc" :alt="callout.imageAlt" class="h-full w-full object-cover object-center" />
-              </div>
-              <h3 class="mt-6 text-sm text-gray-500">
-                <a :href="callout.href">
-                  <span class="absolute inset-0" />
-                  {{ callout.name }}
-                </a>
-              </h3>
-              <p class="text-base font-semibold text-gray-900">{{ callout.description }}</p>
+              <a :href="callout.link" target="_blank">
+                <div
+                  class="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64"
+                >
+                  <img :src="callout.imageSrc" class="h-full w-full object-cover object-center" />
+                </div>
+                <h3 class="mt-6 text-sm text-gray-500">
+                  <a :href="callout.href">
+                    <span class="absolute inset-0" />
+                    {{ callout.name }}
+                  </a>
+                </h3>
+                <p class="text-base font-semibold text-gray-900">{{ callout.description }}</p>
+              </a>
             </div>
           </div>
         </div>
@@ -268,18 +271,24 @@ onMounted(() => {
     <div class="w-full max-w-5xl mx-auto bg-white py-24 sm:py-32">
       <div class="flex gap-6">
         <div class="basis-1/2 px-6 lg:px-8 mt-24">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900">공지사항</h2>
+          <RouterLink :to="{ name: 'notice' }">
+            <h2 class="text-2xl font-bold tracking-tight text-gray-900">공지사항 ></h2>
+          </RouterLink>
           <p class="mt-6 text-lg leading-8 text-gray-600">
             각종 공지사항, 공고와 새로운 소식을 제공하는 공간입니다. 원활한 사이트 이용을 위해 공지사항을 확인해주세요.
           </p>
           <ul role="list" class="grid gap-x-8 gap-y-12 sm:grid-cols-1 sm:gap-y-2 pt-4">
             <li v-for="item in allNoticeData" :key="item.boardId">
-              <div class="flex items-center gap-x-6">
+              <RouterLink
+                :to="{ name: 'notice-detail', params: { boardId: item.boardId } }"
+                class="flex items-center gap-x-6"
+              >
                 <div class="w-full flex justify-between items-center">
                   <h3 class="text-base font-semibold leading-7 tracking-tight text-gray-900">{{ item.title }}</h3>
                   <p class="text-sm font-semibold leading-6 text-gray-600">{{ item.createdTime.split(' ')[0] }}</p>
                 </div>
-              </div>
+              </RouterLink>
+              <!-- { name: 'notice-detail', params: { boardId: boardId } } -->
             </li>
           </ul>
         </div>
