@@ -91,7 +91,7 @@ const dongItemClick = (dong) => {
   <div class="isolate bg-white px-6 py-16 lg:px-8">
     <div class="mx-auto max-w-2xl text-center">
       <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">회원가입</h2>
-      <p class="mt-4 text-sm leading-8 text-gray-600">여기 뭐적을까? 음.. 오신것을 환영합니다</p>
+      <p class="mt-4 text-sm leading-8 text-gray-600">새로방문하셨나요? 방문을 환영합니다</p>
     </div>
     <form @submit.prevent="signupEvent" class="mx-auto mt-8 max-w-xl">
       <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">

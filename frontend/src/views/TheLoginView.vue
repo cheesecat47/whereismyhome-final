@@ -34,7 +34,7 @@ const loginEvent = async () => {
   <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <h2 class="mt-10 text-center text-4xl font-bold leading-9 tracking-tight text-gray-900">로그인</h2>
-      <p class="mt-4 text-center text-sm leading-8 text-gray-600">여기 뭐적을까? 음.. 오신것을 환영합니다</p>
+      <p class="mt-4 text-center text-sm leading-8 text-gray-600">저희 서비스에 방문하신 것을 환영합니다</p>
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
