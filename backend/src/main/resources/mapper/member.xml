@@ -93,6 +93,29 @@
         order by member.memberId
     </select>
 
+    <select id="getMemberByEmail" parameterType="string" resultType="memberDto">
+        select member.memberId,
+               member.emailAccount,
+               member.emailDomain,
+               member.password,
+               member.name,
+               member.age,
+               member.sex,
+               member.authorization,
+               member.refreshToken,
+               member_address.address,
+               member_address.dongCode,
+               member.createdTime,
+               member.updatedTime
+        from member
+                 left join member_address
+                           on member.memberId = member_address.memberId
+        where member.deletedTime is null
+          and member.emailAccount = #{emailAccount}
+          and member.emailDomain = #{emailDomain}
+        order by member.memberId
+    </select>
+
     <!-- memberId가 일치하는 유저의 RefreshToken 값을 업데이트하고 업데이트 된 시각을 현재 시각으로 변경. -->
     <update id="updateRefreshToken" parameterType="string">
         update member

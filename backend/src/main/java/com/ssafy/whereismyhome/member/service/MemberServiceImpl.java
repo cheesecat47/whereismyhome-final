@@ -52,4 +52,9 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.updateRefreshToken(memberId, refreshToken);
     }
 
+    @Override
+    public MemberDto getMemberByEmail(String emailAccount, String emailDomain) throws SQLException {
+        return memberMapper.getMemberByEmail(emailAccount, emailDomain);
+    }
+
 }

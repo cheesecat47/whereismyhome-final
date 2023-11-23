@@ -33,6 +33,8 @@ public class MemberController {
 
     private final JWTUtil jwtUtil;
 
+    private final String EMAIL_REGEX = "^(?<emailAccount>[a-zA-Z0-9]{1,50})@(?<emailDomain>(ssafy|gmail)\\.com)$";
+
     @ApiOperation(value = "로그인", notes = "회원 이메일과 비밀번호를 입력 받아 로그인 처리")
     @PostMapping("/login")
     @ApiResponses({
@@ -64,9 +66,7 @@ public class MemberController {
             }
 
             // 이메일 형식 검사
-            Matcher matcher = Pattern
-                    .compile("^(?<emailAccount>[a-zA-Z0-9]{1,50})@(?<emailDomain>(ssafy|gmail)\\.com)$")
-                    .matcher(email);
+            Matcher matcher = Pattern.compile(EMAIL_REGEX).matcher(email);
             if (!matcher.matches()) {
                 msg = "로그인 실패: 이메일 형식이 유효하지 않습니다";
                 logger.info("{}: {}", msg, params);
@@ -625,4 +625,82 @@ public class MemberController {
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 
+    @ApiOperation(value = "checkEmailDuplicate", notes = "사용 가능한 이메일 주소인지 확인")
+    @GetMapping("/check-email")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "이메일 중복 체크 성공", response = CheckEmailDuplicateResponseDto.class),
+            @ApiResponse(code = 400, message = "이메일 중복 체크 실패", response = CheckEmailDuplicateResponseDto.class),
+            @ApiResponse(code = 500, message = "이메일 중복 체크 실패", response = CheckEmailDuplicateResponseDto.class)
+    })
+    public ResponseEntity<CheckEmailDuplicateResponseDto> checkEmailDuplicate(
+            @RequestParam("email") String email
+    ) {
+        CheckEmailDuplicateResponseDto res = new CheckEmailDuplicateResponseDto();
+        String msg;
+
+        label:
+        try {
+            // 로그인 파라미터 유효성 검사
+            logger.debug("email: {}", email);
+
+            // 빈 문자열인지 체크
+            if (email == null || email.equals("")) {
+                msg = "이메일 중복 체크 실패: 이메일은 필수입니다";
+                logger.info("{}: {}", msg, email);
+                res.setStatus(401);
+                res.setMessage(msg);
+                res.setData(new HashMap<String, Object>(){{
+                    put("email", email);
+                }});
+                break label;
+            }
+
+            // 이메일 형식 검사
+            Matcher matcher = Pattern.compile(EMAIL_REGEX).matcher(email);
+            if (!matcher.matches()) {
+                msg = "이메일 중복 체크 실패: 이메일 형식이 유효하지 않습니다";
+                logger.info("{}: {}", msg, email);
+                res.setStatus(401);
+                res.setMessage(msg);
+                res.setData(new HashMap<String, Object>(){{
+                    put("email", email);
+                }});
+                break label;
+            }
+
+            String emailAccount = matcher.group("emailAccount");
+            String emailDomain = matcher.group("emailDomain");
+            logger.debug("emailAccount: {} / emailDomain: {}", emailAccount, emailDomain);
+
+            MemberDto member = memberService.getMemberByEmail(emailAccount, emailDomain);
+            if (member != null) {
+                msg = "이메일 중복 체크: 이 이메일은 사용할 수 없습니다";
+                logger.info("{}: {}", msg, email);
+                res.setStatus(200);
+                res.setMessage(msg);
+                res.setData(new HashMap<String, Object>(){{
+                    put("duplicate", true);
+                    put("email", email);
+                }});
+                break label;
+            }
+
+            msg = "이메일 중복 체크: 이 이메일은 사용 가능합니다";
+            logger.info("{}: {}", msg, email);
+            res.setStatus(200);
+            res.setMessage(msg);
+            res.setData(new HashMap<String, Object>(){{
+                put("duplicate", false);
+                put("email", email);
+            }});
+        } catch (Exception e) {
+            msg = "이메일 중복 체크";
+            logger.error("{}: {}", msg, e.getMessage());
+            res.setStatus(500);
+            res.setMessage(msg);
+            res.setData(null);
+        }
+
+        return ResponseEntity.status(res.getStatus()).body(res);
+    }
 }
