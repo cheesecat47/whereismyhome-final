@@ -14,54 +14,12 @@ import {
   getHouseInfoByDongCode,
   getHouseDealsByAptCodeYearMonth,
 } from '../api/house.js';
+import { getAptDealAmountAvg } from '../api/stats';
 import RoadView from '../components/actualprice/RoadView.vue';
 import { onClickOutside } from '@vueuse/core';
 
+const seriesOption = ref([]);
 // 차트 api options
-const options = {
-  chart: {
-    type: 'line', // 라인 형태 차트
-    height: 300, // => 차트 높이 조절
-    // column
-    // type: 'area', // 영역 형태 차트
-    // inverted: true, // => x축, y축 반전 여부
-    // margin: 100, // => 상우하좌 마진
-    // zoomType: 'y',
-    // panning: true,
-    // plotBackgroundColor: {
-    //   linearGradient: [0, 0, 500, 500],
-    //   stops: [
-    //     [0, 'rgb(255, 255, 255)'],
-    //     [1, 'rgb(200, 200, 255)'],
-    //   ],
-    // }, // 플롯 영역 배경 색  or 그라데이션
-    // shadow: true, // => 차트 그림자
-  },
-  credits: {
-    enabled: false,
-  },
-  title: {
-    text: '최근 거래 추세',
-  },
-  xAxis: {
-    categories: ['2012', '2013', '2014'],
-  },
-  yAxis: {
-    title: {
-      text: '실거래가',
-    },
-  },
-  series: [
-    {
-      name: 'item1',
-      data: [1, 10, 4],
-    },
-    {
-      name: 'item2',
-      data: [5, 7, 3],
-    },
-  ],
-};
 
 // 바깥영역 클릭시
 // const out = ref(null);
@@ -174,6 +132,46 @@ const detailView = (props) => {
       console.log(error);
     }
   );
+
+  getAptDealAmountAvg(
+    props.aptCode,
+    ({ data }) => {
+      console.log(data);
+
+      seriesOption.value = {
+        colors: ['rgb(15 118 110)'],
+        chart: {
+          type: 'line', // 라인 형태 차트
+          height: 300, // => 차트 높이 조절
+        },
+        credits: {
+          enabled: false,
+        },
+        title: {
+          text: '최근 5년간 평균 거래 가격',
+        },
+        xAxis: {
+          categories: data.data.years,
+        },
+        yAxis: {
+          title: {
+            text: '실거래가',
+          },
+        },
+        series: [
+          {
+            name: '거래가격',
+            data: data.data.dealAmountAvg,
+          },
+        ],
+      };
+
+      console.log(seriesOption.value);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
   drawer.value = true;
 };
 
@@ -221,6 +219,7 @@ const init = () => {
 <template>
   <div class="flex h-full overflow-y-hidden">
     <div class="relative w-1/4 overflow-y-auto h-[calc(100vh-69px)] scrollbar-hide z-30" ref="out">
+      <!-- 리스트 비어있을 때 -->
       <div
         v-show="houseInfo == null || houseInfo.length == 0"
         class="flex flex-col items-center justify-center h-full pb-20"
@@ -236,6 +235,7 @@ const init = () => {
           <p>새로운 집을 찾으러가볼까요?</p>
         </div>
       </div>
+      <!-- 리스트 아이템 -->
       <ApartmentListItem @detail-item="detailView" v-for="(item, index) in houseInfo" :key="index" :item="item" />
     </div>
     <div class="w-3/4 h-full relative">
@@ -250,7 +250,7 @@ const init = () => {
           <input
             type="text"
             placeholder="검색어를 입력하세요"
-            class="h-9 w-72 text-sm border-0 border-black/5 text-gray-700 ring-1 shadow-lg ring-gray-400 placeholder:text-gray-400 focus:ring-1 focus:ring-slate-700"
+            class="h-9 w-72 text-sm border-0 border-gray-300 text-gray-700 ring-1 shadow-lg ring-gray-400 placeholder:text-gray-400 focus:ring-1 focus:ring-slate-700"
           />
           <div
             class="h-9 py-[1.15rem] shadow-lg bg-teal-600 text-white text-sm font-semibold w-16 flex justify-center items-center border border-gray-400"
@@ -295,7 +295,7 @@ const init = () => {
           </div>
         </div>
         <!-- 차트 -->
-        <Highcharts class="border m-4 p-4" :options="options"></Highcharts>
+        <Highcharts class="border m-4 p-4" :options="seriesOption"></Highcharts>
         <!-- 뉴스 -->
         <NewsComponent />
       </div>
