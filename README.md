@@ -16,17 +16,21 @@
 
 ### 1. 메인화면
 
+![main page](docs/main.gif)
+
 ### 2. 실거래가 조회
+
+![map page](docs/map.gif)
 
 ### 3. 커뮤니티
 
+![community page](docs/community.gif)
+
 ### 4. 공지사항
 
-### 5. 로그인
+![notice page](docs/notice.gif)
 
-### 6. 회원가입
-
-<br/>
+---
 
 ## 🔍 실행 방법
 
@@ -104,5 +108,4 @@
 
 ## 🖥 Entity Relation Diagram (ERD)
 
-<img src='../whereismyhome-final/docs/ERD.png'/>
-<br/>
+![ERD](docs/ERD.png)
