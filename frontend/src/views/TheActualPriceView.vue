@@ -186,6 +186,42 @@ const markerDetail = (aptCode) => {
       console.log(error);
     }
   );
+
+  getAptDealAmountAvg(
+    aptCode,
+    ({ data }) => {
+      seriesOption.value = {
+        colors: ['rgb(15 118 110)'],
+        chart: {
+          type: 'line', // 라인 형태 차트
+          height: 300, // => 차트 높이 조절
+        },
+        credits: {
+          enabled: false,
+        },
+        title: {
+          text: '최근 5년간 평균 거래 가격',
+        },
+        xAxis: {
+          categories: data.data.years,
+        },
+        yAxis: {
+          title: {
+            text: '실거래가',
+          },
+        },
+        series: [
+          {
+            name: '거래가격',
+            data: data.data.dealAmountAvg,
+          },
+        ],
+      };
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
   drawer.value = true;
 };
 
