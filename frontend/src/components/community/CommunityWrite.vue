@@ -29,6 +29,7 @@ const writeClick = () => {
     ({ data }) => {
       console.log(data);
       if (data.status == 201) {
+        alert('성공적으로 글이 작성되었습니다.');
         router.push({ name: 'community' });
       } else if (data.status == 401) {
         alert('로그인이 필요한 서비스입니다.');
